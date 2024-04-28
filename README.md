@@ -1,6 +1,6 @@
 # Package manager
 
-pnpm
+[pnpm](https://pnpm.io/es/installation)
 
 # Commands to run
 
