@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { RenderVisibility } from './Visibility'
 import { useHandler } from './hooks/useHandler'
-import { Toaster, toast } from 'sonner'
+import { Toaster } from 'sonner'
 
 export const RegisterClientForm = () => {
+  const [showPassword, setShowPassword] = useState(false)
   const [credentials, setCredentials] = useState({
     dni: '',
     name: '',
@@ -11,11 +12,10 @@ export const RegisterClientForm = () => {
     email: '',
     password: '',
     birthdate: '',
-    newsletter: false,
-    showPassword: false
+    notification: false
   })
   const { handleChange, handleChangePasswordVisibility, handleChangeCheck, handleSubmit } =
-    useHandler(credentials, setCredentials)
+    useHandler(credentials, setCredentials, showPassword, setShowPassword)
 
   return (
     <div className="flex h-screen items-center justify-center bg-gray-100 dark:bg-gray-900">
@@ -107,12 +107,9 @@ export const RegisterClientForm = () => {
               onChange={handleChange}
               placeholder="Ingresa tu contraseña"
               className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
-              type={!credentials.showPassword ? 'password' : 'text'}
+              type={!showPassword ? 'password' : 'text'}
             />
-            <RenderVisibility
-              show={credentials.showPassword}
-              handleClick={handleChangePasswordVisibility}
-            />
+            <RenderVisibility show={showPassword} handleClick={handleChangePasswordVisibility} />
           </div>
           <div>
             <label
@@ -130,13 +127,13 @@ export const RegisterClientForm = () => {
           </div>
           <div className="flex items-center">
             <input
-              name="newsletter"
+              name="notification"
               onChange={handleChangeCheck}
               className="h-4 w-4 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
               type="checkbox"
             />
             <label
-              htmlFor="newsletter"
+              htmlFor="notification"
               className="ml-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
             >
               ¿Desea recibir correos con anuncion de la plataforma?
