@@ -22,7 +22,6 @@ const clientSchema = y.object({
   //birthdate validations
   birthdate: y
     .string()
-    .datetime()
     .test('adultValidation', 'La persona debe ser mayor de edad.', (date) => {
       const today = new Date()
       const birthday = new Date(date)
