@@ -1,5 +1,5 @@
-//TODO: refactor the birthday validator and error message handler
-import { credentialsValidator } from './validator/credentialsValidator'
+import clientSchema from './validator/credentialsValidator'
+import { toast } from 'sonner'
 import { createUser } from './createUser'
 
 export const useHandler = (credentials, setCredentials, showPassword, setShowPassword) => {
@@ -22,9 +22,18 @@ export const useHandler = (credentials, setCredentials, showPassword, setShowPas
   }
   const handleSubmit = (e) => {
     e.preventDefault()
-    const [credentialsValidated, errors] = credentialsValidator(credentials)
-    console.log(!errors) //to test new implementation
-    // if (!errors) createUser(credentialsValidated)
+    try {
+      clientSchema.validateSync(credentials, { abortEarly: false })
+    } catch (error) {
+      const { errors } = error
+      for (let i = 0; i < errors.length; i++) {
+        toast.error(errors[i])
+      }
+      return
+    }
+
+    createUser(credentials)
+    //redirect to login page
   }
 
   return {
