@@ -137,7 +137,7 @@ export const RegisterClientForm = () => {
               htmlFor="notification"
               className="ml-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
             >
-              ¿Desea recibir correos con anuncion de la plataforma?
+              ¿Desea recibir correos con anuncios de la plataforma?
             </label>
           </div>
           <button
