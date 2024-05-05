@@ -1,8 +1,9 @@
-import { PaymentBrick } from './components/payment/PaymentBrick'
+//import { PaymentBrick } from './components/payment/PaymentBrick'
+import { Login } from './components/Login'
 function App() {
   return (
     <>
-      <PaymentBrick />
+      <Login />
     </>
   )
 }
