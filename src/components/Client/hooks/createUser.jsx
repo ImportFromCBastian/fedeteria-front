@@ -8,10 +8,12 @@ export const createUser = async (credentials) => {
     },
     body: JSON.stringify(credentials)
   })
+    .then((res) => res.json())
+    .catch((error) => new Error(error))
   if (result.ok) {
     toast.success('Cliente registrado correctamente')
   } else {
-    toast.error('Error al registrar el cliente')
+    toast.error(result.message)
   }
   return { result: result.status }
 }
