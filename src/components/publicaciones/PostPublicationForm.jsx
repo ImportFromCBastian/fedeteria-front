@@ -3,7 +3,7 @@ import { useHandler } from './hooks/useHandler'
 import { Toaster } from 'sonner'
 
 export const PostPublictionForm = () => {
-  const randomDNI = Math.floor(Math.random() * 10000) + 1
+  const randomDNI = (Math.floor(Math.random() * 10000) + 1).toString()
   const [publicationData, setPublicationData] = useState({
     nombre: '',
     producto_a_cambio: '',
