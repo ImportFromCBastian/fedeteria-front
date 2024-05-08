@@ -3,20 +3,19 @@ import { useHandler } from './hooks/useHandler'
 import { Toaster } from 'sonner'
 
 export const PostPublictionForm = () => {
-  const randomDNI = (Math.floor(Math.random() * 10000) + 1).toString()
+  const randomDNI = Math.floor(Math.random() * 10000) + 1
   const [publicationData, setPublicationData] = useState({
     nombre: '',
     producto_a_cambio: '',
     dni: randomDNI,
     //fotos: '', //habria que hacer la entidad fotos??
     descripcion: '',
-    estado: false //tambien se necesita dejar la fk del usuario que posteo
+    estado: 'Nuevo' //tambien se necesita dejar la fk del usuario que posteo
   })
   const { handleChange, handleSubmit, handleChangeCheck } = useHandler(
     publicationData,
     setPublicationData
   )
-
   return (
     <div className="flex h-screen items-center justify-center bg-gray-100 dark:bg-gray-900">
       <div className="mx-4 w-full max-w-md rounded-lg bg-white p-8 shadow-md sm:mx-0 dark:bg-gray-800">
@@ -63,19 +62,22 @@ export const PostPublictionForm = () => {
                 type="text"
               />
             </div>
-            <div className="flex items-center">
-              <input
-                name="estado"
-                onChange={handleChangeCheck}
-                className="h-4 w-4 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
-                type="checkbox"
-              />
+            <div>
               <label
                 htmlFor="estado"
-                className="ml-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+                className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
               >
-                El producto esta nuevo?
+                Estado
               </label>
+              <select
+                name="estado"
+                onChange={handleChange}
+                value={publicationData.estado}
+                className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              >
+                <option value="nuevo">Nuevo</option>
+                <option value="usado">Usado</option>
+              </select>
             </div>
           </div>
           <div>
