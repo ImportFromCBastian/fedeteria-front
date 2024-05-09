@@ -1,24 +1,45 @@
 import { useState } from 'react'
 import { useHandler } from './hooks/useHandler'
 import { Toaster } from 'sonner'
-
+const MAX_PHOTOS = 4
 export const PostPublictionForm = () => {
   const randomDNI = Math.floor(Math.random() * 10000) + 1
   const [publicationData, setPublicationData] = useState({
     nombre: '',
     producto_a_cambio: '',
     dni: randomDNI,
-    //fotos: '', //habria que hacer la entidad fotos??
+    fotos: [], //habria que hacer la entidad fotos??
     descripcion: '',
     estado: 'Nuevo' //tambien se necesita dejar la fk del usuario que posteo
   })
-  const { handleChange, handleSubmit, handleChangeCheck } = useHandler(
-    publicationData,
-    setPublicationData
-  )
+  const { handleChange, handleSubmit } = useHandler(publicationData, setPublicationData)
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault()
+    }
+  }
+  const handleImageChange = (event) => {
+    const files = Array.from(event.target.files)
+    if (publicationData.fotos.length + files.length > MAX_PHOTOS) {
+      // Verifica si se supera el límite
+      alert(`Solo se permiten agregar un máximo de ${MAX_PHOTOS} fotos.`)
+      setPublicationData((prevData) => ({
+        ...prevData,
+        fotos: [] // Reinicia el arreglo de fotos
+      }))
+    } else {
+      setPublicationData((prevData) => ({
+        ...prevData,
+        fotos: prevData.fotos.concat(files) // Agrega las nuevas fotos al array existente
+      }))
+    }
+  }
   return (
     <div className="flex h-screen items-center justify-center bg-gray-100 dark:bg-gray-900">
-      <div className="mx-4 w-full max-w-md rounded-lg bg-white p-8 shadow-md sm:mx-0 dark:bg-gray-800">
+      <div
+        className="mx-4 w-full rounded-lg bg-white p-8 shadow-md dark:bg-gray-800"
+        style={{ maxWidth: '48rem' }}
+      >
         <h2 className="mb-6 text-center text-2xl font-bold text-gray-800 dark:text-gray-100">
           Carga tu producto
         </h2>
@@ -30,7 +51,7 @@ export const PostPublictionForm = () => {
             duration: 6500
           }}
         />
-        <form className="space-y-4">
+        <form onKeyDown={handleKeyDown} className="space-y-4" autoComplete="off">
           <div>
             <label
               htmlFor="nombre"
@@ -47,45 +68,82 @@ export const PostPublictionForm = () => {
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <div>
+            <div className="col-span-2">
+              {' '}
+              {/* Esta clase hará que este div ocupe las dos columnas */}
               <label
                 htmlFor="descripcion"
                 className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
               >
                 Descripción
               </label>
-              <input
+              <textarea
                 name="descripcion"
                 onChange={handleChange}
-                placeholder="Ingresa la descripcion del producto"
+                placeholder="Ingresa la descripción del producto"
                 className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
-                type="text"
+                style={{ resize: 'none' }} // Evita que se pueda redimensionar manualmente
+                rows="4" // Altura inicial del textarea
               />
             </div>
-            <div>
-              <label
-                htmlFor="estado"
-                className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
-                Estado
-              </label>
-              <select
-                name="estado"
-                onChange={handleChange}
-                value={publicationData.estado}
-                className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
-              >
-                <option value="nuevo">Nuevo</option>
-                <option value="usado">Usado</option>
-              </select>
+            <div className="col-span-2">
+              {' '}
+              {/* Esta clase hará que este div ocupe las dos columnas */}
+              <div className="flex flex-col">
+                <label
+                  htmlFor="estado"
+                  className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
+                  Estado
+                </label>
+                <select
+                  name="estado"
+                  onChange={handleChange}
+                  value={publicationData.estado}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                >
+                  <option value="nuevo">Nuevo</option>
+                  <option value="usado">Usado</option>
+                </select>
+              </div>
             </div>
           </div>
+          <div>
+            <label
+              htmlFor="fotos"
+              className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >
+              Imágenes
+            </label>
+            <input
+              onChange={handleImageChange}
+              className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              type="file"
+              accept="image/*" // Solo permitir la selección de imágenes
+              multiple // Permitir la selección múltiple de archivos
+              style={{ color: 'transparent' }}
+            />
+            {publicationData.fotos.length > 0 && (
+              <div className="mt-2 flex flex-wrap">
+                {publicationData.fotos.map((foto, index) => (
+                  <div key={index} className="w-1/4 p-2">
+                    <img
+                      src={URL.createObjectURL(foto)}
+                      alt={`Imagen ${index}`}
+                      className="h-auto w-full rounded-md"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
           <div>
             <label
               htmlFor="producto_a_cambio"
               className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
             >
-              Produto que te gustaría recibir a cambio
+              Producto que te gustaría recibir a cambio
             </label>
             <input
               name="producto_a_cambio"
