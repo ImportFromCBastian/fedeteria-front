@@ -69,7 +69,6 @@ export const Login = () => {
     })
       .then((data) => data.json())
       .catch((error) => new Error(error))
-
     if (!compare.ok) {
       if (attempts[credential.dni] >= 2) {
         //Cambiado a 2 porque ya se cuenta el intento actual
@@ -84,8 +83,18 @@ export const Login = () => {
       }
       toast.error('Inicio de sesión fallido')
     }
+    localStorage.setItem('token', compare.token)
   }
 
+  /*<Toaster
+        visibleToasts={8}
+        expand="true"
+        richColors="true"
+        toastOptions={{
+          duration: 6500
+        }}
+      />
+  */
   return (
     <div className="flex min-h-[100vh] items-center justify-center bg-yellow-300">
       <Toaster
