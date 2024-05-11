@@ -96,7 +96,7 @@ export const Login = () => {
       />
   */
   return (
-    <div className="flex min-h-[100vh] items-center justify-center bg-yellow-300">
+    <div className="flex min-h-[100vh] items-center justify-center bg-[#edca6f]">
       <Toaster
         visibleToasts={8}
         expand="true"
@@ -105,10 +105,10 @@ export const Login = () => {
           duration: 6500
         }}
       />
-      <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg dark:bg-gray-600">
+      <div className="w-full max-w-md rounded-lg  bg-white p-6 shadow-lg">
         <div className="mb-6 text-center">
           <h2 className="text-2xl font-bold text-gray-900">Iniciar sesión</h2>
-          <p className="text-gray-500 dark:text-gray-400">
+          <p className="text-gray-500 dark:text-gray-900">
             Ingresa tu DNI y contraseña para acceder a tu cuenta.
           </p>
         </div>
@@ -116,7 +116,7 @@ export const Login = () => {
           <div>
             <label
               htmlFor="dni"
-              className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+              className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-900"
             >
               DNI
             </label>
@@ -126,7 +126,7 @@ export const Login = () => {
               placeholder="12345678"
               value={credential.dni}
               onChange={handleChange}
-              className="block w-full rounded-md border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+              className="block w-full rounded-md border border-black bg-white p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-black dark:bg-white dark:text-black dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
               required
               type="number"
             />
@@ -134,7 +134,7 @@ export const Login = () => {
           <div>
             <label
               htmlFor="password"
-              className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+              className="dark:text-gray-text-gray-900 mb-2 block text-sm font-medium text-gray-700"
             >
               Contraseña
             </label>
@@ -144,7 +144,7 @@ export const Login = () => {
               placeholder="••••••••"
               value={credential.password}
               onChange={handleChange}
-              className="block w-full rounded-md border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+              className="block w-full rounded-md border border-black bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500  dark:bg-white dark:text-black dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
               required
               type="password"
             />
@@ -160,7 +160,7 @@ export const Login = () => {
           </div>
           <button
             type="submit"
-            className="w-full rounded-md bg-gray-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="w-full rounded-md px-5 py-2.5 text-center text-sm font-medium text-white  focus:outline-none focus:ring-4  dark:bg-black dark:hover:bg-blue-700 "
           >
             Iniciar sesión
           </button>
