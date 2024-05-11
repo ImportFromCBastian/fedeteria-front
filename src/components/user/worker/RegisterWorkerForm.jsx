@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { RenderVisibility } from './Visibility'
-import { useHandler } from './hooks/useHandler'
+import { RenderVisibility } from '../Visibility'
+import { useHandler } from '../hooks/useHandler'
 import { Toaster } from 'sonner'
 
-export const RegisterClientForm = () => {
+export const RegisterWorkerForm = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [credentials, setCredentials] = useState({
     dni: '',
@@ -15,13 +15,13 @@ export const RegisterClientForm = () => {
     notification: false
   })
   const { handleChange, handleChangePasswordVisibility, handleChangeCheck, handleSubmit } =
-    useHandler(credentials, setCredentials, showPassword, setShowPassword)
+    useHandler(credentials, setCredentials, showPassword, setShowPassword, 'worker')
 
   return (
     <div className="flex h-screen items-center justify-center bg-gray-100 dark:bg-gray-900">
       <div className="mx-4 w-full max-w-md rounded-lg bg-white p-8 shadow-md sm:mx-0 dark:bg-gray-800">
         <h2 className="mb-6 text-center text-2xl font-bold text-gray-800 dark:text-gray-100">
-          Registrate
+          Registrar Empleado
         </h2>
         <Toaster
           visibleToasts={8}
@@ -41,7 +41,7 @@ export const RegisterClientForm = () => {
             </label>
             <input
               name="dni"
-              placeholder="Ingresa tu DNI"
+              placeholder="Ingresa el DNI del empleado"
               onChange={handleChange}
               className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm [appearance:textfield] focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               type="number"
@@ -59,7 +59,7 @@ export const RegisterClientForm = () => {
               <input
                 name="name"
                 onChange={handleChange}
-                placeholder="Ingresa tu nombre"
+                placeholder="Ingresa el nombre del empleado"
                 className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
                 type="text"
               />
@@ -74,7 +74,7 @@ export const RegisterClientForm = () => {
               <input
                 name="lastName"
                 onChange={handleChange}
-                placeholder="Ingresa tu apellido"
+                placeholder="Ingresa el apellido del empleado"
                 className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
                 type="text"
               />
@@ -90,7 +90,7 @@ export const RegisterClientForm = () => {
             <input
               name="email"
               onChange={handleChange}
-              placeholder="Ingresa tu correo electronico"
+              placeholder="Ingresa el correo electronico"
               className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
               type="email"
             />
@@ -106,7 +106,7 @@ export const RegisterClientForm = () => {
             <input
               name="password"
               onChange={handleChange}
-              placeholder="Ingresa tu contraseña"
+              placeholder="Ingresa la contraseña"
               className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
               type={!showPassword ? 'password' : 'text'}
             />
