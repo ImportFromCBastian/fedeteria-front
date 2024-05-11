@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Toaster, toast } from 'sonner'
 
 export const Login = () => {
   const [attempts, setAttempts] = useState({})
@@ -8,10 +9,10 @@ export const Login = () => {
   useEffect(() => {
     // Al cargar el componente, verificar si hay intentos fallidos en localStorage
     const storedAttempts = localStorage.getItem('loginAttempts')
+    console.log(localStorage)
     if (storedAttempts) {
       setAttempts(JSON.parse(storedAttempts))
     }
-    console.log(localStorage)
     // Verificar si hay cuentas bloqueadas en localStorage
     const storedIsLocked = localStorage.getItem('isLocked')
     if (storedIsLocked) {
@@ -33,26 +34,45 @@ export const Login = () => {
     })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     // Verificar si la cuenta está bloqueada
-    if (isLocked[credential.dni]) {
-      alert('Tu cuenta está bloqueada. Por favor, contacta al administrador.')
-      return
-    }
+    // if (isLocked[credential.dni]) {
+    //   alert('Tu cuenta está bloqueada. Por favor, contacta al administrador.')
+    //   return
+    // }
 
     // Lógica para verificar el nombre de usuario y contraseña
     // Aquí deberías tener tu lógica de autenticación
 
     // Simulamos una autenticación fallida
-    if (credential.dni === '123' && credential.password === '123') {
-      // Autenticación exitosa
-      console.log('Inicio de sesión exitoso')
-    } else {
-      // Si se alcanza el límite de intentos fallidos (3 en este ejemplo), bloquear la cuenta
+    const user = await fetch(`${import.meta.env.VITE_BASE_URL}/client/${credential.dni}`)
+      .then((data) => data.json())
+      .catch((error) => new Error(error))
+
+    if (user.message) {
+      toast.error('Los datos ingresados son incorrectos')
+      return
+    }
+    //solicitud al backend de comparacion de contraseñas <--
+
+    const comparation = {
+      DNI: credential.dni,
+      contra: credential.password
+    }
+
+    const compare = await fetch(`${import.meta.env.VITE_BASE_URL}/client/compare`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(comparation)
+    })
+      .then((data) => data.json())
+      .catch((error) => new Error(error))
+
+    if (!compare.ok) {
       if (attempts[credential.dni] >= 2) {
-        // Cambiado a 2 porque ya se cuenta el intento actual
+        //Cambiado a 2 porque ya se cuenta el intento actual
         setIsLocked({ ...isLocked, [credential.dni]: true })
       } else {
         // Incrementar el contador de intentos fallidos para este DNI
@@ -62,20 +82,20 @@ export const Login = () => {
         }
         setAttempts(updatedAttempts)
       }
-      console.log('Inicio de sesión fallido')
+      toast.error('Inicio de sesión fallido')
     }
-  }
-
-  const handleResetAttempts = () => {
-    // Reiniciar los intentos fallidos de todos los DNIs al recargar la página
-    setAttempts({})
-    setIsLocked({})
-    localStorage.removeItem('loginAttempts')
-    localStorage.removeItem('isLocked')
   }
 
   return (
     <div className="flex min-h-[100vh] items-center justify-center bg-yellow-300">
+      <Toaster
+        visibleToasts={8}
+        expand="true"
+        richColors="true"
+        toastOptions={{
+          duration: 6500
+        }}
+      />
       <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg dark:bg-gray-600">
         <div className="mb-6 text-center">
           <h2 className="text-2xl font-bold text-gray-900">Iniciar sesión</h2>
@@ -92,6 +112,7 @@ export const Login = () => {
               DNI
             </label>
             <input
+              id="dni"
               name="dni"
               placeholder="12345678"
               value={credential.dni}
@@ -109,6 +130,7 @@ export const Login = () => {
               Contraseña
             </label>
             <input
+              id="password"
               name="password"
               placeholder="••••••••"
               value={credential.password}
