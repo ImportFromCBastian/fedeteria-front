@@ -1,9 +1,8 @@
-// import { PaymentBrick } from './components/payment/PaymentBrick'
-import { RegisterClientForm } from './components/Client/RegisterClientForm'
+import Layout from './components/Layout/Layout'
 function App() {
   return (
     <>
-      <RegisterClientForm />
+      <Layout />
     </>
   )
 }
