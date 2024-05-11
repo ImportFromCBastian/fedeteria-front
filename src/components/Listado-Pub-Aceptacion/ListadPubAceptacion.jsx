@@ -26,6 +26,38 @@ function ListadoPublicaciones() {
       .catch((error) => console.error('Error al eliminar la publicación:', error))
   }
 
+  const aceptarPublicacion = async (idPublicacion, numero) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/publicaciones/${idPublicacion}`,
+        {
+          method: 'PUT', // O 'POST' dependiendo de cómo esté implementado en el backend
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ numero: numero }) // Envía el número como un JSON en el cuerpo de la solicitud
+        }
+      )
+
+      if (!response.ok) {
+        throw new Error('Error al aceptar la publicación')
+      }
+
+      // Actualizar la lista de publicaciones después de aceptar
+      setPublicaciones((prevPublicaciones) =>
+        prevPublicaciones.map((pub) => {
+          if (pub.idPublicacion === idPublicacion) {
+            // Actualizar el número de la publicación aceptada
+            return { ...pub, numero: numero }
+          }
+          return pub
+        })
+      )
+    } catch (error) {
+      console.error('Error al aceptar la publicación:', error)
+    }
+  }
+
   return (
     <section className="mx-auto w-full max-w-4xl px-4 py-8 md:px-6">
       <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
@@ -43,6 +75,7 @@ function ListadoPublicaciones() {
               publicationName={pub.nombre}
               key={index}
               onDelete={() => eliminarPublicacion(pub.idPublicacion)}
+              onAccept={(numero) => aceptarPublicacion(pub.idPublicacion, numero)}
             />
           ))
         )}
