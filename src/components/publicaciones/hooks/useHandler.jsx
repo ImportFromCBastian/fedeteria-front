@@ -1,6 +1,6 @@
 import { toast } from 'sonner'
-import { CreatePublication } from './CreatePublication'
 import publicationSchema from './validator/PublicationValidator'
+import { CreatePublication } from './CreatePublication'
 
 export const useHandler = (publicationData, setPublicationData) => {
   const handleChange = (e) => {
@@ -10,10 +10,29 @@ export const useHandler = (publicationData, setPublicationData) => {
     })
   }
 
-  const handleChangeCheck = (e) => {
-    setPublicationData({
-      ...publicationData,
-      notification: e.target.checked
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files)
+    const fotoBlobs = []
+
+    files.forEach((file) => {
+      const reader = new FileReader()
+
+      reader.onload = (event) => {
+        // Convertir la imagen a un blob
+        const blob = new Blob([event.target.result], { type: file.type })
+        fotoBlobs.push(blob)
+
+        // Si todas las imágenes han sido convertidas, actualizar el estado
+        if (fotoBlobs.length === files.length) {
+          setPublicationData({
+            ...publicationData,
+            fotos: fotoBlobs
+          })
+        }
+      }
+
+      // Leer el contenido de la imagen como una URL de datos
+      reader.readAsArrayBuffer(file)
     })
   }
 
@@ -34,6 +53,6 @@ export const useHandler = (publicationData, setPublicationData) => {
   return {
     handleChange,
     handleSubmit,
-    handleChangeCheck
+    handleImageChange
   }
 }

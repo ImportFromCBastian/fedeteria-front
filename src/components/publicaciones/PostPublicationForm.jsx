@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useHandler } from './hooks/useHandler'
-import { Toaster } from 'sonner'
+import { toast, Toaster } from 'sonner'
 const MAX_PHOTOS = 4
 export const PostPublictionForm = () => {
   const randomDNI = Math.floor(Math.random() * 10000) + 1
@@ -22,7 +22,7 @@ export const PostPublictionForm = () => {
     const files = Array.from(event.target.files)
     if (publicationData.fotos.length + files.length > MAX_PHOTOS) {
       // Verifica si se supera el límite
-      alert(`Solo se permiten agregar un máximo de ${MAX_PHOTOS} fotos.`)
+      toast.error(`Solo se permiten agregar un máximo de ${MAX_PHOTOS} fotos.`)
       setPublicationData((prevData) => ({
         ...prevData,
         fotos: [] // Reinicia el arreglo de fotos
