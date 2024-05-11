@@ -2,7 +2,11 @@ import * as y from 'yup'
 
 const clientSchema = y.object({
   //dni validations
-  dni: y.number('El DNI debe ser un número').required('El DNI es requerido'),
+  dni: y
+    .number()
+    .typeError('El DNI debe ser un numero')
+    .positive('El DNI debe ser un número valido')
+    .required('El DNI es requerido'),
   //firstName validations
   name: y.string().required('El nombre es requerido'),
   //lastName validations
