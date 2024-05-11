@@ -26,7 +26,6 @@ export const useHandler = (credentials, setCredentials, showPassword, setShowPas
       clientSchema.validateSync(credentials, { abortEarly: false })
     } catch (error) {
       const { errors } = error
-      console.log(errors)
       for (let i = 0; i < errors.length; i++) {
         toast.error(errors[i])
       }
