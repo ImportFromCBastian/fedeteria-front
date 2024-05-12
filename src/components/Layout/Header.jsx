@@ -1,6 +1,7 @@
+import { mainColor } from './Layout'
 export const Header = () => {
   return (
-    <div style={{ backgroundColor: '#edca6f' }}>
+    <div style={{ backgroundColor: mainColor }}>
       <div className="relative w-full">
         <div className=" absolute  left-1/2 top-0 mt-4 flex w-full max-w-2xl -translate-x-1/2 items-center gap-2 rounded-full bg-gray-100 px-3 py-1">
           <svg
@@ -30,7 +31,7 @@ export const Header = () => {
       </div>
       <header
         className="flex flex-col items-center justify-between px-4 py-4 shadow-sm"
-        style={{ backgroundColor: '#edca6f' }}
+        style={{ backgroundColor: mainColor }}
       >
         <div className=" mt-4 flex w-full items-center justify-between">
           <a className="flex items-center gap-2 text-lg font-semibold" href="#">
