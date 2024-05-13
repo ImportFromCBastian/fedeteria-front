@@ -11,12 +11,12 @@ export const Login = () => {
     const storedAttempts = localStorage.getItem('loginAttempts')
     console.log(localStorage)
     if (storedAttempts) {
-      setAttempts(JSON.parse(storedAttempts))
+      // setAttempts(JSON.parse(storedAttempts))
     }
     // Verificar si hay cuentas bloqueadas en localStorage
     const storedIsLocked = localStorage.getItem('isLocked')
     if (storedIsLocked) {
-      setIsLocked(JSON.parse(storedIsLocked))
+      // setIsLocked(JSON.parse(storedIsLocked))
     }
   }, [])
 
@@ -44,10 +44,7 @@ export const Login = () => {
     // }
 
     // Lógica para verificar el nombre de usuario y contraseña
-    // Aquí deberías tener tu lógica de autenticación
-
-    // Simulamos una autenticación fallida
-    const user = await fetch(`${import.meta.env.VITE_BASE_URL}/client/${credential.dni}`)
+    const user = await fetch(`${import.meta.env.VITE_BASE_URL}/user/${credential.dni}`)
       .then((data) => data.json())
       .catch((error) => new Error(error))
 
@@ -57,18 +54,19 @@ export const Login = () => {
     }
     //solicitud al backend de comparacion de contraseñas <--
 
-    const comparation = {
+    const userCredentials = {
       DNI: credential.dni,
       contra: credential.password
     }
 
-    const compare = await fetch(`${import.meta.env.VITE_BASE_URL}/client/compare`, {
+    const compare = await fetch(`${import.meta.env.VITE_BASE_URL}/user/compare`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(comparation)
+      body: JSON.stringify(userCredentials)
     })
       .then((data) => data.json())
       .catch((error) => new Error(error))
+
     if (!compare.ok) {
       if (attempts[credential.dni] >= 2) {
         //Cambiado a 2 porque ya se cuenta el intento actual
@@ -83,18 +81,19 @@ export const Login = () => {
       }
       toast.error('Inicio de sesión fallido')
     }
-    localStorage.setItem('token', compare.token)
-  }
 
-  /*<Toaster
-        visibleToasts={8}
-        expand="true"
-        richColors="true"
-        toastOptions={{
-          duration: 6500
-        }}
-      />
-  */
+    const { token } = await fetch(`${import.meta.env.VITE_BASE_URL}/user/generate_token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        DNI: userCredentials.DNI
+      })
+    })
+      .then((data) => data.json())
+      .catch((error) => new Error(error))
+
+    localStorage.setItem('token', token)
+  }
   return (
     <div className="flex min-h-[100vh] items-center justify-center bg-[#edca6f]">
       <Toaster
