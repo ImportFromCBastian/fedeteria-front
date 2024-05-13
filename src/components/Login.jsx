@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import { Toaster, toast } from 'sonner'
+import { useNavigate } from 'react-router-dom'
 
 export const Login = () => {
   const [attempts, setAttempts] = useState({})
   const [isLocked, setIsLocked] = useState({})
   const [credential, setCredential] = useState({ dni: '', password: '' })
+  const navigate = useNavigate()
 
   useEffect(() => {
     // Al cargar el componente, verificar si hay intentos fallidos en localStorage
@@ -37,12 +39,17 @@ export const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    // Verificar si la cuenta está bloqueada
-    // if (isLocked[credential.dni]) {
-    //   alert('Tu cuenta está bloqueada. Por favor, contacta al administrador.')
-    //   return
-    // }
-
+    // Verificar si credential.dni es un entero positivo
+    const dniAsInt = parseInt(credential.dni, 10)
+    if (isNaN(dniAsInt) || dniAsInt <= 0) {
+      toast.error('ingrese un DNI valido')
+      return
+    }
+    //Verificar si la cuenta está bloqueada ----> quitar el los "//" en caso de que ya este listo
+    if (isLocked[credential.dni]) {
+      alert('Tu cuenta está bloqueada. Por favor, contacta al administrador.')
+      return
+    }
     // Lógica para verificar el nombre de usuario y contraseña
     const user = await fetch(`${import.meta.env.VITE_BASE_URL}/user/${credential.dni}`)
       .then((data) => data.json())
@@ -93,6 +100,8 @@ export const Login = () => {
       .catch((error) => new Error(error))
 
     localStorage.setItem('token', token)
+    // Redirige al usuario a la homepage
+    return navigate('/')
   }
   return (
     <div className="flex min-h-[100vh] items-center justify-center bg-[#edca6f]">
