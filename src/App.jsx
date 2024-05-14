@@ -1,8 +1,10 @@
-import MostrarPerfil from './components/Perfil/ConseguirPerfil'
+// import { PaymentBrick } from './components/payment/PaymentBrick'
+import { RegisterClientForm } from './components/Client/RegisterClientForm'
+import { RegistrarSucursalForm } from './components/Client/RegistrarSucursalForm'
 function App() {
   return (
     <>
-      <MostrarPerfil />
+      <RegistrarSucursalForm />
     </>
   )
 }
