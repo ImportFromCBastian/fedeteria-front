@@ -1,6 +1,6 @@
 import * as y from 'yup'
 
-const clientSchema = y.object({
+const userSchema = y.object({
   //dni validations
   dni: y
     .number()
@@ -40,10 +40,7 @@ const clientSchema = y.object({
       return age > 18
     })
     .required('La fecha de nacimiento es requerida'),
-  notification: y
-    .string()
-    .transform((value) => (value === 'true' ? 'si' : 'no'))
-    .required()
+  notification: y.boolean().required()
 })
 
-export default clientSchema
+export default userSchema

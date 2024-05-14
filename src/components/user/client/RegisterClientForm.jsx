@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { RenderVisibility } from './Visibility'
-import { useHandler } from './hooks/useHandler'
+import { RenderVisibility } from '../Visibility'
+import { useHandler } from '../hooks/useHandler'
 import { Toaster } from 'sonner'
 
 export const RegisterClientForm = () => {
@@ -15,7 +15,7 @@ export const RegisterClientForm = () => {
     notification: false
   })
   const { handleChange, handleChangePasswordVisibility, handleChangeCheck, handleSubmit } =
-    useHandler(credentials, setCredentials, showPassword, setShowPassword)
+    useHandler(credentials, setCredentials, showPassword, setShowPassword, 'client')
 
   return (
     <div className="flex h-screen items-center justify-center bg-gray-100 dark:bg-gray-900">
