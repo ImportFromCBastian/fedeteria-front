@@ -1,8 +1,8 @@
-import clientSchema from './validator/credentialsValidator'
+import userSchema from './validator/credentialsValidator'
 import { toast } from 'sonner'
 import { createUser } from './createUser'
 
-export const useHandler = (credentials, setCredentials, showPassword, setShowPassword) => {
+export const useHandler = (credentials, setCredentials, showPassword, setShowPassword, type) => {
   const handleChange = (e) => {
     setCredentials({
       ...credentials,
@@ -23,7 +23,8 @@ export const useHandler = (credentials, setCredentials, showPassword, setShowPas
   const handleSubmit = (e) => {
     e.preventDefault()
     try {
-      clientSchema.validateSync(credentials, { abortEarly: false })
+      const user = userSchema.validateSync(credentials, { abortEarly: false })
+      createUser(user, type)
     } catch (error) {
       const { errors } = error
       for (let i = 0; i < errors.length; i++) {
@@ -31,9 +32,6 @@ export const useHandler = (credentials, setCredentials, showPassword, setShowPas
       }
       return
     }
-
-    createUser(credentials)
-    //redirect to login page
   }
 
   return {
