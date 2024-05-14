@@ -1,10 +1,10 @@
 // import { PaymentBrick } from './components/payment/PaymentBrick'
 import { RegisterClientForm } from './components/Client/RegisterClientForm'
-import { DetallesPublicacion } from './components/DetallesPublicacion/VistaPublicacion'
+import { RegistrarSucursalForm } from './components/Client/RegistrarSucursalForm'
 function App() {
   return (
     <>
-      <DetallesPublicacion />
+      <RegistrarSucursalForm />
     </>
   )
 }
