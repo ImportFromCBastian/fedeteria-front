@@ -1,8 +1,10 @@
-import { PostPublictionForm } from './components/publicaciones/PostPublicationForm'
+
+// import { PaymentBrick } from './components/payment/PaymentBrick'
+import { RegisterClientForm } from './components/Client/RegisterClientForm'
 function App() {
   return (
     <>
-      <PostPublictionForm />
+      <RegisterClientForm />
     </>
   )
 }

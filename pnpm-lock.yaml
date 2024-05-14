@@ -24,10 +24,11 @@ importers:
         specifier: ^6.22.3
         version: 6.22.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       sonner:
-        specifier: ^1.4.41
+        specifier: 1.4.41
         version: 1.4.41(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       yup:
-        specifier: ^1.4.0
+        specifier: 1.4.0
+
         version: 1.4.0
     devDependencies:
       '@babel/eslint-parser':
