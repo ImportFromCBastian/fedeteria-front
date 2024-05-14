@@ -1,10 +1,11 @@
+
 // import { PaymentBrick } from './components/payment/PaymentBrick'
 import { RegisterClientForm } from './components/Client/RegisterClientForm'
-import ListadoPublicaciones from './components/Listado-Pub-Aceptacion/ListadPubAceptacion'
+import { RegistrarSucursalForm } from './components/Client/RegistrarSucursalForm'
 function App() {
   return (
     <>
-      <ListadoPublicaciones />
+      <RegistrarSucursalForm />
     </>
   )
 }
