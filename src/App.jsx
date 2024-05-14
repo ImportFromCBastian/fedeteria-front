@@ -1,11 +1,10 @@
-//import { PaymentBrick } from './components/payment/PaymentBrick'
-import { Login } from './components/Login'
-import * as React from 'react'
-import * as ReactDOM from 'react-dom'
+// import { PaymentBrick } from './components/payment/PaymentBrick'
+import { RegisterClientForm } from './components/Client/RegisterClientForm'
+import { RegistrarSucursalForm } from './components/Client/RegistrarSucursalForm'
 function App() {
   return (
     <>
-      <Login />
+      <RegistrarSucursalForm />
     </>
   )
 }
