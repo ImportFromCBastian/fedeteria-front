@@ -28,7 +28,6 @@ importers:
         version: 1.4.41(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       yup:
         specifier: 1.4.0
-
         version: 1.4.0
     devDependencies:
       '@babel/eslint-parser':
