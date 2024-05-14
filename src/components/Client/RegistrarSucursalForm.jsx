@@ -6,7 +6,7 @@ export const RegistrarSucursalForm = () => {
   const [credentials, setCredentials] = useState({
     nombre: '',
     calle: '',
-    numero: '',
+    numero: null,
     piso: 0,
     depto: 0
   })
@@ -57,6 +57,7 @@ export const RegistrarSucursalForm = () => {
                 placeholder="Ingresa la calle"
                 className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
                 type="text"
+                autoComplete="off"
               />
             </div>
             <div>
@@ -70,8 +71,9 @@ export const RegistrarSucursalForm = () => {
                 name="numero"
                 onChange={handleChange}
                 placeholder="Ingresa el número"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 type="number"
+                autoComplete="off"
               />
             </div>
           </div>
@@ -87,8 +89,9 @@ export const RegistrarSucursalForm = () => {
                 name="piso"
                 onChange={handleChange}
                 placeholder="Ingresa el piso (opcional)"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 type="number"
+                autoComplete="off"
               />
             </div>
             <div>
@@ -104,6 +107,7 @@ export const RegistrarSucursalForm = () => {
                 placeholder="Ingresa el depto (opcional)"
                 className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
                 type="text"
+                autoComplete="off"
               />
             </div>
           </div>
