@@ -88,7 +88,7 @@ export const RegistrarSucursalForm = () => {
                 onChange={handleChange}
                 placeholder="Ingresa el piso (opcional)"
                 className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
-                type="text"
+                type="number"
               />
             </div>
             <div>
@@ -103,7 +103,7 @@ export const RegistrarSucursalForm = () => {
                 onChange={handleChange}
                 placeholder="Ingresa el depto (opcional)"
                 className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
-                type="number"
+                type="text"
               />
             </div>
           </div>
