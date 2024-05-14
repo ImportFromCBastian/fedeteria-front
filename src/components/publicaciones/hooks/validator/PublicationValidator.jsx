@@ -8,10 +8,7 @@ const publicationSchema = y.object({
   //descripcion validations
   descripcion: y.string().required('La descripcion es obligatoria'),
   //estado validations
-  estado: y
-    .string()
-    .transform((value) => (value === 'true' ? 'si' : 'no'))
-    .required()
+  estado: y.string().required('El estado es obligatorio')
 })
 
 export default publicationSchema

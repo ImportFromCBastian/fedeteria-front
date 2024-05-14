@@ -35,7 +35,7 @@ export const useHandler = (publicationData, setPublicationData) => {
       reader.readAsArrayBuffer(file)
     })
   }
-
+  // Validar los datos de la publicación
   const handleSubmit = (e) => {
     e.preventDefault()
     try {
@@ -49,7 +49,7 @@ export const useHandler = (publicationData, setPublicationData) => {
     }
     CreatePublication(publicationData)
   }
-
+  // Retornar los métodos que se van a utilizar en el componente
   return {
     handleChange,
     handleSubmit,
