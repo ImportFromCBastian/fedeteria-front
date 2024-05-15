@@ -1,6 +1,6 @@
 import { toast } from 'sonner'
 import { createSucursal } from './createSucursal'
-import sucursalSchema from './validator/sucursalValidator'
+import sucursalSchema from './validator/sucursalValidator.jsx'
 
 export const useHandlerSucursal = (credentials, setCredentials) => {
   const handleChange = (e) => {
