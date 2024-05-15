@@ -1,9 +1,8 @@
-import { mainColor } from './Layout'
 export const Header = () => {
   return (
-    <div style={{ backgroundColor: mainColor }}>
-      <div className="relative w-full">
-        <div className=" absolute  left-1/2 top-0 mt-4 flex w-full max-w-2xl -translate-x-1/2 items-center gap-2 rounded-full bg-gray-100 px-3 py-1">
+    <div>
+      <div className="relative w-full bg-fede-main">
+        <div className="  absolute  left-1/2 top-0 mt-4 flex w-full max-w-2xl -translate-x-1/2 items-center gap-2 rounded-full bg-gray-100 px-3 py-1">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -29,10 +28,7 @@ export const Header = () => {
           />
         </div>
       </div>
-      <header
-        className="flex flex-col items-center justify-between px-4 py-4 shadow-sm"
-        style={{ backgroundColor: mainColor }}
-      >
+      <header className=" flex flex-col items-center justify-between bg-fede-main px-4 py-4 shadow-sm">
         <div className=" mt-4 flex w-full items-center justify-between">
           <a className="flex items-center gap-2 text-lg font-semibold" href="#">
             <img
