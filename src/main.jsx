@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { Login } from './components/Login.jsx'
-import { RegistrarSucursalForm } from './components/Client/RegistrarSucursalForm.jsx'
+import { RegistrarSucursalForm } from './components/Sucursal/RegistrarSucursalForm.jsx'
 import { RegisterClientForm } from './components/user/client/RegisterClientForm.jsx'
 import { PostPublicationForm } from './components/publicaciones/PostPublicationForm.jsx'
 import { MostrarPerfil } from './components/Perfil/ConseguirPerfil.jsx'
@@ -25,15 +25,15 @@ const router = createBrowserRouter([
     element: <RegistrarSucursalForm />
   },
   {
-    path: '/user',
+    path: '/registrar/cliente',
     element: <RegisterClientForm />
   },
   {
-    path: '/worker',
+    path: '/registrar/empleado',
     element: <RegisterWorkerForm />
   },
   {
-    path: '/publicaction',
+    path: '/agregar_publicacion',
     element: <PostPublicationForm />
   },
   {
@@ -45,7 +45,7 @@ const router = createBrowserRouter([
     element: <DetallesPublicacion />
   },
   {
-    path: '/publicaciones',
+    path: '/listado_publicaciones',
     element: <ListadoPublicaciones />
   }
 ])

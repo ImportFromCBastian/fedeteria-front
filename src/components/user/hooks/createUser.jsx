@@ -3,7 +3,7 @@ import { toast } from 'sonner'
 export const createUser = async (credentials, type) => {
   let result
   if (type === 'client') {
-    result = await fetch(`${import.meta.env.VITE_BASE_URL}/client`, {
+    result = await fetch(`${import.meta.env.VITE_BASE_URL}/user/client`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -13,7 +13,7 @@ export const createUser = async (credentials, type) => {
       .then((res) => res.json())
       .catch((error) => new Error(error))
   } else {
-    result = await fetch(`${import.meta.env.VITE_BASE_URL}/worker`, {
+    result = await fetch(`${import.meta.env.VITE_BASE_URL}/user/worker`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
