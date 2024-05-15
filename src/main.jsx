@@ -10,6 +10,7 @@ import { MostrarPerfil } from './components/Perfil/ConseguirPerfil.jsx'
 import { DetallesPublicacion } from './components/DetallesPublicacion/VistaPublicacion.jsx'
 import { ListadoPublicaciones } from './components/Listado-Pub-Aceptacion/ListadoPubAceptacion.jsx'
 import { RegisterWorkerForm } from './components/user/worker/RegisterWorkerForm.jsx'
+import Layout from './components/Layout/Layout.jsx'
 
 const router = createBrowserRouter([
   {
@@ -34,10 +35,15 @@ const router = createBrowserRouter([
   },
   {
     path: '/agregar_publicacion',
-    element: <PostPublicationForm />
+    element: (
+      <Layout>
+        {' '}
+        <PostPublicationForm />{' '}
+      </Layout>
+    )
   },
   {
-    path: '/mi_perfil', //NO ANDA
+    path: '/mi_perfil',
     element: <MostrarPerfil />
   },
   {
@@ -46,11 +52,19 @@ const router = createBrowserRouter([
   },
   {
     path: '/listado_publicaciones',
-    element: <ListadoPublicaciones />
+    element: (
+      <Layout>
+        {' '}
+        <ListadoPublicaciones />{' '}
+      </Layout>
+    )
   }
 ])
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <RouterProvider router={router}>
+      {' '}
+      <Layout />{' '}
+    </RouterProvider>
   </React.StrictMode>
 )

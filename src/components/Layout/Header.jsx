@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 export const Header = () => {
   return (
     <div>
@@ -82,12 +83,18 @@ export const Header = () => {
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <a className="font-medium underline-offset-4 hover:underline" href="#">
+          <Link
+            className="font-medium underline-offset-4 hover:underline"
+            to="/listado_publicaciones"
+          >
             Publicaciones
-          </a>
-          <a className="font-medium underline-offset-4 hover:underline" href="#">
-            Cargar publicación
-          </a>
+          </Link>
+          <Link
+            className="font-medium underline-offset-4 hover:underline"
+            to="/agregar_publicacion"
+          >
+            Cargar Publicacion
+          </Link>
           <a className="font-medium underline-offset-4 hover:underline" href="#">
             Trueques futuros
           </a>

@@ -15,14 +15,12 @@ export const RegisterClientForm = () => {
     notification: false
   })
   const { handleChange, handleChangePasswordVisibility, handleChangeCheck, handleSubmit } =
-    useHandler(credentials, setCredentials, showPassword, setShowPassword, 'client')
+    useHandler(credentials, setCredentials, showPassword, setShowPassword)
 
   return (
-    <div className="flex h-screen items-center justify-center bg-gray-100 dark:bg-gray-900">
-      <div className="mx-4 w-full max-w-md rounded-lg bg-white p-8 shadow-md sm:mx-0 dark:bg-gray-800">
-        <h2 className="mb-6 text-center text-2xl font-bold text-gray-800 dark:text-gray-100">
-          Registrate
-        </h2>
+    <div className="flex h-screen items-center justify-center">
+      <div className="mx-4 w-full max-w-md rounded-lg bg-fede-secundary p-8 shadow-md sm:mx-0">
+        <h2 className="mb-6 text-center text-2xl font-bold text-fede-texto-base">Registrate</h2>
         <Toaster
           visibleToasts={8}
           expand="true"
@@ -33,41 +31,35 @@ export const RegisterClientForm = () => {
         />
         <form className="space-y-4">
           <div>
-            <label
-              htmlFor="dni"
-              className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
+            <label htmlFor="dni" className="mb-2 block text-sm font-medium text-fede-texto-base">
               DNI
             </label>
             <input
               name="dni"
               placeholder="Ingresa tu DNI"
               onChange={handleChange}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm [appearance:textfield] focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              className="w-full rounded-md border border-gray-300 bg-fede-secundary-claro px-3 py-2 text-fede-texto-base shadow-sm [appearance:textfield] focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main dark:border-gray-600 dark:text-gray-100 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               type="number"
               autoComplete="off"
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label
-                htmlFor="name"
-                className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
+              <label htmlFor="name" className="mb-2 block text-sm font-medium text-fede-texto-base">
                 Nombre
               </label>
               <input
                 name="name"
                 onChange={handleChange}
                 placeholder="Ingresa tu nombre"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                className="w-full rounded-md border border-gray-300 bg-fede-secundary-claro px-3 py-2 text-fede-texto-claro shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main dark:border-gray-600"
                 type="text"
               />
             </div>
             <div>
               <label
                 htmlFor="lastName"
-                className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+                className="mb-2 block text-sm font-medium text-fede-texto-base"
               >
                 Apellido
               </label>
@@ -75,30 +67,27 @@ export const RegisterClientForm = () => {
                 name="lastName"
                 onChange={handleChange}
                 placeholder="Ingresa tu apellido"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                className="w-full rounded-md border border-gray-300 bg-fede-secundary-claro px-3 py-2 text-fede-texto-claro shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main dark:border-gray-600"
                 type="text"
               />
             </div>
           </div>
           <div>
-            <label
-              htmlFor="email"
-              className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
+            <label htmlFor="email" className="mb-2 block text-sm font-medium text-fede-texto-base">
               Email
             </label>
             <input
               name="email"
               onChange={handleChange}
               placeholder="Ingresa tu correo electronico"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              className="w-full rounded-md border border-gray-300 bg-fede-secundary-claro px-3 py-2 text-fede-texto-claro shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main dark:border-gray-600"
               type="email"
             />
           </div>
           <div className="relative">
             <label
               htmlFor="password"
-              className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+              className="mb-2 block text-sm font-medium text-fede-texto-base"
             >
               Contraseña
             </label>
@@ -107,7 +96,7 @@ export const RegisterClientForm = () => {
               name="password"
               onChange={handleChange}
               placeholder="Ingresa tu contraseña"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              className="w-full rounded-md border border-gray-300 bg-fede-secundary-claro px-3 py-2 text-fede-texto-claro shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main dark:border-gray-600"
               type={!showPassword ? 'password' : 'text'}
             />
             <RenderVisibility show={showPassword} handleClick={handleChangePasswordVisibility} />
@@ -115,27 +104,28 @@ export const RegisterClientForm = () => {
           <div>
             <label
               htmlFor="birthdate"
-              className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+              className="mb-2 block text-sm font-medium text-fede-texto-base"
             >
               Fecha de Nacimiento
             </label>
             <input
               name="birthdate"
               onChange={handleChange}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
-              type="date"
+              placeholder="YYYY-MM-DD"
+              className="w-full rounded-md border border-gray-300 bg-fede-secundary-claro px-3 py-2 text-fede-texto-claro shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main dark:border-gray-600"
+              type="text"
             />
           </div>
           <div className="flex items-center">
             <input
               name="notification"
               onChange={handleChangeCheck}
-              className="h-4 w-4 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+              className="h-4 w-4 rounded border-gray-300 text-fede-main focus:ring-fede-main"
               type="checkbox"
             />
             <label
               htmlFor="notification"
-              className="ml-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+              className="ml-2 block text-sm font-medium text-fede-texto-base"
             >
               ¿Desea recibir correos con anuncios de la plataforma?
             </label>
@@ -143,7 +133,7 @@ export const RegisterClientForm = () => {
           <button
             type="submit"
             onClick={handleSubmit}
-            className="w-full rounded-md bg-blue-500 px-4 py-2 font-medium text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="w-full rounded-md bg-fede-main px-4 py-2 font-medium text-white hover:bg-fede-main-claro focus:outline-none focus:ring-2 focus:ring-fede-main focus:ring-offset-2"
           >
             Registrarse
           </button>
