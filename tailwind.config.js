@@ -9,7 +9,7 @@ export default {
       colors: {
         'fede-main': '#E7AB12',
         'fede-main-claro': '#F0BF42',
-        'fede-secundary': '#000000',
+        'fede-secundary': '#231C07',
         'fede-secundary-claro': '#1c1c1b',
         'fede-texto-claro': '#FFFFFF',
         'fede-texto-base': '#FFFFFF'

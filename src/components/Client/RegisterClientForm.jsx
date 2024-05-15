@@ -38,7 +38,7 @@ export const RegisterClientForm = () => {
               name="dni"
               placeholder="Ingresa tu DNI"
               onChange={handleChange}
-              className="w-full rounded-md border border-gray-300 bg-fede-secundary-claro px-3 py-2 text-fede-texto-base shadow-sm [appearance:textfield] focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main dark:border-gray-600 dark:text-gray-100 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              className="w-full rounded-md border border-gray-300 bg-fede-secundary-claro px-3 py-2 text-fede-texto-base shadow-sm [appearance:textfield] focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               type="number"
               autoComplete="off"
             />
@@ -52,7 +52,7 @@ export const RegisterClientForm = () => {
                 name="name"
                 onChange={handleChange}
                 placeholder="Ingresa tu nombre"
-                className="w-full rounded-md border border-gray-300 bg-fede-secundary-claro px-3 py-2 text-fede-texto-claro shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main dark:border-gray-600"
+                className="w-full rounded-md border border-gray-300 bg-fede-secundary-claro px-3 py-2 text-fede-texto-claro shadow-sm placeholder:text-yellow-300 focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
                 type="text"
               />
             </div>
@@ -67,7 +67,7 @@ export const RegisterClientForm = () => {
                 name="lastName"
                 onChange={handleChange}
                 placeholder="Ingresa tu apellido"
-                className="w-full rounded-md border border-gray-300 bg-fede-secundary-claro px-3 py-2 text-fede-texto-claro shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main dark:border-gray-600"
+                className="w-full rounded-md border border-gray-300 bg-fede-secundary-claro px-3 py-2 text-fede-texto-claro shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main "
                 type="text"
               />
             </div>
@@ -80,7 +80,7 @@ export const RegisterClientForm = () => {
               name="email"
               onChange={handleChange}
               placeholder="Ingresa tu correo electronico"
-              className="w-full rounded-md border border-gray-300 bg-fede-secundary-claro px-3 py-2 text-fede-texto-claro shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main dark:border-gray-600"
+              className="w-full rounded-md border border-gray-300 bg-fede-secundary-claro px-3 py-2 text-fede-texto-claro shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main "
               type="email"
             />
           </div>
@@ -96,7 +96,7 @@ export const RegisterClientForm = () => {
               name="password"
               onChange={handleChange}
               placeholder="Ingresa tu contraseña"
-              className="w-full rounded-md border border-gray-300 bg-fede-secundary-claro px-3 py-2 text-fede-texto-claro shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main dark:border-gray-600"
+              className="w-full rounded-md border border-gray-300 bg-fede-secundary-claro px-3 py-2 text-fede-texto-claro shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main "
               type={!showPassword ? 'password' : 'text'}
             />
             <RenderVisibility show={showPassword} handleClick={handleChangePasswordVisibility} />
@@ -112,7 +112,7 @@ export const RegisterClientForm = () => {
               name="birthdate"
               onChange={handleChange}
               placeholder="YYYY-MM-DD"
-              className="w-full rounded-md border border-gray-300 bg-fede-secundary-claro px-3 py-2 text-fede-texto-claro shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main dark:border-gray-600"
+              className="w-full rounded-md border border-gray-300 bg-fede-secundary-claro px-3 py-2 text-fede-texto-claro shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main "
               type="text"
             />
           </div>
