@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { ShowProfile } from './profile'
 
-function MostrarPerfil() {
+export function MostrarPerfil() {
   const [perfil, setPerfil] = useState('')
   const [error, setError] = useState(false)
 
@@ -24,4 +24,3 @@ function MostrarPerfil() {
   }
   return <ShowProfile userData={perfil.at(0)} />
 }
-export default MostrarPerfil

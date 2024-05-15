@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useHandler } from './hooks/useHandler'
 import { toast, Toaster } from 'sonner'
 const MAX_PHOTOS = 4
-export const PostPublictionForm = () => {
+export const PostPublicationForm = () => {
   const randomDNI = Math.floor(Math.random() * 10000) + 1
   const [publicationData, setPublicationData] = useState({
     nombre: '',

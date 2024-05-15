@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Publicacion } from './Publicacion'
 
-function ListadoPublicaciones() {
+export function ListadoPublicaciones() {
   const [publicaciones, setPublicaciones] = useState([])
 
   useEffect(() => {
@@ -83,5 +83,3 @@ function ListadoPublicaciones() {
     </section>
   )
 }
-
-export default ListadoPublicaciones

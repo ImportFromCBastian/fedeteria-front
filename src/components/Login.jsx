@@ -11,7 +11,6 @@ export const Login = () => {
   useEffect(() => {
     // Al cargar el componente, verificar si hay intentos fallidos en localStorage
     const storedAttempts = localStorage.getItem('loginAttempts')
-    console.log(localStorage)
     if (storedAttempts) {
       // setAttempts(JSON.parse(storedAttempts))
     }
