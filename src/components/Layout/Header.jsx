@@ -14,7 +14,7 @@ export const Header = () => {
     setToken(localStorage.getItem('token'))
     // Verifica si el token existe en el almacenamiento local y no está vacío
     if (!token) {
-      navigate('/listado_publicaciones')
+      navigate('/listado_publicaciones') // cambiar a '/unauthorized
     }
   }, [])
 
