@@ -103,7 +103,7 @@ export const Login = () => {
     return navigate('/')
   }
   return (
-    <div className="flex min-h-[100vh] items-center justify-center bg-[#edca6f]">
+    <div className="flex min-h-[100vh] items-center justify-center ">
       <Toaster
         visibleToasts={8}
         expand="true"

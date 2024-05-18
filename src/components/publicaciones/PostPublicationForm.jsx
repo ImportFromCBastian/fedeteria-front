@@ -35,14 +35,9 @@ export const PostPublicationForm = () => {
     }
   }
   return (
-    <div className="flex h-screen items-center justify-center bg-gray-100 dark:bg-gray-900">
-      <div
-        className="mx-4 w-full rounded-lg bg-white p-8 shadow-md dark:bg-gray-800"
-        style={{ maxWidth: '48rem' }}
-      >
-        <h2 className="mb-6 text-center text-2xl font-bold text-gray-800 dark:text-gray-100">
-          Carga tu producto
-        </h2>
+    <div className="flex h-screen items-center justify-center  ">
+      <div className="mx-4 w-full max-w-[48rem] rounded-lg bg-white p-8 shadow-md ">
+        <h2 className="mb-6 text-center text-2xl font-bold text-gray-800">Carga tu producto</h2>
         <Toaster
           visibleToasts={8}
           expand="true"
@@ -53,35 +48,28 @@ export const PostPublicationForm = () => {
         />
         <form onKeyDown={handleKeyDown} className="space-y-4" autoComplete="off">
           <div>
-            <label
-              htmlFor="nombre"
-              className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
+            <label htmlFor="nombre" className="mb-2 block text-sm font-medium text-gray-700">
               Nombre
             </label>
             <input
               name="nombre"
               placeholder="Ingresa el nombre del producto"
               onChange={handleChange}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm [appearance:textfield] focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm [appearance:textfield] focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500   [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               type="text"
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2">
-              {' '}
               {/* Esta clase hará que este div ocupe las dos columnas */}
-              <label
-                htmlFor="descripcion"
-                className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
+              <label htmlFor="descripcion" className="mb-2 block text-sm font-medium text-gray-700">
                 Descripción
               </label>
               <textarea
                 name="descripcion"
                 onChange={handleChange}
                 placeholder="Ingresa la descripción del producto"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500  "
                 style={{ resize: 'none' }} // Evita que se pueda redimensionar manualmente
                 rows="4" // Altura inicial del textarea
               />
@@ -90,17 +78,14 @@ export const PostPublicationForm = () => {
               {' '}
               {/* Esta clase hará que este div ocupe las dos columnas */}
               <div className="flex flex-col">
-                <label
-                  htmlFor="estado"
-                  className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
+                <label htmlFor="estado" className="mb-2 text-sm font-medium text-gray-700">
                   Estado
                 </label>
                 <select
                   name="estado"
                   onChange={handleChange}
                   value={publicationData.estado}
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500  "
                 >
                   <option value="nuevo">Nuevo</option>
                   <option value="usado">Usado</option>
@@ -109,15 +94,12 @@ export const PostPublicationForm = () => {
             </div>
           </div>
           <div>
-            <label
-              htmlFor="fotos"
-              className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
+            <label htmlFor="fotos" className="mb-2 block text-sm font-medium text-gray-700">
               Imágenes
             </label>
             <input
               onChange={handleImageChange}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500  "
               type="file"
               accept="image/*" // Solo permitir la selección de imágenes
               multiple // Permitir la selección múltiple de archivos
@@ -141,7 +123,7 @@ export const PostPublicationForm = () => {
           <div>
             <label
               htmlFor="producto_a_cambio"
-              className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+              className="mb-2 block text-sm font-medium text-gray-700"
             >
               Producto que te gustaría recibir a cambio
             </label>
@@ -149,7 +131,7 @@ export const PostPublicationForm = () => {
               name="producto_a_cambio"
               onChange={handleChange}
               placeholder="Ingresa el producto"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500  "
               type="text"
             />
           </div>
