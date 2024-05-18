@@ -2,9 +2,18 @@ import { useState } from 'react'
 import { RenderVisibility } from '../Visibility'
 import { useHandler } from '../hooks/useHandler'
 import { Toaster } from 'sonner'
+import {
+  Button,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  Transition,
+  TransitionChild
+} from '@headlessui/react'
 
 export const RegisterClientForm = () => {
   const [showPassword, setShowPassword] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   const [credentials, setCredentials] = useState({
     dni: '',
     name: '',
@@ -18,7 +27,7 @@ export const RegisterClientForm = () => {
     useHandler(credentials, setCredentials, showPassword, setShowPassword, 'client')
 
   return (
-    <div className="flex h-screen items-center justify-center">
+    <div className="flex items-center justify-center">
       <div className="mx-4 w-full max-w-md rounded-lg bg-fede-secundary p-8 shadow-md sm:mx-0">
         <h2 className="mb-6 text-center text-2xl font-bold text-fede-texto-base">Registrate</h2>
         <Toaster
@@ -90,13 +99,19 @@ export const RegisterClientForm = () => {
               className="mb-2 block text-sm font-medium text-fede-texto-base"
             >
               Contraseña
+              <span
+                className="material-symbols-outlined float-right cursor-pointer rounded-full outline-dotted"
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                question_mark
+              </span>
             </label>
 
             <input
               name="password"
               onChange={handleChange}
               placeholder="Ingresa tu contraseña"
-              className="w-full rounded-md border border-gray-300 bg-fede-secundary-claro px-3 py-2 text-fede-texto-claro shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main dark:border-gray-600"
+              className="mt-1 w-full rounded-md border border-gray-300 bg-fede-secundary-claro px-3 py-2 text-fede-texto-claro shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main dark:border-gray-600"
               type={!showPassword ? 'password' : 'text'}
             />
             <RenderVisibility show={showPassword} handleClick={handleChangePasswordVisibility} />
@@ -138,6 +153,49 @@ export const RegisterClientForm = () => {
             Registrarse
           </button>
         </form>
+        <Transition appear show={isOpen}>
+          <Dialog
+            as="div"
+            className="relative z-10 focus:outline-none"
+            onClose={() => setIsOpen(false)}
+          >
+            <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+              <div className="flex min-h-full items-center justify-center p-4">
+                <TransitionChild
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0 transform-[scale(95%)]"
+                  enterTo="opacity-100 transform-[scale(100%)]"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100 transform-[scale(100%)]"
+                  leaveTo="opacity-0 transform-[scale(95%)]"
+                >
+                  <DialogPanel className="m-4 w-auto  rounded-xl bg-white/5 p-6 backdrop-blur-2xl">
+                    <DialogTitle as="h3" className="text-base/7 font-medium text-white">
+                      Reglas de la contraseña
+                    </DialogTitle>
+                    <ul className="mt-2 text-sm/6 text-white/50 ">
+                      <li> - La contraseña debe contener al menos 6 caracteres</li>
+                      <li> - La contraseña debe contener al menos una letra mayúscula</li>
+                      <li> - La contraseña debe contener algún caracter especial</li>
+                      <li>
+                        (!@#$%^&*()_+-=[]{}
+                        ;':"\|,./?+)
+                      </li>
+                    </ul>
+                    <div className="mt-4">
+                      <button
+                        className="inline-flex items-center gap-2 rounded-md bg-gray-700 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        Entendido!
+                      </button>
+                    </div>
+                  </DialogPanel>
+                </TransitionChild>
+              </div>
+            </div>
+          </Dialog>
+        </Transition>
       </div>
     </div>
   )
