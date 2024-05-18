@@ -8,11 +8,11 @@ export default {
       },
       colors: {
         'fede-main': '#E7AB12',
-        'fede-main-claro': '#F0BF42',
-        'fede-secundary': '#231C07',
-        'fede-secundary-claro': '#1c1c1b',
+        'fede-main-claro': '#FFF9E3',
+        'fede-secundary': '#2B2B2B     ',
+        'fede-fondo-texto': '#7F7F7F    ',
         'fede-texto-claro': '#FFFFFF',
-        'fede-texto-base': '#FFFFFF'
+        'fede-texto-base': '#FFFFFF  '
         //231C07 marron oscuro cute
       }
     }

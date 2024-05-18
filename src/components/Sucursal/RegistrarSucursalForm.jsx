@@ -13,11 +13,9 @@ export const RegistrarSucursalForm = () => {
   const { handleChange, handleSubmit } = useHandlerSucursal(credentials, setCredentials)
 
   return (
-    <div className="flex h-screen items-center justify-center bg-gray-100 dark:bg-gray-900">
-      <div className="mx-4 w-full max-w-md rounded-lg bg-white p-8 shadow-md sm:mx-0 dark:bg-gray-800">
-        <h2 className="mb-6 text-center text-2xl font-bold text-gray-800 dark:text-gray-100">
-          Registrar nueva sucursal
-        </h2>
+    <div className="flex items-center justify-center">
+      <div className="my-5 w-full max-w-[48rem] rounded-lg bg-white p-8 shadow-md ">
+        <h2 className="text-center text-2xl font-bold text-gray-800">Registrar nueva sucursal</h2>
         <Toaster
           visibleToasts={8}
           expand="true"
