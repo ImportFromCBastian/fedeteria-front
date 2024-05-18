@@ -5,7 +5,7 @@ import { AceptarDenegar } from './Aceptar-Denegar'
 export const DetallesPublicacion = () => {
   const [comment, setComment] = useState('')
   const maxLength = 200 // Máximo de caracteres permitidos
-  const idPublicacion = 12 //CONSEGUIR EL idPublicacion DE ALGUNA MANERA.
+  const idPublicacion = 10 //CONSEGUIR EL idPublicacion DE ALGUNA MANERA.
   const [publicacion, setPublicacion] = useState({
     idPublicacion: null,
     nombre: '',
@@ -13,17 +13,37 @@ export const DetallesPublicacion = () => {
     descripcion: '',
     productoACambio: ''
   })
+  const [fotos, setFotos] = useState([])
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion}`, {
-      method: 'GET'
-    })
-      .then((response) => response.json())
-      .then((data) => {
+    const fetchPublicacion = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion}`
+        )
+        const data = await response.json()
         setPublicacion(data[0])
-      })
-      .catch((error) => console.error('Error al obtener la publicacion:', error))
-  }, [])
+      } catch (error) {
+        console.error('Error al obtener la publicación:', error)
+      }
+    }
+
+    const fetchFoto = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion}/fotos`
+        )
+        const data = await response.json()
+        console.log(data)
+        setFotos(data)
+      } catch (error) {
+        console.error('Error al obtener la imagen:', error)
+      }
+    }
+
+    fetchPublicacion()
+    fetchFoto()
+  }, [idPublicacion])
 
   const eliminarPublicacion = async (idPublicacion) => {
     await fetch(`${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion}`, {
@@ -88,55 +108,16 @@ export const DetallesPublicacion = () => {
         </div>
         <div className="grid gap-4 md:gap-10">
           <div className="grid gap-4">
-            <img
-              src="{foto.at(0)}" //foto de articulo,
-              alt="Imagen del artículo"
-              width="500"
-              height="500"
-              className="aspect-square w-full overflow-hidden rounded-lg border border-gray-200 object-cover dark:border-gray-800"
-            />
-            <div className="hidden items-start gap-4 md:flex">
-              <button className="overflow-hidden rounded-lg border border-gray-500 transition-colors hover:border-black">
-                <img
-                  src="/placeholder.svg"
-                  alt="Imagen de previsualización"
-                  width="100"
-                  height="100"
-                  className="aspect-square object-cover"
-                />
-                <span className="sr-only">Ver imagen 1</span>
-              </button>
-              <button className="overflow-hidden rounded-lg border border-gray-500 transition-colors hover:border-black">
-                <img
-                  src="/placeholder.svg"
-                  alt="Imagen de previsualización"
-                  width="100"
-                  height="100"
-                  className="aspect-square object-cover"
-                />
-                <span className="sr-only">Ver imagen 2</span>
-              </button>
-              <button className="overflow-hidden rounded-lg border border-gray-500 transition-colors hover:border-black">
-                <img
-                  src="/placeholder.svg"
-                  alt="Imagen de previsualización"
-                  width="100"
-                  height="100"
-                  className="aspect-square object-cover"
-                />
-                <span className="sr-only">Ver imagen 3</span>
-              </button>
-              <button className="overflow-hidden rounded-lg border border-gray-500 transition-colors hover:border-black">
-                <img
-                  src="/placeholder.svg"
-                  alt="Imagen de previsualización"
-                  width="100"
-                  height="100"
-                  className="aspect-square object-cover"
-                />
-                <span className="sr-only">Ver imagen 4</span>
-              </button>
-            </div>
+            {fotos.map((fotoUrl, index) => (
+              <img
+                key={index}
+                src={fotoUrl}
+                alt={`Imagen ${index + 1} del artículo`}
+                width="300"
+                height="300"
+                className="aspect-square w-full overflow-hidden rounded-lg border border-gray-200 object-cover dark:border-gray-800"
+              />
+            ))}
           </div>
           <div className="grid gap-4">
             <div className="grid gap-2">
@@ -150,7 +131,7 @@ export const DetallesPublicacion = () => {
                 className="text-base font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 htmlFor="product"
               >
-                {publicacion.productoACambio} aCambio
+                {publicacion.productoACambio}
               </label>
             </div>
           </div>
