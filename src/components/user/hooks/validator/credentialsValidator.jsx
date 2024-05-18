@@ -28,13 +28,18 @@ const userSchema = y.object({
     .string()
     .test('adultValidation', 'La persona debe ser mayor de edad.', (date) => {
       const today = new Date()
-      const birthday = new Date(date)
+      const birthday = {
+        getFullYear: () => parseInt(date.split('-')[0]),
+        getMonth: () => parseInt(date.split('-')[1]),
+        getDate: () => parseInt(date.split('-')[2])
+      }
       const age = today.getFullYear() - birthday.getFullYear()
       if (age === 18) {
         // Si la persona tiene 18 años, comprobamos si su mes y día de nacimiento ya han pasado en el año actual
+        const monthCorrection = today.getMonth() + 1
         const isAdult =
-          today.getMonth() > birthday.getMonth() ||
-          (today.getMonth() === birthday.getMonth() && today.getDate() >= birthday.getDate())
+          monthCorrection > birthday.getMonth() ||
+          (monthCorrection === birthday.getMonth() && today.getDate() >= birthday.getDate())
         return isAdult
       }
       return age > 18

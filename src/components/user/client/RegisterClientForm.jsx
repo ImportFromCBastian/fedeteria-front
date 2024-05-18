@@ -113,7 +113,7 @@ export const RegisterClientForm = () => {
               onChange={handleChange}
               placeholder="YYYY-MM-DD"
               className="w-full rounded-md border border-gray-300 bg-fede-secundary-claro px-3 py-2 text-fede-texto-claro shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main dark:border-gray-600"
-              type="text"
+              type="date"
             />
           </div>
           <div className="flex items-center">
