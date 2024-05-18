@@ -3,6 +3,7 @@ import { CommentForm } from './DejarConsulta'
 import { AceptarDenegar } from './Aceptar-Denegar'
 
 export const DetallesPublicacion = () => {
+  const { id } = useParams('')
   const [comment, setComment] = useState('')
   const maxLength = 200 // Máximo de caracteres permitidos
   const idPublicacion = 12 //CONSEGUIR EL idPublicacion DE ALGUNA MANERA.

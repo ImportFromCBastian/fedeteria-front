@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Publicacion } from './Publicacion'
+import { useNavigation } from 'react-router-dom'
 
 export function ListadoPublicaciones() {
   const [publicaciones, setPublicaciones] = useState([])
+  const navigate = useNavigation()
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_BASE_URL}/publicaciones`, {
@@ -74,6 +76,7 @@ export function ListadoPublicaciones() {
             <Publicacion
               publicationName={pub.nombre}
               key={index}
+              onClick={() => navigate(`/listado_publicaciones/${pub.idPublicacion}`)}
               onDelete={() => eliminarPublicacion(pub.idPublicacion)}
               onAccept={(numero) => aceptarPublicacion(pub.idPublicacion, numero)}
             />
