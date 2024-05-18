@@ -59,14 +59,14 @@ export function ListadoPublicaciones() {
   }
 
   return (
-    <section className="mx-auto w-full max-w-4xl px-4 py-8 md:px-6">
-      <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
+    <section className="mx-auto w-full max-w-4xl px-4 pb-6 pt-8 md:px-6">
+      <h2 className="pl-6 pt-4 text-3xl font-bold tracking-tighter md:text-4xl">
         Publicaciones pendientes de revisión
       </h2>
-      <p className="text-gray-500 md:text-xl/relaxed dark:text-gray-400">
+      <p className="pl-6 pt-2 text-gray-500 md:text-xl/relaxed dark:text-gray-400">
         Revisa y toma acciones sobre las publicaciones enviadas por los usuarios.
-      </p>
-      <div className="space-y-4">
+      </p>{' '}
+      <div className="space-y-4 px-1 py-1">
         {publicaciones.length === 0 ? (
           <p>No hay publicaciones que aceptar!</p>
         ) : (

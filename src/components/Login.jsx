@@ -112,7 +112,7 @@ export const Login = () => {
           duration: 6500
         }}
       />
-      <div className="mx-4 my-5 w-full max-w-md rounded-lg bg-fede-secundary p-8 shadow-md sm:mx-0">
+      <div className="mx-4 my-5 w-full max-w-md rounded-lg border-2 border-fede-main bg-fede-secundary p-8 shadow-md sm:mx-0">
         <h2 className="mb-6 text-center text-2xl font-bold text-fede-texto-base">Iniciar sesión</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -159,7 +159,7 @@ export const Login = () => {
           </div>
           <button
             type="submit"
-            className="w-full rounded-md bg-fede-main px-4 py-2 font-medium text-white hover:bg-fede-main-claro focus:outline-none focus:ring-2 focus:ring-fede-main focus:ring-offset-2"
+            className="w-full rounded-md bg-fede-main px-4 py-2 font-medium text-white hover:scale-105 hover:bg-fede-hover-button focus:outline-none focus:ring-2 focus:ring-fede-main focus:ring-offset-2"
           >
             Iniciar sesión
           </button>

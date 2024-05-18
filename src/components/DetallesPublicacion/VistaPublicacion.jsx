@@ -57,7 +57,7 @@ export const DetallesPublicacion = () => {
   return (
     <div className="mx-auto grid max-w-6xl items-start gap-6 px-4 py-6 md:grid-cols-2 lg:gap-12">
       <div className="grid items-start gap-4 md:gap-10">
-        <div className="hidden items-start md:flex">
+        <div className="hidden  items-start md:flex">
           <div className="grid gap-4">
             <h1 className="text-3xl font-bold">{publicacion.nombre} Nombre</h1>
             <div className="flex items-center gap-4">
@@ -156,7 +156,7 @@ export const DetallesPublicacion = () => {
           </div>
         </div>
       </div>
-      <div className="grid items-start gap-4 rounded-md border border-black p-4 md:gap-10">
+      <div className="grid items-start gap-4 rounded-md border border-black bg-fede-secundary p-4 md:gap-10">
         <div className="grid gap-4">
           {/* {publicacion.precio === 0 && (//que el precio sea 0 y al conseguir el localCache sea un empleado, de todas maneras no tendria que poder verlo porque en listados comunes no va a existir, eso si tendriamos que dejarselo ver si es de el la publicacion */}
           <AceptarDenegar onAccept={aceptarPublicacion} onDelete={eliminarPublicacion} />
