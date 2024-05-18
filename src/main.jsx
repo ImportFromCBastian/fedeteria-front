@@ -10,6 +10,7 @@ import { MostrarPerfil } from './components/Perfil/ConseguirPerfil.jsx'
 import { DetallesPublicacion } from './components/DetallesPublicacion/VistaPublicacion.jsx'
 import { ListadoPublicaciones } from './components/Listado-Pub-Aceptacion/ListadoPubAceptacion.jsx'
 import { RegisterWorkerForm } from './components/user/worker/RegisterWorkerForm.jsx'
+import UnauthorizedAccessPage from './components/Error/Unauthorized.jsx'
 import Layout from './components/Layout/Layout.jsx'
 
 const router = createBrowserRouter([
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
   {
     path: '/mi_perfil',
     element: <MostrarPerfil />
+  },
+  {
+    path: '/unauthorized',
+    element: <UnauthorizedAccessPage />
   },
   {
     path: '/ver_detalles',
