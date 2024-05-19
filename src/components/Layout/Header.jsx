@@ -1,5 +1,11 @@
 import { Link } from 'react-router-dom'
 export const Header = () => {
+  // <Link className="float-right rounded-md border p-2" to="/login">
+  //   Iniciar Sesion
+  // </Link>
+  // <Link className="rounded-md border p-2" to="/registrar/cliente">
+  //   Registrarse
+  // </Link>
   return (
     <div>
       <div className="relative w-full bg-fede-main">
