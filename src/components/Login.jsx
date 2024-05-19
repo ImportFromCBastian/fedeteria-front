@@ -41,10 +41,10 @@ export const Login = () => {
     // Verificar si credential.dni es un entero positivo
     const dniAsInt = parseInt(credential.dni, 10)
     if (isNaN(dniAsInt) || dniAsInt <= 0) {
-      toast.error('ingrese un DNI valido')
+      toast.error('Ingrese un DNI válido')
       return
     }
-    //Verificar si la cuenta está bloqueada ----> quitar el los "//" en caso de que ya este listo
+    // Verificar si la cuenta está bloqueada
     if (isLocked[credential.dni]) {
       alert('Tu cuenta está bloqueada. Por favor, contacta al administrador.')
       return
@@ -75,7 +75,6 @@ export const Login = () => {
 
     if (!compare.ok) {
       if (attempts[credential.dni] >= 2) {
-        //Cambiado a 2 porque ya se cuenta el intento actual
         setIsLocked({ ...isLocked, [credential.dni]: true })
       } else {
         // Incrementar el contador de intentos fallidos para este DNI
@@ -102,8 +101,9 @@ export const Login = () => {
     // Redirige al usuario a la homepage
     return navigate('/')
   }
+
   return (
-    <div className="flex min-h-[100vh] items-center justify-center bg-[#edca6f]">
+    <div className="flex min-h-[100vh] items-center justify-center">
       <Toaster
         visibleToasts={8}
         expand="true"
@@ -112,19 +112,11 @@ export const Login = () => {
           duration: 6500
         }}
       />
-      <div className="w-full max-w-md rounded-lg  bg-white p-6 shadow-lg">
-        <div className="mb-6 text-center">
-          <h2 className="text-2xl font-bold text-gray-900">Iniciar sesión</h2>
-          <p className="text-gray-500 dark:text-gray-900">
-            Ingresa tu DNI y contraseña para acceder a tu cuenta.
-          </p>
-        </div>
+      <div className="mx-4 my-5 w-full max-w-md rounded-lg border-2 border-fede-main bg-fede-secundary p-8 shadow-md sm:mx-0">
+        <h2 className="mb-6 text-center text-2xl font-bold text-fede-texto-base">Iniciar sesión</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label
-              htmlFor="dni"
-              className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-900 "
-            >
+            <label htmlFor="dni" className="mb-2 block text-sm font-medium text-fede-texto-base">
               DNI
             </label>
             <input
@@ -133,7 +125,7 @@ export const Login = () => {
               placeholder="12345678"
               value={credential.dni}
               onChange={handleChange}
-              className="block w-full rounded-md border border-black bg-white p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-black dark:bg-white dark:text-black dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              className=" w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-base shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               required
               type="number"
             />
@@ -141,7 +133,7 @@ export const Login = () => {
           <div>
             <label
               htmlFor="password"
-              className="dark:text-gray-text-gray-900 mb-2 block text-sm font-medium text-gray-700"
+              className="mb-2 block text-sm font-medium text-fede-texto-base"
             >
               Contraseña
             </label>
@@ -151,7 +143,7 @@ export const Login = () => {
               placeholder="••••••••"
               value={credential.password}
               onChange={handleChange}
-              className="block w-full rounded-md border border-black bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500  dark:bg-white dark:text-black dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+              className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-base shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
               required
               type="password"
             />
@@ -160,14 +152,14 @@ export const Login = () => {
             <a
               target="_blank"
               href="https://www.youtube.com/watch?v=lYBUbBu4W08"
-              className="ml-auto text-sm text-gray-900 hover:underline"
+              className="ml-auto text-sm text-fede-texto-base hover:underline"
             >
               ¿Olvidaste tu contraseña?
             </a>
           </div>
           <button
             type="submit"
-            className="w-full rounded-md px-5 py-2.5 text-center text-sm font-medium text-white  focus:outline-none focus:ring-4  dark:bg-black dark:hover:bg-blue-700 "
+            className="w-full rounded-md bg-fede-main px-4 py-2 font-medium text-white hover:scale-105 hover:bg-fede-hover-button focus:outline-none focus:ring-2 focus:ring-fede-main focus:ring-offset-2"
           >
             Iniciar sesión
           </button>

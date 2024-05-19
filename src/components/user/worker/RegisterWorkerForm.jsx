@@ -18,9 +18,9 @@ export const RegisterWorkerForm = () => {
     useHandler(credentials, setCredentials, showPassword, setShowPassword, 'worker')
 
   return (
-    <div className="flex h-screen items-center justify-center bg-gray-100 dark:bg-gray-900">
-      <div className="mx-4 w-full max-w-md rounded-lg bg-white p-8 shadow-md sm:mx-0 dark:bg-gray-800">
-        <h2 className="mb-6 text-center text-2xl font-bold text-gray-800 dark:text-gray-100">
+    <div className="flex items-center justify-center">
+      <div className="mx-4 my-5 w-full max-w-md rounded-lg border-2 border-fede-main bg-fede-secundary p-8 shadow-md sm:mx-0">
+        <h2 className="mb-6 text-center text-2xl font-bold text-fede-texto-base">
           Registrar Empleado
         </h2>
         <Toaster
@@ -33,41 +33,35 @@ export const RegisterWorkerForm = () => {
         />
         <form className="space-y-4">
           <div>
-            <label
-              htmlFor="dni"
-              className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
+            <label htmlFor="dni" className="mb-2 block text-sm font-medium text-fede-texto-base">
               DNI
             </label>
             <input
               name="dni"
               placeholder="Ingresa el DNI del empleado"
               onChange={handleChange}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm [appearance:textfield] focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm [appearance:textfield] focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               type="number"
               autoComplete="off"
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label
-                htmlFor="name"
-                className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
+              <label htmlFor="name" className="mb-2 block text-sm font-medium text-fede-texto-base">
                 Nombre
               </label>
               <input
                 name="name"
                 onChange={handleChange}
                 placeholder="Ingresa el nombre del empleado"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
                 type="text"
               />
             </div>
             <div>
               <label
                 htmlFor="lastName"
-                className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+                className="mb-2 block text-sm font-medium text-fede-texto-base"
               >
                 Apellido
               </label>
@@ -75,39 +69,35 @@ export const RegisterWorkerForm = () => {
                 name="lastName"
                 onChange={handleChange}
                 placeholder="Ingresa el apellido del empleado"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
                 type="text"
               />
             </div>
           </div>
           <div>
-            <label
-              htmlFor="email"
-              className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
+            <label htmlFor="email" className="mb-2 block text-sm font-medium text-fede-texto-base">
               Email
             </label>
             <input
               name="email"
               onChange={handleChange}
               placeholder="Ingresa el correo electronico"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
               type="email"
             />
           </div>
           <div className="relative">
             <label
               htmlFor="password"
-              className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+              className="mb-2 block text-sm font-medium text-fede-texto-base"
             >
               Contraseña
             </label>
-
             <input
               name="password"
               onChange={handleChange}
               placeholder="Ingresa la contraseña"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
               type={!showPassword ? 'password' : 'text'}
             />
             <RenderVisibility show={showPassword} handleClick={handleChangePasswordVisibility} />
@@ -115,14 +105,14 @@ export const RegisterWorkerForm = () => {
           <div>
             <label
               htmlFor="birthdate"
-              className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+              className="mb-2 block text-sm font-medium text-fede-texto-base"
             >
               Fecha de Nacimiento
             </label>
             <input
               name="birthdate"
               onChange={handleChange}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
               type="date"
             />
           </div>
@@ -130,12 +120,12 @@ export const RegisterWorkerForm = () => {
             <input
               name="notification"
               onChange={handleChangeCheck}
-              className="h-4 w-4 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+              className="h-4 w-4 rounded border-gray-300 text-fede-main focus:ring-fede-main"
               type="checkbox"
             />
             <label
               htmlFor="notification"
-              className="ml-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+              className="ml-2 block text-sm font-medium text-fede-texto-base"
             >
               ¿Desea recibir correos con anuncios de la plataforma?
             </label>
@@ -143,7 +133,7 @@ export const RegisterWorkerForm = () => {
           <button
             type="submit"
             onClick={handleSubmit}
-            className="w-full rounded-md bg-blue-500 px-4 py-2 font-medium text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="w-full rounded-md bg-fede-main px-4 py-2 font-medium text-white hover:scale-105 hover:bg-fede-hover-button focus:outline-none focus:ring-2 focus:ring-fede-main focus:ring-offset-2"
           >
             Registrarse
           </button>
