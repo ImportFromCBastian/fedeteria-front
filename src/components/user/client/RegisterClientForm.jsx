@@ -2,14 +2,7 @@ import { useState } from 'react'
 import { RenderVisibility } from '../Visibility'
 import { useHandler } from '../hooks/useHandler'
 import { Toaster } from 'sonner'
-import {
-  Button,
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-  Transition,
-  TransitionChild
-} from '@headlessui/react'
+import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
 
 export const RegisterClientForm = () => {
   const [showPassword, setShowPassword] = useState(false)

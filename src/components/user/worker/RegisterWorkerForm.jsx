@@ -1,10 +1,14 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { RenderVisibility } from '../Visibility'
 import { useHandler } from '../hooks/useHandler'
 import { Toaster } from 'sonner'
+import { useNavigate } from 'react-router-dom'
+import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
 
 export const RegisterWorkerForm = () => {
+  const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   const [credentials, setCredentials] = useState({
     dni: '',
     name: '',
@@ -16,6 +20,35 @@ export const RegisterWorkerForm = () => {
   })
   const { handleChange, handleChangePasswordVisibility, handleChangeCheck, handleSubmit } =
     useHandler(credentials, setCredentials, showPassword, setShowPassword, 'worker')
+
+  const decodeToken = async (token) => {
+    return await fetch(`${import.meta.env.VITE_BASE_URL}/user/decode_token`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      method: 'POST'
+    })
+      .then((response) => response.json())
+      .then((data) => data.data)
+      .catch((e) => new Error(e))
+  }
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+
+    // if (token) {
+    //   navigate('/')
+    //   return
+    // }
+
+    const fetchData = async () => {
+      const decodedToken = await decodeToken(token)
+      // if (decodedToken.rol !== 'admin') {
+      //   navigate('/')
+      //   return
+      // }
+    }
+    fetchData()
+  }, [])
 
   return (
     <div className="flex items-center justify-center">
@@ -92,6 +125,12 @@ export const RegisterWorkerForm = () => {
               className="mb-2 block text-sm font-medium text-fede-texto-base"
             >
               Contraseña
+              <span
+                className="material-symbols-outlined float-right cursor-pointer rounded-full outline-dotted"
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                question_mark
+              </span>
             </label>
             <input
               name="password"
@@ -138,6 +177,49 @@ export const RegisterWorkerForm = () => {
             Registrarse
           </button>
         </form>
+        <Transition appear show={isOpen}>
+          <Dialog
+            as="div"
+            className="relative z-10 focus:outline-none"
+            onClose={() => setIsOpen(false)}
+          >
+            <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+              <div className="flex min-h-full items-center justify-center p-4">
+                <TransitionChild
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0 transform-[scale(95%)]"
+                  enterTo="opacity-100 transform-[scale(100%)]"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100 transform-[scale(100%)]"
+                  leaveTo="opacity-0 transform-[scale(95%)]"
+                >
+                  <DialogPanel className="m-4 w-auto  rounded-xl bg-white/5 p-6 backdrop-blur-2xl">
+                    <DialogTitle as="h3" className="text-base/7 font-medium text-white">
+                      Reglas de la contraseña
+                    </DialogTitle>
+                    <ul className="mt-2 text-sm/6 text-white/50 ">
+                      <li> - La contraseña debe contener al menos 6 caracteres</li>
+                      <li> - La contraseña debe contener al menos una letra mayúscula</li>
+                      <li> - La contraseña debe contener algún caracter especial</li>
+                      <li>
+                        (!@#$%^&*()_+-=[]{}
+                        ;':"\|,./?+)
+                      </li>
+                    </ul>
+                    <div className="mt-4">
+                      <button
+                        className="inline-flex items-center gap-2 rounded-md bg-gray-700 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        Entendido!
+                      </button>
+                    </div>
+                  </DialogPanel>
+                </TransitionChild>
+              </div>
+            </div>
+          </Dialog>
+        </Transition>
       </div>
     </div>
   )
