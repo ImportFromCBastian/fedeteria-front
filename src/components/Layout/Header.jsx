@@ -49,14 +49,13 @@ export const Header = () => {
       </div>
       <header className=" flex flex-col items-center justify-between bg-fede-main px-4 py-4 shadow-sm">
         <div className=" mt-4 flex w-full items-center justify-between">
-          <a className="flex items-center gap-2 text-lg font-semibold" href="#">
+          <Link to="/" className="flex items-center gap-2 text-lg font-semibold" href="#">
             <img
               alt="Logo"
-              className="mx-auto h-auto max-h-8 w-auto"
+              className="mx-auto h-auto max-h-8 w-auto max-w-[100%]"
               src="/Fedeteria_Horizontal.svg"
-              style={{ maxWidth: '100%' }}
             />
-          </a>
+          </Link>
           <div className="flex items-center gap-4">
             <button className="ring-offset-background focus-visible:ring-ring hover:bg-accent hover:text-accent-foreground inline-flex h-10 w-10 items-center justify-center whitespace-nowrap rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
               <svg

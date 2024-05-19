@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { Routes, Route, BrowserRouter } from 'react-router-dom'
 import { Login } from './components/Login.jsx'
 import { RegistrarSucursalForm } from './components/Sucursal/RegistrarSucursalForm.jsx'
 import { RegisterClientForm } from './components/user/client/RegisterClientForm.jsx'
@@ -12,7 +12,6 @@ import { ListadoPublicaciones } from './components/Listado-Pub-Aceptacion/Listad
 import { RegisterWorkerForm } from './components/user/worker/RegisterWorkerForm.jsx'
 import UnauthorizedAccessPage from './components/Error/Unauthorized.jsx'
 import Layout from './components/Layout/Layout.jsx'
-
 const router = createBrowserRouter([
   {
     path: '/',
@@ -65,11 +64,23 @@ const router = createBrowserRouter([
     )
   }
 ])
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router}>
-      {' '}
-      <Layout />{' '}
-    </RouterProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<h1> hola </h1>} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/sucursal" element={<RegistrarSucursalForm />} />
+          <Route path="/registrar/cliente" element={<RegisterClientForm />} />
+          <Route path="/registrar/empleado" element={<RegisterWorkerForm />} />
+          <Route path="/agregar_publicacion" element={<PostPublicationForm />} />
+          <Route path="/mi_perfil" element={<MostrarPerfil />} />
+          <Route path="/listado_publicaciones" element={<ListadoPublicaciones />} />
+          <Route path="/listado_publicaciones/:id" element={<DetallesPublicacion />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>
 )
