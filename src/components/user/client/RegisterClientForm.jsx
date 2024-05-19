@@ -142,7 +142,7 @@ export const RegisterClientForm = () => {
               htmlFor="sucursal"
               className="mb-2 block text-sm font-medium text-fede-texto-base"
             >
-              Sucursal
+              Sucursal más cercana
             </label>
             <select
               name="sucursal"
