@@ -1,20 +1,49 @@
 import { useEffect, useState } from 'react'
 import { Publicacion } from './Publicacion'
-import { useNavigation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
-export function ListadoPublicaciones() {
+export const ListadoPublicaciones = () => {
   const [publicaciones, setPublicaciones] = useState([])
-  const navigate = useNavigation()
+  const navigate = useNavigate()
 
-  useEffect(() => {
-    fetch(`${import.meta.env.VITE_BASE_URL}/publicaciones`, {
-      method: 'GET'
+  const decodeToken = async (token) => {
+    return await fetch(`${import.meta.env.VITE_BASE_URL}/user/decode_token`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      method: 'POST'
     })
+      .then((response) => response.json())
+      .then((data) => data.data)
+      .catch((e) => new Error(e))
+  }
+
+  const fetchPublicationData = async () => {
+    await fetch(`${import.meta.env.VITE_BASE_URL}/publicaciones`)
       .then((response) => response.json())
       .then((data) => {
         setPublicaciones(data.data)
       })
       .catch((error) => console.error('Error al obtener el listado de publicaciones:', error))
+  }
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+
+    if (!token) {
+      navigate('/')
+      return
+    }
+
+    const fetchData = async () => {
+      const decodedToken = await decodeToken(token)
+      if (decodedToken.rol !== 'empleado') {
+        navigate('/')
+        return
+      }
+      fetchPublicationData()
+    }
+    fetchData()
   }, [])
 
   const eliminarPublicacion = async (idPublicacion) => {
@@ -75,8 +104,8 @@ export function ListadoPublicaciones() {
           publicaciones.map((pub, index) => (
             <Publicacion
               publicationName={pub.nombre}
+              idPublicacion={pub.idPublicacion}
               key={index}
-              onClick={() => navigate(`/listado_publicaciones/${pub.idPublicacion}`)}
               onDelete={() => eliminarPublicacion(pub.idPublicacion)}
               onAccept={(numero) => aceptarPublicacion(pub.idPublicacion, numero)}
             />

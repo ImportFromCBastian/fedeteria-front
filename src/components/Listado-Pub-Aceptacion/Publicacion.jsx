@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
 import { toast, Toaster } from 'sonner'
-export const Publicacion = ({ publicationName, onDelete, onAccept }) => {
+import { useNavigate } from 'react-router-dom'
+
+export const Publicacion = ({ publicationName, idPublicacion, onDelete, onAccept }) => {
   const [showInputModal, setShowInputModal] = useState(false)
   const [numero, setNumero] = useState('')
   const exceptThisSymbols = ['e', 'E', '+', '-', ',']
+  const navigate = useNavigate()
 
   const handleChangeNumero = (event) => {
     if (event.target.value === '-' || event.target.value === 'e') {
@@ -28,7 +31,12 @@ export const Publicacion = ({ publicationName, onDelete, onAccept }) => {
   }
 
   return (
-    <div className="relative">
+    <div
+      className="relative"
+      onClick={() => {
+        navigate('/listado_publicaciones/' + idPublicacion)
+      }}
+    >
       <Toaster />
       <div className="rounded-lg bg-white p-4 shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-xl">
         <h3 className="mb-2 text-lg font-medium">{publicationName}</h3>
