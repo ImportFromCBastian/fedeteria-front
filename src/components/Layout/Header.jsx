@@ -1,11 +1,40 @@
 import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
 export const Header = () => {
-  // <Link className="float-right rounded-md border p-2" to="/login">
-  //   Iniciar Sesion
-  // </Link>
-  // <Link className="rounded-md border p-2" to="/registrar/cliente">
-  //   Registrarse
-  // </Link>
+  const [user, setUser] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  const decodeToken = async (token) => {
+    return await fetch(`${import.meta.env.VITE_BASE_URL}/user/decode_token`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      method: 'POST'
+    })
+      .then((response) => response.json())
+      .then((data) => data.data)
+      .catch((e) => new Error(e))
+  }
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      decodeToken(token)
+        .then((data) => {
+          setUser(data || 'anónimo')
+          setIsLoading(false)
+        })
+        .catch(() => {
+          setUser('anónimo')
+          setIsLoading(false)
+        })
+    } else {
+      setUser('anónimo')
+      setIsLoading(false)
+    }
+  }, [])
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
   return (
     <div>
       <div className="relative w-full bg-fede-main">
@@ -44,49 +73,66 @@ export const Header = () => {
               src="/Fedeteria_Horizontal.svg"
             />
           </Link>
-          <div className="flex items-center gap-4">
-            <button className="ring-offset-background focus-visible:ring-ring hover:bg-accent hover:text-accent-foreground inline-flex h-10 w-10 items-center justify-center whitespace-nowrap rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-6 w-6"
-              >
-                <line x1="8" x2="21" y1="6" y2="6"></line>
-                <line x1="8" x2="21" y1="12" y2="12"></line>
-                <line x1="8" x2="21" y1="18" y2="18"></line>
-                <line x1="3" x2="3.01" y1="6" y2="6"></line>
-                <line x1="3" x2="3.01" y1="12" y2="12"></line>
-                <line x1="3" x2="3.01" y1="18" y2="18"></line>
-              </svg>
-              <span className="sr-only">Carrito</span>
-            </button>
-            <button className="ring-offset-background focus-visible:ring-ring hover:bg-accent hover:text-accent-foreground inline-flex h-10 w-10 items-center justify-center whitespace-nowrap rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-6 w-6"
-              >
-                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-              </svg>
-              <span className="sr-only">Perfil</span>
-            </button>
-          </div>
+          {user && (user.rol === 'empleado' || user.rol === 'cliente') ? (
+            <div className="flex items-center gap-4">
+              <button className="ring-offset-background focus-visible:ring-ring hover:bg-accent hover:text-accent-foreground inline-flex h-10 w-10 items-center justify-center whitespace-nowrap rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-6 w-6"
+                >
+                  <line x1="8" x2="21" y1="6" y2="6"></line>
+                  <line x1="8" x2="21" y1="12" y2="12"></line>
+                  <line x1="8" x2="21" y1="18" y2="18"></line>
+                  <line x1="3" x2="3.01" y1="6" y2="6"></line>
+                  <line x1="3" x2="3.01" y1="12" y2="12"></line>
+                  <line x1="3" x2="3.01" y1="18" y2="18"></line>
+                </svg>
+                <span className="sr-only">Listado</span>
+              </button>
+              <button className="ring-offset-background focus-visible:ring-ring hover:bg-accent hover:text-accent-foreground inline-flex h-10 w-10 items-center justify-center whitespace-nowrap rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
+                <Link
+                  to="/mi_perfil"
+                  className="ring-offset-background focus-visible:ring-ring hover:bg-accent hover:text-accent-foreground inline-flex h-10 w-10 items-center justify-center whitespace-nowrap rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-6 w-6"
+                  >
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  <span className="sr-only">Perfil</span>
+                </Link>
+              </button>
+            </div>
+          ) : (
+            <h1>
+              <Link className="float-right ml-2 rounded-md border p-2" to="/login">
+                Iniciar Sesion
+              </Link>
+              <Link className="float-right rounded-md border p-2" to="/registrar/cliente">
+                Registrarse
+              </Link>
+            </h1>
+          )}
         </div>
+
         <div className="flex items-center gap-4">
           <Link
             className="font-medium underline-offset-4 hover:underline"
@@ -100,12 +146,12 @@ export const Header = () => {
           >
             Cargar Publicacion
           </Link>
-          <a className="font-medium underline-offset-4 hover:underline" href="#">
+          {/* <a className="font-medium underline-offset-4 hover:underline" href="#">
             Trueques futuros
           </a>
           <a className="font-medium underline-offset-4 hover:underline" href="#">
             Historial de trueques
-          </a>
+          </a> */}
         </div>
       </header>
     </div>

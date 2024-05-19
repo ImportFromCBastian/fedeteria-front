@@ -23,7 +23,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/registrar/cliente" element={<RegisterClientForm />} />
           <Route path="/registrar/empleado" element={<RegisterWorkerForm />} />
           <Route path="/agregar_publicacion" element={<PostPublicationForm />} />
-          <Route path="/mi_perfil" element={<MostrarPerfil />} />
+          <Route path="/:id" element={<MostrarPerfil />} />
           <Route path="/listado_publicaciones" element={<ListadoPublicaciones />} />
           <Route path="/listado_publicaciones/:id" element={<DetallesPublicacion />} />
         </Route>
