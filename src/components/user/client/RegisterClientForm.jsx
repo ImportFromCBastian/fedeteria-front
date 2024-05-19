@@ -28,8 +28,8 @@ export const RegisterClientForm = () => {
 
   return (
     <div className="flex items-center justify-center">
-      <div className="mx-4 w-full max-w-md rounded-lg bg-fede-secundary p-8 shadow-md sm:mx-0">
-        <h2 className="mb-6 text-center text-2xl font-bold text-fede-texto-base">Registrate</h2>
+      <div className="mx-4 my-5 w-full max-w-md rounded-lg border-2 border-fede-main bg-fede-secundary p-8 shadow-md sm:mx-0">
+        <h2 className="text-center text-2xl font-bold text-fede-texto-base">Registrate</h2>
         <Toaster
           visibleToasts={8}
           expand="true"
@@ -47,7 +47,7 @@ export const RegisterClientForm = () => {
               name="dni"
               placeholder="Ingresa tu DNI"
               onChange={handleChange}
-              className="w-full rounded-md border border-gray-300 bg-fede-secundary-claro px-3 py-2 text-fede-texto-base shadow-sm [appearance:textfield] focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main dark:border-gray-600 dark:text-gray-100 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              className="w-full rounded-md border bg-fede-fondo-texto px-3 py-2 text-fede-texto-input placeholder-fede-texto-claro shadow-sm outline-fede-main focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
               type="number"
               autoComplete="off"
             />
@@ -61,7 +61,7 @@ export const RegisterClientForm = () => {
                 name="name"
                 onChange={handleChange}
                 placeholder="Ingresa tu nombre"
-                className="w-full rounded-md border border-gray-300 bg-fede-secundary-claro px-3 py-2 text-fede-texto-claro shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main dark:border-gray-600"
+                className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
                 type="text"
               />
             </div>
@@ -76,7 +76,7 @@ export const RegisterClientForm = () => {
                 name="lastName"
                 onChange={handleChange}
                 placeholder="Ingresa tu apellido"
-                className="w-full rounded-md border border-gray-300 bg-fede-secundary-claro px-3 py-2 text-fede-texto-claro shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main dark:border-gray-600"
+                className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
                 type="text"
               />
             </div>
@@ -89,7 +89,7 @@ export const RegisterClientForm = () => {
               name="email"
               onChange={handleChange}
               placeholder="Ingresa tu correo electronico"
-              className="w-full rounded-md border border-gray-300 bg-fede-secundary-claro px-3 py-2 text-fede-texto-claro shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main dark:border-gray-600"
+              className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
               type="email"
             />
           </div>
@@ -111,7 +111,7 @@ export const RegisterClientForm = () => {
               name="password"
               onChange={handleChange}
               placeholder="Ingresa tu contraseña"
-              className="mt-1 w-full rounded-md border border-gray-300 bg-fede-secundary-claro px-3 py-2 text-fede-texto-claro shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main dark:border-gray-600"
+              className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
               type={!showPassword ? 'password' : 'text'}
             />
             <RenderVisibility show={showPassword} handleClick={handleChangePasswordVisibility} />
@@ -127,7 +127,7 @@ export const RegisterClientForm = () => {
               name="birthdate"
               onChange={handleChange}
               placeholder="YYYY-MM-DD"
-              className="w-full rounded-md border border-gray-300 bg-fede-secundary-claro px-3 py-2 text-fede-texto-claro shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main dark:border-gray-600"
+              className=":bordedarkr-gray-600 w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
               type="date"
             />
           </div>
@@ -148,7 +148,7 @@ export const RegisterClientForm = () => {
           <button
             type="submit"
             onClick={handleSubmit}
-            className="w-full rounded-md bg-fede-main px-4 py-2 font-medium text-white hover:bg-fede-main-claro focus:outline-none focus:ring-2 focus:ring-fede-main focus:ring-offset-2"
+            className="w-full rounded-md bg-fede-main px-4 py-2 font-medium text-white hover:scale-105  hover:bg-fede-hover-button focus:outline-none focus:ring-2 focus:ring-fede-main focus:ring-offset-2"
           >
             Registrarse
           </button>

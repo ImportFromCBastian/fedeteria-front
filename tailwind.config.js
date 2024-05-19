@@ -8,11 +8,13 @@ export default {
       },
       colors: {
         'fede-main': '#E7AB12',
-        'fede-main-claro': '#F0BF42',
-        'fede-secundary': '#231C07',
-        'fede-secundary-claro': '#1c1c1b',
-        'fede-texto-claro': '#FFFFFF',
-        'fede-texto-base': '#FFFFFF'
+        'fede-main-claro': '#FFF9E3',
+        'fede-hover-button': '#ebba3d',
+        'fede-secundary': '#FFFFFF     ',
+        'fede-fondo-texto': '#f0eded',
+        'fede-texto-claro': ' #808080', //placeholder
+        'fede-texto-input': '#000000',
+        'fede-texto-base': '#000000  '
         //231C07 marron oscuro cute
       }
     }
