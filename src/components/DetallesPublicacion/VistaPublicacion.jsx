@@ -73,6 +73,31 @@ export const DetallesPublicacion = () => {
       console.error('Error al aceptar la publicación:', error)
     }
   }
+  const convertirBlobAUrl = (foto) => {
+    // Obtener los datos de la foto
+    const fotoData = foto.data
+    // Convertir los datos en una cadena base64
+    const base64String = btoa(String.fromCharCode.apply(null, fotoData))
+    // Crear la URL de datos
+    const imageUrl = `data:image/png;base64,${base64String}`
+    return imageUrl
+  }
+
+  const [fotosUrls, setFotosUrls] = useState([])
+  useEffect(() => {
+    // Verificar si hay fotos
+    if (fotos.length > 0) {
+      // Convertir cada foto a una URL de datos
+      Promise.all(fotos.map((foto) => convertirBlobAUrl(foto.foto)))
+        .then((urls) => {
+          // Actualizar el estado con las URLs de las imágenes convertidas
+          setFotosUrls(urls)
+        })
+        .catch((error) => {
+          console.error('Error al convertir blobs a URLs:', error)
+        })
+    }
+  }, [fotos])
 
   return (
     <div className="mx-auto grid max-w-6xl items-start gap-6 px-4 py-6 md:grid-cols-2 lg:gap-12">
@@ -108,7 +133,7 @@ export const DetallesPublicacion = () => {
         </div>
         <div className="grid gap-4 md:gap-10">
           <div className="grid gap-4">
-            {fotos.map((fotoUrl, index) => (
+            {fotosUrls.map((fotoUrl, index) => (
               <img
                 key={index}
                 src={fotoUrl}
