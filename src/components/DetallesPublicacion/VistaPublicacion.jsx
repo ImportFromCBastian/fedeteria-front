@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
 import { CommentForm } from './DejarConsulta'
 import { AceptarDenegar } from './Aceptar-Denegar'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 export const DetallesPublicacion = () => {
+  const { idPublicacion } = useParams()
+  const navigate = useNavigate()
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0)
   const [comment, setComment] = useState('')
-  const maxLength = 200 // Máximo de caracteres permitidos
-  const idPublicacion = 10 //CONSEGUIR EL idPublicacion DE ALGUNA MANERA.
+  const maxLength = 200
   const [publicacion, setPublicacion] = useState({
     idPublicacion: null,
     nombre: '',
@@ -16,6 +17,7 @@ export const DetallesPublicacion = () => {
     productoACambio: ''
   })
   const [fotos, setFotos] = useState([])
+  const [fotosUrls, setFotosUrls] = useState([])
 
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -24,64 +26,61 @@ export const DetallesPublicacion = () => {
       navigate('/')
       return
     }
+
     const fetchData = async () => {
       const decodedToken = await decodeToken(token)
       if (decodedToken.rol === 'cliente') {
         navigate('/')
         return
       }
-      fetchPublicacion()
-      fetchFoto()
+      await fetchPublicacion()
+      await fetchFoto()
     }
-    fetchData
-  }, [])
-    const fetchPublicacion = async (idPublicacion) => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion.id}`
-        )
-        const data = await response.json()
-        setPublicacion(data[0])
-      } catch (error) {
-        console.error('Error al obtener la publicación:', error)
-      }
+    fetchData()
+  }, [idPublicacion, navigate])
+
+  const fetchPublicacion = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion}`)
+      const data = await response.json()
+      setPublicacion(data[0])
+    } catch (error) {
+      console.error('Error al obtener la publicación:', error)
     }
-
-    const fetchFoto = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion}/fotos`
-        )
-        const data = await response.json()
-        console.log(data)
-        setFotos(data)
-      } catch (error) {
-        console.error('Error al obtener la imagen:', error)
-      }
-    }
-
-    fetchPublicacion()
-    fetchFoto()
-  }, [idPublicacion])
-
-  const eliminarPublicacion = async (idPublicacion) => {
-    await fetch(`${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion.id}`, {
-      method: 'DELETE'
-    })
-      .then()
-      .catch((error) => console.error('Error al eliminar la publicación:', error))
   }
 
-  const aceptarPublicacion = async (idPublicacion, numero) => {
+  const fetchFoto = async () => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion.id}`,
+        `${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion}/fotos`
+      )
+      const data = await response.json()
+      setFotos(data)
+    } catch (error) {
+      console.error('Error al obtener la imagen:', error)
+    }
+  }
+
+  const eliminarPublicacion = async () => {
+    try {
+      await fetch(`${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion}`, {
+        method: 'DELETE'
+      })
+    } catch (error) {
+      console.error('Error al eliminar la publicación:', error)
+    }
+  }
+
+  const aceptarPublicacion = async (numero) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion}`,
         {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ numero: numero }) // Envía el número como un JSON en el cuerpo de la solicitud
+          body: JSON.stringify({ numero })
         }
       )
 
@@ -92,38 +91,25 @@ export const DetallesPublicacion = () => {
       console.error('Error al aceptar la publicación:', error)
     }
   }
+
   const convertirBlobAUrl = (foto) => {
-    // Obtener los datos de la foto
-    const fotoData = foto.data
-    // Convertir los datos en una cadena base64
-    const base64String = btoa(String.fromCharCode.apply(null, fotoData))
-    // Crear la URL de datos
-    const imageUrl = `data:image/png;base64,${base64String}`
-    return imageUrl
+    const base64String = btoa(String.fromCharCode(...new Uint8Array(foto.data)))
+    return `data:image/png;base64,${base64String}`
   }
 
-  const [fotosUrls, setFotosUrls] = useState([])
   useEffect(() => {
-    // Verificar si hay fotos
     if (fotos.length > 0) {
-      // Convertir cada foto a una URL de datos
-      Promise.all(fotos.map((foto) => convertirBlobAUrl(foto.foto)))
-        .then((urls) => {
-          // Actualizar el estado con las URLs de las imágenes convertidas
-          setFotosUrls(urls)
-        })
-        .catch((error) => {
-          console.error('Error al convertir blobs a URLs:', error)
-        })
+      const urls = fotos.map((foto) => convertirBlobAUrl(foto))
+      setFotosUrls(urls)
     }
   }, [fotos])
 
   return (
     <div className="mx-auto grid max-w-6xl items-start gap-6 px-4 py-6 md:grid-cols-1 lg:gap-12">
       <div className="grid items-start gap-4 md:gap-10">
-        <div className="hidden  items-start md:flex">
+        <div className="hidden items-start md:flex">
           <div className="grid gap-4">
-            <h1 className="text-3xl font-bold">{publicacion.nombre} Nombre</h1>
+            <h1 className="text-3xl font-bold">{publicacion.nombre}</h1>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-0.5">
                 <svg
@@ -141,11 +127,11 @@ export const DetallesPublicacion = () => {
                   <path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"></path>
                   <circle cx="7.5" cy="7.5" r=".5" fill="currentColor"></circle>
                 </svg>
-                <span className="text-sm font-medium">{publicacion.estado}Estado</span>
+                <span className="text-sm font-medium">{publicacion.estado}</span>
               </div>
             </div>
             <div>
-              <p>Descripción del artículo{publicacion.descripcion}</p>
+              <p>{publicacion.descripcion}</p>
             </div>
           </div>
           <div className="ml-auto text-4xl font-bold">${publicacion.precio}</div>
@@ -194,7 +180,10 @@ export const DetallesPublicacion = () => {
       </div>
       <div className="grid items-start gap-4 rounded-md border border-black bg-fede-secundary p-4 md:gap-10">
         <div className="grid gap-4">
-          <AceptarDenegar onAccept={aceptarPublicacion} onDelete={eliminarPublicacion} />
+          <AceptarDenegar
+            onAccept={(numero) => aceptarPublicacion(numero)}
+            onDelete={() => eliminarPublicacion()}
+          />
           <h2 className="text-2xl font-bold">Consultas</h2>
           <div className="grid gap-6">
             <div className="flex gap-4">
