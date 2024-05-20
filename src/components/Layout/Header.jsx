@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
+
 export const Header = () => {
   const [user, setUser] = useState(null)
-  const [isLoading, setIsLoading] = useState(true)
 
   const decodeToken = async (token) => {
     return await fetch(`${import.meta.env.VITE_BASE_URL}/user/decode_token`, {
@@ -15,30 +15,22 @@ export const Header = () => {
       .then((data) => data.data)
       .catch((e) => new Error(e))
   }
+
   useEffect(() => {
     const token = localStorage.getItem('token')
     if (token) {
-      decodeToken(token)
-        .then((data) => {
-          setUser(data || 'anónimo')
-          setIsLoading(false)
-        })
-        .catch(() => {
-          setUser('anónimo')
-          setIsLoading(false)
-        })
-    } else {
-      setUser('anónimo')
-      setIsLoading(false)
+      const fetchData = async () => {
+        const decodedToken = await decodeToken(token)
+        setUser(decodedToken)
+      }
+      fetchData()
     }
   }, [])
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
+
   return (
     <div>
       <div className="relative w-full bg-fede-main">
-        <div className="  absolute  left-1/2 top-0 mt-4 flex w-full max-w-2xl -translate-x-1/2 items-center gap-2 rounded-full bg-gray-100 px-3 py-1">
+        <div className="absolute left-1/2 top-0 mt-4 flex w-full max-w-2xl -translate-x-1/2 items-center gap-2 rounded-full bg-gray-100 px-3 py-1">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -64,16 +56,16 @@ export const Header = () => {
           />
         </div>
       </div>
-      <header className=" flex flex-col items-center justify-between bg-fede-main px-4 py-4 shadow-sm">
-        <div className=" mt-4 flex w-full items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 text-lg font-semibold" href="#">
+      <header className="flex flex-col items-center justify-between bg-fede-main px-4 py-4 shadow-sm">
+        <div className="mt-4 flex w-full items-center justify-between">
+          <Link to="/" className="flex items-center gap-2 text-lg font-semibold">
             <img
               alt="Logo"
               className="mx-auto h-auto max-h-8 w-auto max-w-[100%]"
               src="/Fedeteria_Horizontal.svg"
             />
           </Link>
-          {user && (user.rol === 'empleado' || user.rol === 'cliente') ? (
+          {user ? (
             <div className="flex items-center gap-4">
               <button className="ring-offset-background focus-visible:ring-ring hover:bg-accent hover:text-accent-foreground inline-flex h-10 w-10 items-center justify-center whitespace-nowrap rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
                 <svg
@@ -97,29 +89,27 @@ export const Header = () => {
                 </svg>
                 <span className="sr-only">Listado</span>
               </button>
-              <button className="ring-offset-background focus-visible:ring-ring hover:bg-accent hover:text-accent-foreground inline-flex h-10 w-10 items-center justify-center whitespace-nowrap rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
-                <Link
-                  to="/mi_perfil"
-                  className="ring-offset-background focus-visible:ring-ring hover:bg-accent hover:text-accent-foreground inline-flex h-10 w-10 items-center justify-center whitespace-nowrap rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+              <Link
+                to="/mi_perfil"
+                className="ring-offset-background focus-visible:ring-ring hover:bg-accent hover:text-accent-foreground inline-flex h-10 w-10 items-center justify-center whitespace-nowrap rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-6 w-6"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="h-6 w-6"
-                  >
-                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
-                  </svg>
-                  <span className="sr-only">Perfil</span>
-                </Link>
-              </button>
+                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span className="sr-only">Perfil</span>
+              </Link>
             </div>
           ) : (
             <h1>
@@ -132,27 +122,40 @@ export const Header = () => {
             </h1>
           )}
         </div>
-
-        <div className="flex items-center gap-4">
-          <Link
-            className="font-medium underline-offset-4 hover:underline"
-            to="/listado_publicaciones"
-          >
-            Publicaciones
-          </Link>
-          <Link
-            className="font-medium underline-offset-4 hover:underline"
-            to="/agregar_publicacion"
-          >
-            Cargar Publicacion
-          </Link>
-          {/* <a className="font-medium underline-offset-4 hover:underline" href="#">
-            Trueques futuros
-          </a>
-          <a className="font-medium underline-offset-4 hover:underline" href="#">
-            Historial de trueques
-          </a> */}
-        </div>
+        {user && (
+          <div className="flex items-center gap-4">
+            <Link
+              className="font-medium underline-offset-4 hover:underline"
+              to="/agregar_publicacion"
+            >
+              Cargar Publicación
+            </Link>
+            {(user.rol === 'empleado' || user.rol === 'administrador') && (
+              <Link
+                className="font-medium underline-offset-4 hover:underline"
+                to="/listado_publicaciones"
+              >
+                Publicaciones
+              </Link>
+            )}
+            {user.rol === 'administrador' && (
+              <>
+                <Link
+                  className="font-medium underline-offset-4 hover:underline"
+                  to="/agregar_sucursal"
+                >
+                  Crear Sucursal
+                </Link>
+                <Link
+                  className="font-medium underline-offset-4 hover:underline"
+                  to="/registrar/empleado"
+                >
+                  Registrar Empleado
+                </Link>
+              </>
+            )}
+          </div>
+        )}
       </header>
     </div>
   )

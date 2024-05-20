@@ -16,6 +16,24 @@ export const DetallesPublicacion = () => {
   })
 
   useEffect(() => {
+    const token = localStorage.getItem('token')
+
+    if (!token) {
+      navigate('/')
+      return
+    }
+    const fetchData = async () => {
+      const decodedToken = await decodeToken(token)
+      if (decodedToken.rol === 'cliente') {
+        navigate('/')
+        return
+      }
+      fetchDetalle()
+    }
+    fetchData
+  }, [])
+
+  const fetchDetalle = async (idPublicacion) => {
     fetch(`${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion.id}`, {
       method: 'GET'
     })
@@ -24,8 +42,7 @@ export const DetallesPublicacion = () => {
         setPublicacion(data[0])
       })
       .catch((error) => console.error('Error al obtener la publicacion:', error))
-  }, [])
-
+  }
   const eliminarPublicacion = async (idPublicacion) => {
     await fetch(`${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion.id}`, {
       method: 'DELETE'
