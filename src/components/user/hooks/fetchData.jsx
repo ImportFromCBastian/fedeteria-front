@@ -6,14 +6,23 @@ export const fetchData = () => {
       .catch((error) => console.error(error))
     return response
   }
-  const fetchUser = async (dni) => {
-    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/user/client/${dni}`, {
-      method: 'GET'
-    })
-      .then((res) => res.json())
+  const fetchUser = async (rol, dni) => {
+    let translate
+    if (rol === 'cliente') {
+      translate = 'client'
+    }
+    if (rol === 'empleado') {
+      translate = 'worker'
+    }
+    if (rol === 'administrador') {
+      translate = 'admin'
+    }
+    return await fetch(`${import.meta.env.VITE_BASE_URL}/user/${translate}/${dni}`)
+      .then((response) => response.json())
       .then((data) => data)
-      .catch((error) => console.error(error))
-    return response
+      .catch((e) => {
+        console.log(e)
+      })
   }
   return { fetchSucursal, fetchUser }
 }

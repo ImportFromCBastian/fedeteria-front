@@ -2,7 +2,14 @@ import { useEffect, useState } from 'react'
 import { ShowProfile } from './profile'
 
 export function MostrarPerfil() {
-  const [perfil, setPerfil] = useState(null)
+  const [perfil, setPerfil] = useState({
+    DNI: '',
+    nombre: '',
+    apellido: '',
+    nombreSucursal: '',
+    fechaNacimiento: '',
+    mail: ''
+  })
 
   const [error, setError] = useState(false)
 
@@ -17,21 +24,41 @@ export function MostrarPerfil() {
       .then((data) => data.data)
       .catch((e) => new Error(e))
   }
-
+  const transformFetch = async (rol, dni) => {
+    let translate
+    if (rol === 'cliente') {
+      translate = 'client'
+    }
+    if (rol === 'empleado') {
+      translate = 'worker'
+    }
+    if (rol === 'administrador') {
+      translate = 'admin'
+    }
+    return await fetch(`${import.meta.env.VITE_BASE_URL}/user/${translate}/${dni}`)
+      .then((response) => response.json())
+      .catch((e) => {
+        console.log(e)
+      })
+  }
   useEffect(() => {
     const obtenerPerfil = async () => {
       try {
         const token = localStorage.getItem('token')
         const decodedToken = await decodeToken(token)
-        const dniPerfil = decodedToken.DNI
-        const response = await fetch(`${import.meta.env.VITE_BASE_URL}/mi_perfil/${dniPerfil}`)
-          .then((response) => response.json())
-          .then((data) => data.data[0])
+        const [response] = await transformFetch(decodedToken.rol, decodedToken.DNI)
 
         if (response.ok) {
           throw new Error('Error al obtener el perfil')
         }
-        setPerfil(response)
+        setPerfil({
+          ['DNI']: response.DNI,
+          ['nombre']: response.nombre,
+          ['apellido']: response.apellido,
+          ['nombreSucursal']: response.nombreSucursal,
+          ['fechaNacimiento']: response.fechaNacimiento,
+          ['mail']: response.mail
+        })
       } catch (error) {
         console.error('Error al obtener el perfil', error)
         setError(true)

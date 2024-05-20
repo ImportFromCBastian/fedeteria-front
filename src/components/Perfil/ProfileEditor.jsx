@@ -10,6 +10,7 @@ export const ProfileEditor = () => {
   const navigate = useNavigate()
   const { dni } = useParams('')
   const [sucursales, setSucursales] = useState([])
+  const [rol, setRol] = useState('')
   const [userData, setUserData] = useState({
     nombre: '',
     apellido: '',
@@ -20,20 +21,6 @@ export const ProfileEditor = () => {
 
   const { fetchSucursal, fetchUser } = fetchData()
 
-  const gatherSucursales = async () => {
-    const sucursales = await fetchSucursal()
-    setSucursales(sucursales)
-  }
-  const gatherUser = async () => {
-    const { nombre, apellido, idLocal, mail, fechaNacimiento } = await fetchUser(dni)
-    setUserData({
-      nombre,
-      apellido,
-      idLocal,
-      mail,
-      fechaNacimiento
-    })
-  }
   const formatFechaNacimiento = (fechaNacimiento) => {
     if (!fechaNacimiento) return '' // Manejo de caso en que la fecha no esté definida
 
@@ -56,7 +43,7 @@ export const ProfileEditor = () => {
     e.preventDefault()
     try {
       const user = partialUserSchema.validateSync(userData)
-      updateUser(user, dni)
+      updateUser(user, dni, rol)
       navigate(`/mi_perfil`)
     } catch (error) {
       const { errors } = error
@@ -68,8 +55,42 @@ export const ProfileEditor = () => {
   }
 
   useEffect(() => {
+    const token = localStorage.getItem('token')
+    const gatherUser = async (token) => {
+      const tokenReal = await getToken(token)
+      setRol(tokenReal.rol)
+      const [user] = await fetchUser(tokenReal.rol, dni)
+      const { nombre, apellido, idLocal, mail, fechaNacimiento } = user
+      setUserData({
+        nombre,
+        apellido,
+        idLocal,
+        mail,
+        fechaNacimiento
+      })
+    }
+    const gatherSucursales = async () => {
+      const sucursales = await fetchSucursal()
+      setSucursales(sucursales)
+    }
+
+    const decodeToken = async (token) => {
+      return await fetch(`${import.meta.env.VITE_BASE_URL}/user/decode_token`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        method: 'POST'
+      })
+        .then((response) => response.json())
+        .then((data) => data.data)
+        .catch((e) => new Error(e))
+    }
+    const getToken = async (token) => {
+      return await decodeToken(token)
+    }
+
     gatherSucursales()
-    gatherUser()
+    gatherUser(token)
   }, [])
 
   return (
