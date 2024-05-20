@@ -49,6 +49,15 @@ export const RegisterWorkerForm = () => {
     }
     fetchData()
   }, [])
+  const handleMouseEnter = () => {
+    setShowPasswordRules(true)
+  }
+
+  const handleMouseLeave = () => {
+    setShowPasswordRules(false)
+  }
+
+  const [showPasswordRules, setShowPasswordRules] = useState(false)
 
   return (
     <div className="flex items-center justify-center">
@@ -127,7 +136,8 @@ export const RegisterWorkerForm = () => {
               Contraseña
               <span
                 className="material-symbols-outlined float-right cursor-pointer rounded-full outline-dotted"
-                onClick={() => setIsOpen(!isOpen)}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
               >
                 question_mark
               </span>
@@ -135,11 +145,27 @@ export const RegisterWorkerForm = () => {
             <input
               name="password"
               onChange={handleChange}
-              placeholder="Ingresa la contraseña"
+              placeholder="Ingresa tu contraseña"
               className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
               type={!showPassword ? 'password' : 'text'}
             />
-            <RenderVisibility show={showPassword} handleClick={handleChangePasswordVisibility} />
+            {showPasswordRules && (
+              <div className="absolute bottom-full left-0 mt-2 rounded-xl  bg-fede-main/40 p-4 backdrop-blur-md">
+                <h3 className="text-base/7 font-medium text-fede-texto-input">
+                  Reglas de la contraseña
+                </h3>
+                <ul className="mt-2 text-sm/6 text-fede-texto-input/50">
+                  <li> - La contraseña debe contener al menos 6 caracteres</li>
+                  <li> - La contraseña debe contener al menos una letra mayúscula</li>
+                  <li> - La contraseña debe contener algún caracter especial</li>
+                  <li>
+                    (!@#$%^&*()_+-=[]{}
+                    ;':"\|,./?+)
+                  </li>
+                </ul>
+                <div className="mt-4"></div>
+              </div>
+            )}
           </div>
           <div>
             <label
@@ -177,49 +203,6 @@ export const RegisterWorkerForm = () => {
             Registrarse
           </button>
         </form>
-        <Transition appear show={isOpen}>
-          <Dialog
-            as="div"
-            className="relative z-10 focus:outline-none"
-            onClose={() => setIsOpen(false)}
-          >
-            <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-              <div className="flex min-h-full items-center justify-center p-4">
-                <TransitionChild
-                  enter="ease-out duration-300"
-                  enterFrom="opacity-0 transform-[scale(95%)]"
-                  enterTo="opacity-100 transform-[scale(100%)]"
-                  leave="ease-in duration-200"
-                  leaveFrom="opacity-100 transform-[scale(100%)]"
-                  leaveTo="opacity-0 transform-[scale(95%)]"
-                >
-                  <DialogPanel className="m-4 w-auto  rounded-xl bg-white/5 p-6 backdrop-blur-2xl">
-                    <DialogTitle as="h3" className="text-base/7 font-medium text-white">
-                      Reglas de la contraseña
-                    </DialogTitle>
-                    <ul className="mt-2 text-sm/6 text-white/50 ">
-                      <li> - La contraseña debe contener al menos 6 caracteres</li>
-                      <li> - La contraseña debe contener al menos una letra mayúscula</li>
-                      <li> - La contraseña debe contener algún caracter especial</li>
-                      <li>
-                        (!@#$%^&*()_+-=[]{}
-                        ;':"\|,./?+)
-                      </li>
-                    </ul>
-                    <div className="mt-4">
-                      <button
-                        className="inline-flex items-center gap-2 rounded-md bg-gray-700 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white"
-                        onClick={() => setIsOpen(false)}
-                      >
-                        Entendido!
-                      </button>
-                    </div>
-                  </DialogPanel>
-                </TransitionChild>
-              </div>
-            </div>
-          </Dialog>
-        </Transition>
       </div>
     </div>
   )

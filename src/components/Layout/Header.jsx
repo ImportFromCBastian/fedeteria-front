@@ -71,28 +71,6 @@ export const Header = () => {
           </Link>
           {user ? (
             <div className="flex items-center gap-4">
-              {/* <button className="ring-offset-background focus-visible:ring-ring hover:bg-accent hover:text-accent-foreground inline-flex h-10 w-10 items-center justify-center whitespace-nowrap rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-6 w-6"
-                >
-                  <line x1="8" x2="21" y1="6" y2="6"></line>
-                  <line x1="8" x2="21" y1="12" y2="12"></line>
-                  <line x1="8" x2="21" y1="18" y2="18"></line>
-                  <line x1="3" x2="3.01" y1="6" y2="6"></line>
-                  <line x1="3" x2="3.01" y1="12" y2="12"></line>
-                  <line x1="3" x2="3.01" y1="18" y2="18"></line>
-                </svg>
-                <span className="sr-only">Listado</span>
-              </button> */}
               <Link
                 to="/mi_perfil"
                 className="ring-offset-background focus-visible:ring-ring hover:bg-accent hover:text-accent-foreground inline-flex h-10 w-10 items-center justify-center whitespace-nowrap rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
@@ -116,16 +94,25 @@ export const Header = () => {
               </Link>
             </div>
           ) : (
-            <h1>
-              <Link className="float-right ml-2 rounded-md border p-2" to="/login">
-                Iniciar Sesion
-              </Link>
-              <Link className="float-right rounded-md border p-2" to="/registrar/cliente">
-                Registrarse
-              </Link>
-            </h1>
+            <div className="flex items-center gap-4">
+              <div className="ring-offset-background focus-visible:ring-ring inline-flex h-10 w-10 items-center justify-center whitespace-nowrap rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"></div>
+              <h1>
+                <Link className="float-right ml-2 p-2 font-semibold hover:scale-105 " to="/login">
+                  Iniciar sesión
+                </Link>
+                <Link
+                  className="float-right rounded-md p-2 font-semibold hover:scale-105 "
+                  to="/registrar/cliente"
+                >
+                  Registrarse
+                </Link>
+              </h1>
+            </div>
           )}
         </div>
+        {!user && (
+          <div className="ring-offset-background focus-visible:ring-ring inline-flex h-5 w-10 items-center justify-center whitespace-nowrap rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"></div>
+        )}
         {user && (
           <div className="flex items-center gap-4">
             <Link
@@ -157,7 +144,7 @@ export const Header = () => {
             )}
             {user && (
               <Link
-                className="font-medium underline-offset-4 hover:underline"
+                className=" font-medium underline-offset-4 hover:underline"
                 onClick={handleLogout}
                 to="/"
               >
