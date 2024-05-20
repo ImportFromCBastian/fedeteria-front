@@ -7,15 +7,14 @@ export const CreatePublication = async (publicationData) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(publicationData)
-    })
+    }).then((data) => data.json())
 
     if (!result.ok) {
       throw new Error('Error al agregar publicación')
     }
 
-    const responseData = await result.json()
     // Obtener el ID de la publicación creada desde la respuesta
-    const idPublicacion = responseData.message // Ajusta esto según la estructura de tu respuesta
+    const idPublicacion = result.message // Ajusta esto según la estructura de tu respuesta
     // Insertar fotos asociadas a la publicación
     for (const foto of publicationData.fotos) {
       await insertarFoto(foto, idPublicacion)
