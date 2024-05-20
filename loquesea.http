@@ -1,0 +1,13 @@
+###create empleado
+POST http://localhost:3000/user/worker
+content-type: application/json
+
+{
+  "dni": "3211",
+  "name": "empleado",
+  "lastName": "comun",
+  "email": "loaslza@gmail.com",
+  "password": "123456S*",
+  "birthdate": "2005-01-01",
+  "notification": false
+}

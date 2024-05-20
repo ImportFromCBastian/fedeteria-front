@@ -39,7 +39,8 @@ export const useHandler = (publicationData, setPublicationData) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     try {
-      publicationSchema.validateSync(publicationData, { abortEarly: false })
+      const publication = publicationSchema.validateSync(publicationData, { abortEarly: false })
+      CreatePublication(publication)
     } catch (error) {
       const { errors } = error
       for (let i = 0; i < errors.length; i++) {
@@ -47,7 +48,6 @@ export const useHandler = (publicationData, setPublicationData) => {
       }
       return
     }
-    CreatePublication(publicationData)
   }
   // Retornar los métodos que se van a utilizar en el componente
   return {

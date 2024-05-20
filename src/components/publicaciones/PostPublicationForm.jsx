@@ -23,7 +23,7 @@ export const PostPublicationForm = () => {
   const [publicationData, setPublicationData] = useState({
     nombre: '',
     producto_a_cambio: '',
-    dni: null,
+    dni: '',
     fotos: [],
     descripcion: '',
     estado: 'Nuevo'
@@ -40,7 +40,7 @@ export const PostPublicationForm = () => {
 
     const fetch = async () => {
       const decodedToken = await decodeToken(token)
-      console.log(decodedToken.rol)
+      setPublicationData({ ...publicationData, ['dni']: decodedToken.DNI })
     }
     fetch()
   }, [])
