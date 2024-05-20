@@ -99,7 +99,7 @@ export const ShowProfile = ({ userData }) => {
                 >
                   Sucursal más cercana
                 </label>
-                <div className="font-bold">Sucursal 1</div>
+                <div className="font-bold">{userData.nombreSucursal}</div>
               </div>
             </div>
           </div>
