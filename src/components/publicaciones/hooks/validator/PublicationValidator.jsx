@@ -14,7 +14,8 @@ const publicationSchema = y.object({
   //descripcion validations
   descripcion: y.string().required('La descripcion es obligatoria'),
   //estado validations
-  estado: y.string().required('El estado es obligatorio')
+  estado: y.string().required('El estado es obligatorio'),
+  fotos: y.array().of(y.mixed()).min(1, 'Debe agregar al menos una foto')
 })
 
 export default publicationSchema
