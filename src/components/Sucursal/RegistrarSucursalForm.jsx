@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useHandlerSucursal } from './hooks/useHandlerSucursal'
 import { Toaster } from 'sonner'
-
+import { useNavigate } from 'react-router-dom'
 export const RegistrarSucursalForm = () => {
+  const navigate = useNavigate()
   const [credentials, setCredentials] = useState({
     nombre: '',
     calle: '',
@@ -11,6 +12,34 @@ export const RegistrarSucursalForm = () => {
     depto: 0
   })
   const { handleChange, handleSubmit } = useHandlerSucursal(credentials, setCredentials)
+  const decodeToken = async (token) => {
+    return await fetch(`${import.meta.env.VITE_BASE_URL}/user/decode_token`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      method: 'POST'
+    })
+      .then((response) => response.json())
+      .then((data) => data.data)
+      .catch((e) => new Error(e))
+  }
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+
+    if (!token) {
+      navigate('/')
+      return
+    }
+
+    const fetchData = async () => {
+      const decodedToken = await decodeToken(token)
+      if (decodedToken.rol !== 'administrador') {
+        navigate('/')
+        return
+      }
+    }
+    fetchData()
+  }, [])
 
   return (
     <div className="flex items-center justify-center ">

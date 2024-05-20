@@ -29,13 +29,14 @@ export const ListadoPublicaciones = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token')
-    if (token === null) {
+    if (!token) {
       navigate('/')
       return
     }
 
     const fetchData = async () => {
       const decodedToken = await decodeToken(token)
+      console.log(decodedToken.rol)
       if (decodedToken.rol == 'cliente') {
         navigate('/')
         return

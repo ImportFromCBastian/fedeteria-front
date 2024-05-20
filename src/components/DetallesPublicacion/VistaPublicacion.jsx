@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react'
 import { CommentForm } from './DejarConsulta'
 import { AceptarDenegar } from './Aceptar-Denegar'
 import { useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 export const DetallesPublicacion = () => {
+  const navigate = useNavigate()
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0)
   const [comment, setComment] = useState('')
   const maxLength = 200 // Máximo de caracteres permitidos
@@ -20,6 +22,20 @@ export const DetallesPublicacion = () => {
 
   useEffect(() => {
     const fetchPublicacion = async () => {
+      const token = localStorage.getItem('token')
+      if (!token) {
+        navigate('/')
+        return
+      }
+      const fetchData = async () => {
+        const decodedToken = await decodeToken(token)
+        if (decodedToken.rol == 'cliente') {
+          navigate('/')
+          return
+        }
+      }
+      fetchData()
+
       try {
         const response = await fetch(
           `${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion}`

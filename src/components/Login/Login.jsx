@@ -12,6 +12,11 @@ export const Login = () => {
   const exceptThisSymbols = ['e', 'E', '+', '-', ',']
 
   useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      navigate('/')
+      return
+    }
     // Al cargar el componente, verificar si hay intentos fallidos en localStorage
     const storedAttempts = localStorage.getItem('loginAttempts')
     if (storedAttempts) {
