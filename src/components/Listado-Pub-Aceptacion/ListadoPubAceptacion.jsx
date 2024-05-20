@@ -37,7 +37,7 @@ export const ListadoPublicaciones = () => {
 
     const fetchData = async () => {
       const decodedToken = await decodeToken(token)
-      if (decodedToken.rol === 'cliente') {
+      if (decodedToken.rol !== 'empleado') {
         navigate('/')
         return
       }
