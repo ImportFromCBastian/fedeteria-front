@@ -18,10 +18,27 @@ export const DetallesPublicacion = () => {
   const [fotos, setFotos] = useState([])
 
   useEffect(() => {
-    const fetchPublicacion = async () => {
+    const token = localStorage.getItem('token')
+
+    if (!token) {
+      navigate('/')
+      return
+    }
+    const fetchData = async () => {
+      const decodedToken = await decodeToken(token)
+      if (decodedToken.rol === 'cliente') {
+        navigate('/')
+        return
+      }
+      fetchPublicacion()
+      fetchFoto()
+    }
+    fetchData
+  }, [])
+    const fetchPublicacion = async (idPublicacion) => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion}`
+          `${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion.id}`
         )
         const data = await response.json()
         setPublicacion(data[0])
