@@ -10,7 +10,6 @@ import { MostrarPerfil } from './components/Perfil/ConseguirPerfil.jsx'
 import { DetallesPublicacion } from './components/DetallesPublicacion/VistaPublicacion.jsx'
 import { ListadoPublicaciones } from './components/Listado-Pub-Aceptacion/ListadoPubAceptacion.jsx'
 import { RegisterWorkerForm } from './components/user/worker/RegisterWorkerForm.jsx'
-import UnauthorizedAccessPage from './components/Error/Unauthorized.jsx'
 import Layout from './components/Layout/Layout.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -27,7 +26,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/:id" element={<MostrarPerfil />} />
           <Route path="/listado_publicaciones" element={<ListadoPublicaciones />} />
           <Route path="/listado_publicaciones/:id" element={<DetallesPublicacion />} />
-          <Route path="/unauthorized" element={<UnauthorizedAccessPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
