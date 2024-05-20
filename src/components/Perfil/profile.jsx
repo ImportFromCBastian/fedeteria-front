@@ -30,7 +30,7 @@ export const ShowProfile = ({ userData }) => {
               </div>
               <button
                 onClick={() => {
-                  navigate(`/mi_perfil/editar_perfil/${121111111}`)
+                  navigate(`/mi_perfil/editar_perfil/${userData.DNI}`)
                 }}
                 className="focus:ring-ring ml-auto inline-flex h-7 w-7 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
               >
