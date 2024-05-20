@@ -20,6 +20,17 @@ export const DetallesPublicacion = () => {
   })
   const [fotos, setFotos] = useState([])
 
+  const decodeToken = async (token) => {
+    return await fetch(`${import.meta.env.VITE_BASE_URL}/user/decode_token`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      method: 'POST'
+    })
+      .then((response) => response.json())
+      .then((data) => data.data)
+      .catch((e) => new Error(e))
+  }
   useEffect(() => {
     const fetchPublicacion = async () => {
       const token = localStorage.getItem('token')
@@ -122,7 +133,7 @@ export const DetallesPublicacion = () => {
       <div className="grid items-start gap-4 md:gap-10">
         <div className="hidden  items-start md:flex">
           <div className="grid gap-4">
-            <h1 className="text-3xl font-bold">{publicacion.nombre} Nombre</h1>
+            <h1 className="text-3xl font-bold">{publicacion.nombre}</h1>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-0.5">
                 <svg
@@ -140,11 +151,11 @@ export const DetallesPublicacion = () => {
                   <path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"></path>
                   <circle cx="7.5" cy="7.5" r=".5" fill="currentColor"></circle>
                 </svg>
-                <span className="text-sm font-medium">{publicacion.estado}Estado</span>
+                <span className="text-sm font-medium">{publicacion.estado}</span>
               </div>
             </div>
             <div>
-              <p>Descripción del artículo{publicacion.descripcion}</p>
+              <p>Descripción del artículo: {publicacion.descripcion}</p>
             </div>
           </div>
           <div className="ml-auto text-4xl font-bold">${publicacion.precio}</div>
@@ -153,24 +164,42 @@ export const DetallesPublicacion = () => {
       </div>
       <div className="grid gap-4 md:gap-10">
         <div className="grid items-start gap-4 rounded-md border border-fede-main bg-fede-secundary p-4 md:gap-10">
-          <img
-            src={fotosUrls[selectedPhotoIndex]}
-            alt={`Imagen ${selectedPhotoIndex + 1} del artículo`}
-            className="mx-auto"
-            style={{ maxWidth: '100%', maxHeight: '400px', cursor: 'pointer' }}
-          />
-          <div className="grid grid-cols-3 gap-4">
-            {fotosUrls.map((photoUrl, index) => (
+          {fotosUrls.length === 1 ? (
+            // Si solo hay una foto, mostrarla sola y grande
+            <img
+              src={fotosUrls[0]}
+              alt={`Imagen principal del artículo`}
+              className="mx-auto rounded-md border border-gray-400"
+              style={{ width: '800px', height: '400px', objectFit: 'contain', cursor: 'pointer' }}
+            />
+          ) : (
+            // Si hay más de una foto, mostrar todas en miniatura
+            <div>
               <img
-                key={index}
-                src={photoUrl}
-                alt={`Imagen ${index + 1} del artículo`}
-                className="mx-auto"
-                style={{ width: '100%', height: 'auto', cursor: 'pointer' }}
-                onClick={() => setSelectedPhotoIndex(index)}
+                src={fotosUrls[selectedPhotoIndex]}
+                alt={`Imagen ${selectedPhotoIndex + 1} del artículo`}
+                className="mx-auto rounded-md border border-gray-400"
+                style={{ width: '800px', height: '400px', objectFit: 'contain', cursor: 'pointer' }}
               />
-            ))}
-          </div>
+              <div className="mt-2 grid grid-cols-4 gap-4">
+                {fotosUrls.map((photoUrl, index) => (
+                  <img
+                    key={index}
+                    src={photoUrl}
+                    alt={`Imagen ${index + 1} del artículo`}
+                    className="mx-auto rounded-md border border-gray-400"
+                    style={{
+                      width: '200px',
+                      height: '200px',
+                      objectFit: 'contain',
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => setSelectedPhotoIndex(index)}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
         <div className="grid gap-4">
           <div className="grid gap-4">
@@ -179,7 +208,7 @@ export const DetallesPublicacion = () => {
                 className="text-base font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 htmlFor="product"
               >
-                Producto que espera a cambio
+                Producto que espera a cambio:
               </label>
               <label
                 className="text-base font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"

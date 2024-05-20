@@ -167,7 +167,7 @@ export const Login = () => {
           <div className="flex items-start">
             <a
               target="_blank"
-              href="https://www.youtube.com/watch?v=lYBUbBu4W08"
+              //href="https://www.youtube.com/watch?v=lYBUbBu4W08"
               className="ml-auto text-sm text-fede-texto-base hover:underline"
             >
               ¿Olvidaste tu contraseña?

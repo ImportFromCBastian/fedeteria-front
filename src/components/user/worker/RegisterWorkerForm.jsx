@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
 
 export const RegisterWorkerForm = () => {
+  const exceptThisSymbols = ['e', 'E', '+', '-', ',']
   const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
   const [sucursal, setSucursal] = useState([])
@@ -92,9 +93,11 @@ export const RegisterWorkerForm = () => {
             </label>
             <input
               name="dni"
-              placeholder="Ingresa el DNI del empleado"
+              placeholder="Ingresa el DNI"
               onChange={handleChange}
-              className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm [appearance:textfield] focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              onKeyDown={(e) => exceptThisSymbols.includes(e.key) && e.preventDefault()}
+              onWheel={(e) => e.target.blur()}
+              className="w-full rounded-md border bg-fede-fondo-texto px-3 py-2 text-fede-texto-input placeholder-fede-texto-claro shadow-sm outline-fede-main focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               type="number"
               autoComplete="off"
             />
@@ -205,7 +208,7 @@ export const RegisterWorkerForm = () => {
               onChange={handleChange}
               className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
             >
-              <option value="">Selecciona una sucursal</option>
+              <option value="0">Selecciona una sucursal</option>
               {sucursal.map((sucursal) => (
                 <option className="text-black" key={sucursal.idLocal} value={sucursal.idLocal}>
                   {sucursal.nombre}

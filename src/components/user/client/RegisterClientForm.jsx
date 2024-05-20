@@ -17,7 +17,7 @@ export const RegisterClientForm = () => {
     email: '',
     password: '',
     birthdate: '',
-    sucursal: '',
+    sucursal: null,
     notification: false
   })
   const { handleChange, handleChangePasswordVisibility, handleChangeCheck, handleSubmit } =
@@ -164,8 +164,7 @@ export const RegisterClientForm = () => {
               name="birthdate"
               onChange={handleChange}
               placeholder="YYYY-MM-DD"
-              className=":bordedarkr-gray-600 w
-   -full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
+              className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
               type="date"
             />
           </div>
@@ -181,7 +180,7 @@ export const RegisterClientForm = () => {
               onChange={handleChange}
               className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
             >
-              <option value="">Selecciona una sucursal</option>
+              <option value="0">Selecciona una sucursal</option>
               {sucursal.map((sucursal) => (
                 <option className="text-black" key={sucursal.idLocal} value={sucursal.idLocal}>
                   {sucursal.nombre}
