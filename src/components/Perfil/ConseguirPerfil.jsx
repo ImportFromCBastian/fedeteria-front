@@ -44,17 +44,5 @@ export function MostrarPerfil() {
   if (error) {
     return <div>Error al conseguir el perfil!</div>
   }
-
-  async function decodeToken(token) {
-    return await fetch(`${import.meta.env.VITE_BASE_URL}/user/decode_token`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
-      method: 'POST'
-    })
-      .then((response) => response.json())
-      .then((data) => data.data)
-      .catch((e) => new Error(e))
-  }
   return <ShowProfile userData={perfil} />
 }
