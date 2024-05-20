@@ -1,5 +1,3 @@
-
-import { useState, useRef } from 'react'
 import { useState, useEffect } from 'react'
 import { RenderVisibility } from '../Visibility'
 import { useHandler } from '../hooks/useHandler'
@@ -24,9 +22,6 @@ export const RegisterClientForm = () => {
   const { handleChange, handleChangePasswordVisibility, handleChangeCheck, handleSubmit } =
     useHandler(credentials, setCredentials, showPassword, setShowPassword, 'client')
 
-
-  const timerRef = useRef(null)
-
   const handleMouseEnter = () => {
     setShowPasswordRules(true)
   }
@@ -46,7 +41,6 @@ export const RegisterClientForm = () => {
   useEffect(() => {
     fetchSucursales()
   }, [])
-
 
   return (
     <div className="flex items-center justify-center">
