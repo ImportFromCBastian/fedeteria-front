@@ -1,20 +1,49 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useHandler } from './hooks/useHandler'
 import { toast, Toaster } from 'sonner'
+import { useNavigate } from 'react-router-dom'
+
 const MAX_PHOTOS = 4
 
 export const PostPublicationForm = () => {
-  const randomDNI = Math.floor(Math.random() * 10000) + 1
+  const navigate = useNavigate()
+
+  const decodeToken = async (token) => {
+    return await fetch(`${import.meta.env.VITE_BASE_URL}/user/decode_token`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      method: 'POST'
+    })
+      .then((response) => response.json())
+      .then((data) => data.data)
+      .catch((e) => new Error(e))
+  }
+
   const [publicationData, setPublicationData] = useState({
     nombre: '',
     producto_a_cambio: '',
-    dni: randomDNI,
+    dni: '',
     fotos: [],
     descripcion: '',
     estado: 'Nuevo'
   })
-
   const { handleChange, handleSubmit } = useHandler(publicationData, setPublicationData)
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+
+    if (!token) {
+      navigate('/')
+      return
+    }
+
+    const fetch = async () => {
+      const decodedToken = await decodeToken(token)
+      setPublicationData({ ...publicationData, ['dni']: decodedToken.DNI })
+    }
+    fetch()
+  }, [])
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
