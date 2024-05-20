@@ -136,7 +136,7 @@ export const DetallesPublicacion = () => {
         <div className="grid gap-4 md:gap-10"></div>
       </div>
       <div className="grid gap-4 md:gap-10">
-        <div className="grid items-start gap-4 rounded-md border border-black p-4 md:gap-10">
+        <div className="grid items-start gap-4 rounded-md border border-fede-main bg-fede-secundary p-4 md:gap-10">
           <img
             src={fotosUrls[selectedPhotoIndex]}
             alt={`Imagen ${selectedPhotoIndex + 1} del artículo`}
@@ -175,7 +175,7 @@ export const DetallesPublicacion = () => {
           </div>
         </div>
       </div>
-      <div className="grid items-start gap-4 rounded-md border border-black bg-fede-secundary p-4 md:gap-10">
+      <div className="grid items-start gap-4 rounded-md border border-fede-main bg-fede-secundary p-4 md:gap-10">
         <div className="grid gap-4">
           <AceptarDenegar onAccept={aceptarPublicacion} onDelete={eliminarPublicacion} />
           <h2 className="text-2xl font-bold">Consultas</h2>
