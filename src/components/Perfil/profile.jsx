@@ -12,7 +12,12 @@ export const ShowProfile = ({ userData }) => {
 
     return `${dia}/${mes}/${anio}`
   }
-
+  const handleLogout = () => {
+    // Borra el token del local storage
+    localStorage.removeItem('token')
+    navigate('/')
+    window.location.reload()
+  }
   return (
     <div className="flex h-screen flex-col items-center justify-center">
       {userData && (
@@ -111,11 +116,14 @@ export const ShowProfile = ({ userData }) => {
                 >
                   Sucursal más cercana
                 </label>
-                <div className="font-bold">{userData.nombreSucursal}</div>
+                <div className="text-xl font-bold">{userData.nombreSucursal}</div>
               </div>
             </div>
             <div className="mt-4 flex justify-end">
-              <button className="my-6 rounded-md bg-red-600 px-4 py-2 text-white transition-colors hover:bg-red-700">
+              <button
+                onClick={handleLogout}
+                className="my-6 rounded-md bg-red-600 px-4 py-2 text-white transition-colors hover:bg-red-700"
+              >
                 Cerrar sesión
               </button>
             </div>

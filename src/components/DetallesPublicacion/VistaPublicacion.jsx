@@ -34,7 +34,7 @@ export const DetallesPublicacion = () => {
   useEffect(() => {
     const fetchPublicacion = async () => {
       const token = localStorage.getItem('token')
-      if (!token) {
+      if (token === null) {
         navigate('/')
         return
       }

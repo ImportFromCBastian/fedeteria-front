@@ -64,7 +64,7 @@ export const RegistrarSucursalForm = () => {
               name="nombre"
               placeholder="Ingresa el nombre de la sucursal"
               onChange={handleChange}
-              className="w-full rounded-md border-2 border-gray-300 bg-fede-fondo-texto px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-fede-main"
+              className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
               type="text"
               autoComplete="off"
             />
@@ -81,7 +81,7 @@ export const RegistrarSucursalForm = () => {
                 name="calle"
                 onChange={handleChange}
                 placeholder="Ingresa la calle"
-                className="w-full rounded-md border-2 border-gray-300 bg-fede-fondo-texto px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-fede-main"
+                className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
                 type="text"
                 autoComplete="off"
               />
@@ -97,7 +97,7 @@ export const RegistrarSucursalForm = () => {
                 name="numero"
                 onChange={handleChange}
                 placeholder="Ingresa el número"
-                className="w-full rounded-md border-2 border-gray-300 bg-fede-fondo-texto px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-fede-main [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none "
+                className="focus:ring-fede-main[&::-webkit-inner-spin-button]:appearance-none w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 [&::-webkit-outer-spin-button]:appearance-none "
                 type="number"
                 autoComplete="off"
               />
@@ -112,7 +112,7 @@ export const RegistrarSucursalForm = () => {
                 name="piso"
                 onChange={handleChange}
                 placeholder="Ingresa el piso (opcional)"
-                className="w-full rounded-md border-2 border-gray-300 bg-fede-fondo-texto px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-fede-main [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 type="number"
                 autoComplete="off"
               />
@@ -128,7 +128,7 @@ export const RegistrarSucursalForm = () => {
                 name="depto"
                 onChange={handleChange}
                 placeholder="Ingresa el depto (opcional)"
-                className="w-full rounded-md border-2 border-gray-300 bg-fede-fondo-texto px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-fede-main"
+                className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
                 type="text"
                 autoComplete="off"
               />
@@ -137,7 +137,7 @@ export const RegistrarSucursalForm = () => {
           <button
             type="submit"
             onClick={handleSubmit}
-            className="w-full rounded-md bg-fede-main px-4 py-2 font-medium text-white hover:bg-fede-hover-button focus:outline-none focus:ring-2 focus:ring-fede-main focus:ring-offset-2"
+            className="font-mediumhover:scale-105 w-full rounded-md bg-fede-main px-4 py-2 text-white hover:scale-105 hover:bg-fede-hover-button focus:outline-none focus:ring-2 focus:ring-fede-main focus:ring-offset-2"
           >
             Registrar sucursal
           </button>

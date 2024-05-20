@@ -97,7 +97,7 @@ export const RegisterWorkerForm = () => {
               onChange={handleChange}
               onKeyDown={(e) => exceptThisSymbols.includes(e.key) && e.preventDefault()}
               onWheel={(e) => e.target.blur()}
-              className="w-full rounded-md border bg-fede-fondo-texto px-3 py-2 text-fede-texto-input placeholder-fede-texto-claro shadow-sm outline-fede-main focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input placeholder-fede-texto-claro shadow-sm outline-fede-main focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               type="number"
               autoComplete="off"
             />
@@ -110,7 +110,7 @@ export const RegisterWorkerForm = () => {
               <input
                 name="name"
                 onChange={handleChange}
-                placeholder="Ingresa el nombre del empleado"
+                placeholder="Ingresa el nombre"
                 className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
                 type="text"
               />
@@ -125,7 +125,7 @@ export const RegisterWorkerForm = () => {
               <input
                 name="lastName"
                 onChange={handleChange}
-                placeholder="Ingresa el apellido del empleado"
+                placeholder="Ingresa el apellido"
                 className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
                 type="text"
               />
