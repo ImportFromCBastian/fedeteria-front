@@ -22,5 +22,5 @@ export function MostrarPerfil() {
   if (error) {
     return <div>Error al conseguir el perfil!</div>
   }
-  return <ShowProfile userData={perfil}></ShowProfile>
+  return <ShowProfile userData={perfil} />
 }

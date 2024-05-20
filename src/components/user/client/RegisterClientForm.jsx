@@ -24,12 +24,12 @@ export const RegisterClientForm = () => {
 
   const { fetchSucursal } = fetchData()
 
-  const wrapper = async () => {
+  const fetchSucursales = async () => {
     const sucursales = await fetchSucursal()
     setSucursal(sucursales)
   }
   useEffect(() => {
-    wrapper()
+    fetchSucursales()
   }, [])
 
   return (
