@@ -14,7 +14,6 @@ export const Login = () => {
   useEffect(() => {
     // Al cargar el componente, verificar si hay intentos fallidos en localStorage
     const storedAttempts = localStorage.getItem('loginAttempts')
-    console.log(localStorage)
     if (storedAttempts) {
       // setAttempts(JSON.parse(storedAttempts))
     }
@@ -95,7 +94,6 @@ export const Login = () => {
       }
       toast.error('Inicio de sesión fallido')
     }
-
     const { token } = await fetch(`${import.meta.env.VITE_BASE_URL}/user/generate_token`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -105,7 +103,6 @@ export const Login = () => {
     })
       .then((data) => data.json())
       .catch((error) => new Error(error))
-
     localStorage.setItem('token', token)
     // Redirige al usuario a la homepage
     return navigate('/')
