@@ -12,58 +12,6 @@ import { ListadoPublicaciones } from './components/Listado-Pub-Aceptacion/Listad
 import { RegisterWorkerForm } from './components/user/worker/RegisterWorkerForm.jsx'
 import UnauthorizedAccessPage from './components/Error/Unauthorized.jsx'
 import Layout from './components/Layout/Layout.jsx'
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <h1> hola </h1>
-  },
-  {
-    path: '/login',
-    element: <Login />
-  },
-  {
-    path: '/sucursal',
-    element: <RegistrarSucursalForm />
-  },
-  {
-    path: '/registrar/cliente',
-    element: <RegisterClientForm />
-  },
-  {
-    path: '/registrar/empleado',
-    element: <RegisterWorkerForm />
-  },
-  {
-    path: '/agregar_publicacion',
-    element: (
-      <Layout>
-        {' '}
-        <PostPublicationForm />{' '}
-      </Layout>
-    )
-  },
-  {
-    path: '/mi_perfil',
-    element: <MostrarPerfil />
-  },
-  {
-    path: '/unauthorized',
-    element: <UnauthorizedAccessPage />
-  },
-  {
-    path: '/ver_detalles',
-    element: <DetallesPublicacion />
-  },
-  {
-    path: '/listado_publicaciones',
-    element: (
-      <Layout>
-        {' '}
-        <ListadoPublicaciones />{' '}
-      </Layout>
-    )
-  }
-])
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -79,6 +27,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/mi_perfil" element={<MostrarPerfil />} />
           <Route path="/listado_publicaciones" element={<ListadoPublicaciones />} />
           <Route path="/listado_publicaciones/:id" element={<DetallesPublicacion />} />
+          <Route path="/unauthorized" element={<UnauthorizedAccessPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

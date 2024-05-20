@@ -122,7 +122,7 @@ export const Header = () => {
             <Link
               className="font-medium underline-offset-4 hover:underline"
               onClick={handleLogout}
-              to="/login"
+              to="/"
             >
               Cerrar sesión
             </Link>
