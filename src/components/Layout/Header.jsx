@@ -1,5 +1,23 @@
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+
+const handleLogout = () => {
+  // Borra el token del local storage
+  localStorage.removeItem('token')
+}
+
 export const Header = () => {
+  const navigate = useNavigate()
+  const [token, setToken] = useState('')
+
+  useEffect(() => {
+    setToken(localStorage.getItem('token'))
+    // Verifica si el token existe en el almacenamiento local y no está vacío
+    if (!token) {
+      navigate('/listado_publicaciones') // cambiar a '/unauthorized
+    }
+  }, [])
+
   return (
     <div>
       <div className="relative w-full bg-fede-main">
@@ -100,6 +118,28 @@ export const Header = () => {
           <a className="font-medium underline-offset-4 hover:underline" href="#">
             Historial de trueques
           </a>
+          {token && (
+            <Link
+              className="font-medium underline-offset-4 hover:underline"
+              onClick={handleLogout}
+              to="/"
+            >
+              Cerrar sesión
+            </Link>
+          )}
+          {!token && (
+            <Link className="font-medium underline-offset-4 hover:underline" to="/login">
+              Iniciar sesión
+            </Link>
+          )}
+          {!token && (
+            <Link
+              className="font-medium underline-offset-4 hover:underline"
+              to="/registrar/cliente"
+            >
+              Registrarte
+            </Link>
+          )}
         </div>
       </header>
     </div>
