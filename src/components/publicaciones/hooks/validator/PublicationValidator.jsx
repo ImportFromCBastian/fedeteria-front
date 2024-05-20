@@ -1,6 +1,12 @@
 import * as y from 'yup'
 
 const publicationSchema = y.object({
+  //dni validations
+  dni: y
+    .number()
+    .typeError('El DNI debe ser un numero')
+    .positive('El DNI debe ser un número valido')
+    .required('El DNI es requerido'),
   //nombre validations
   nombre: y.string().required('El nombre es obligatorio'),
   //producto a cambio validations
