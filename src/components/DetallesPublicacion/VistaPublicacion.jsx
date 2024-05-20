@@ -16,7 +16,8 @@ export const DetallesPublicacion = () => {
     nombre: '',
     precio: null,
     descripcion: '',
-    productoACambio: ''
+    productoACambio: '',
+    estado: ''
   })
   const [fotos, setFotos] = useState([])
 

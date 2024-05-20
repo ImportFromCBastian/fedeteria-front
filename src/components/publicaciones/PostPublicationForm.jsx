@@ -156,7 +156,7 @@ export const PostPublicationForm = () => {
               htmlFor="producto_a_cambio"
               className="mb-2 block text-sm font-medium text-fede-texto-base"
             >
-              Producto que te gustaría recibir a cambio
+              Producto que te gustaría recibir a cambio (opcional)
             </label>
             <input
               name="producto_a_cambio"
