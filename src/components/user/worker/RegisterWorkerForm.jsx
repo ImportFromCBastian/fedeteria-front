@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { RenderVisibility } from '../Visibility'
 import { useHandler } from '../hooks/useHandler'
+import { fetchData } from '../hooks/fetchData'
 import { Toaster } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
@@ -8,6 +9,7 @@ import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@
 export const RegisterWorkerForm = () => {
   const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
+  const [sucursal, setSucursal] = useState([])
   const [isOpen, setIsOpen] = useState(false)
   const [credentials, setCredentials] = useState({
     dni: '',
@@ -20,6 +22,16 @@ export const RegisterWorkerForm = () => {
   })
   const { handleChange, handleChangePasswordVisibility, handleChangeCheck, handleSubmit } =
     useHandler(credentials, setCredentials, showPassword, setShowPassword, 'worker')
+
+  const { fetchSucursal } = fetchData()
+
+  const wrapper = async () => {
+    const sucursales = await fetchSucursal()
+    setSucursal(sucursales)
+  }
+  useEffect(() => {
+    wrapper()
+  }, [])
 
   const decodeToken = async (token) => {
     return await fetch(`${import.meta.env.VITE_BASE_URL}/user/decode_token`, {
@@ -180,6 +192,26 @@ export const RegisterWorkerForm = () => {
               className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
               type="date"
             />
+          </div>
+          <div>
+            <label
+              htmlFor="sucursal"
+              className="mb-2 block text-sm font-medium text-fede-texto-base"
+            >
+              Sucursal
+            </label>
+            <select
+              name="sucursal"
+              onChange={handleChange}
+              className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
+            >
+              <option value="">Selecciona una sucursal</option>
+              {sucursal.map((sucursal) => (
+                <option className="text-black" key={sucursal.idLocal} value={sucursal.idLocal}>
+                  {sucursal.nombre}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="flex items-center">
             <input
