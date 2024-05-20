@@ -104,6 +104,7 @@ export const Login = () => {
       .then((data) => data.json())
       .catch((error) => new Error(error))
     localStorage.setItem('token', token)
+    window.location.reload()
     // Redirige al usuario a la homepage
     return navigate('/')
   }

@@ -18,6 +18,7 @@ export const Header = () => {
   const handleLogout = () => {
     // Borra el token del local storage
     localStorage.removeItem('token')
+    window.location.reload()
   }
 
   useEffect(() => {
