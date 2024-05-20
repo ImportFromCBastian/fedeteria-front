@@ -9,6 +9,7 @@ export const RegisterClientForm = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [sucursal, setSucursal] = useState([])
+  const exceptThisSymbols = ['e', 'E', '+', '-', ',']
   const [credentials, setCredentials] = useState({
     dni: '',
     name: '',
@@ -53,7 +54,9 @@ export const RegisterClientForm = () => {
               name="dni"
               placeholder="Ingresa tu DNI"
               onChange={handleChange}
-              className="w-full rounded-md border bg-fede-fondo-texto px-3 py-2 text-fede-texto-input placeholder-fede-texto-claro shadow-sm outline-fede-main focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
+              onKeyDown={(e) => exceptThisSymbols.includes(e.key) && e.preventDefault()}
+              onWheel={(e) => e.target.blur()}
+              className="w-full rounded-md border bg-fede-fondo-texto px-3 py-2 text-fede-texto-input placeholder-fede-texto-claro shadow-sm outline-fede-main focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               type="number"
               autoComplete="off"
             />
