@@ -15,11 +15,6 @@ export const Header = () => {
       .then((data) => data.data)
       .catch((e) => new Error(e))
   }
-  const handleLogout = () => {
-    // Borra el token del local storage
-    localStorage.removeItem('token')
-    window.location.reload()
-  }
 
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -142,15 +137,6 @@ export const Header = () => {
                   Registrar Empleado
                 </Link>
               </>
-            )}
-            {user && (
-              <Link
-                className=" font-medium underline-offset-4 hover:underline"
-                onClick={handleLogout}
-                to="/"
-              >
-                Cerrar sesión
-              </Link>
             )}
           </div>
         )}

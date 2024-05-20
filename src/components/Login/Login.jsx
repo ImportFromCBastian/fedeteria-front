@@ -13,7 +13,7 @@ export const Login = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token')
-    if (token === null) {
+    if (token != null) {
       navigate('/')
       return
     }

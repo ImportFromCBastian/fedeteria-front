@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { ShowProfile } from './profile'
-
 export function MostrarPerfil() {
   const [perfil, setPerfil] = useState({
     DNI: '',
