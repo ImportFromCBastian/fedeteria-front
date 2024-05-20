@@ -35,14 +35,14 @@ export const RegisterWorkerForm = () => {
   useEffect(() => {
     const token = localStorage.getItem('token')
 
-    if (token) {
+    if (!token) {
       navigate('/')
       return
     }
 
     const fetchData = async () => {
       const decodedToken = await decodeToken(token)
-      if (decodedToken.rol !== 'admin') {
+      if (decodedToken.rol !== 'administrador') {
         navigate('/')
         return
       }
