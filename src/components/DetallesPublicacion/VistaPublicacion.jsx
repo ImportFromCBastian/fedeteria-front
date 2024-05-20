@@ -7,7 +7,8 @@ export const DetallesPublicacion = () => {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0)
   const [comment, setComment] = useState('')
   const maxLength = 200 // Máximo de caracteres permitidos
-  const idPublicacion = 10 //CONSEGUIR EL idPublicacion DE ALGUNA MANERA.
+  const { id } = useParams('')
+  const idPublicacion = id
   const [publicacion, setPublicacion] = useState({
     idPublicacion: null,
     nombre: '',
@@ -36,7 +37,6 @@ export const DetallesPublicacion = () => {
           `${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion}/fotos`
         )
         const data = await response.json()
-        console.log(data)
         setFotos(data)
       } catch (error) {
         console.error('Error al obtener la imagen:', error)

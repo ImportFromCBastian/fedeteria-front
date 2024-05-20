@@ -29,8 +29,7 @@ export const ListadoPublicaciones = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token')
-
-    if (!token) {
+    if (token === null) {
       navigate('/')
       return
     }
@@ -106,8 +105,8 @@ export const ListadoPublicaciones = () => {
               publicationName={pub.nombre}
               idPublicacion={pub.idPublicacion}
               key={index}
-              onDelete={() => eliminarPublicacion(pub.idPublicacion)}
-              onAccept={(numero) => aceptarPublicacion(pub.idPublicacion, numero)}
+              // onDelete={() => eliminarPublicacion(pub.idPublicacion)}
+              // onAccept={(numero) => aceptarPublicacion(pub.idPublicacion, numero)}
             />
           ))
         )}

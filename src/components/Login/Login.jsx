@@ -1,17 +1,19 @@
 import { useState, useEffect } from 'react'
 import { Toaster, toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
+import { RenderVisibility } from '../user/Visibility'
 
 export const Login = () => {
+  const [showPassword, setShowPassword] = useState(false)
   const [attempts, setAttempts] = useState({})
   const [isLocked, setIsLocked] = useState({})
   const [credential, setCredential] = useState({ dni: '', password: '' })
   const navigate = useNavigate()
+  const exceptThisSymbols = ['e', 'E', '+', '-', ',']
 
   useEffect(() => {
     // Al cargar el componente, verificar si hay intentos fallidos en localStorage
     const storedAttempts = localStorage.getItem('loginAttempts')
-    console.log(localStorage)
     if (storedAttempts) {
       // setAttempts(JSON.parse(storedAttempts))
     }
@@ -34,6 +36,11 @@ export const Login = () => {
       ...credential,
       [e.target.name]: e.target.value
     })
+  }
+
+  const handleChangePasswordVisibility = (e) => {
+    e.preventDefault()
+    setShowPassword(!showPassword)
   }
 
   const handleSubmit = async (e) => {
@@ -87,7 +94,6 @@ export const Login = () => {
       }
       toast.error('Inicio de sesión fallido')
     }
-
     const { token } = await fetch(`${import.meta.env.VITE_BASE_URL}/user/generate_token`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -97,7 +103,6 @@ export const Login = () => {
     })
       .then((data) => data.json())
       .catch((error) => new Error(error))
-
     localStorage.setItem('token', token)
     // Redirige al usuario a la homepage
     return navigate('/')
@@ -125,13 +130,15 @@ export const Login = () => {
               name="dni"
               placeholder="12345678"
               value={credential.dni}
+              onKeyDown={(e) => exceptThisSymbols.includes(e.key) && e.preventDefault()}
+              onWheel={(e) => e.target.blur()}
               onChange={handleChange}
               className=" w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-base shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               required
               type="number"
             />
           </div>
-          <div>
+          <div className="relative">
             <label
               htmlFor="password"
               className="mb-2 block text-sm font-medium text-fede-texto-base"
@@ -146,9 +153,11 @@ export const Login = () => {
               onChange={handleChange}
               className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-base shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
               required
-              type="password"
+              type={!showPassword ? 'password' : 'text'}
             />
+            <RenderVisibility show={showPassword} handleClick={handleChangePasswordVisibility} />
           </div>
+
           <div className="flex items-start">
             <a
               target="_blank"

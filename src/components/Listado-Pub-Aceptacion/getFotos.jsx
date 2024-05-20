@@ -8,10 +8,7 @@ const getFoto = async (idPublicacion) => {
 
       return response.json()
     })
-    .then((data) => {
-      const fotos = data.fotos
-      console.log(fotos)
-    })
+    .then((data) => data.fotos)
     .catch((error) => {
       console.error('Error al obtener las fotos:', error)
     })
