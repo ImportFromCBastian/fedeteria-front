@@ -59,7 +59,18 @@ export const ProfileEditor = () => {
     const gatherUser = async (token) => {
       const tokenReal = await getToken(token)
       setRol(tokenReal.rol)
-      const [user] = await fetchUser(tokenReal.rol, dni)
+      const user = await fetchUser(tokenReal.rol, dni)
+      if (tokenReal.rol === 'administrador') {
+        const { nombre, apellido, idLocal, mail, fechaNacimiento } = user.admin[0]
+        setUserData({
+          nombre,
+          apellido,
+          idLocal,
+          mail,
+          fechaNacimiento
+        })
+        return
+      }
       const { nombre, apellido, idLocal, mail, fechaNacimiento } = user
       setUserData({
         nombre,

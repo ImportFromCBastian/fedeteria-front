@@ -46,10 +46,20 @@ export function MostrarPerfil() {
       try {
         const token = localStorage.getItem('token')
         const decodedToken = await decodeToken(token)
-        const [response] = await transformFetch(decodedToken.rol, decodedToken.DNI)
-
+        const response = await transformFetch(decodedToken.rol, decodedToken.DNI)
         if (response.ok) {
           throw new Error('Error al obtener el perfil')
+        }
+        if (response.nombreSucursal === 'Admin') {
+          setPerfil({
+            ['DNI']: response.admin[0].DNI,
+            ['nombre']: response.admin[0].nombre,
+            ['apellido']: response.admin[0].apellido,
+            ['nombreSucursal']: response.nombreSucursal,
+            ['fechaNacimiento']: response.admin[0].fechaNacimiento,
+            ['mail']: response.admin[0].mail
+          })
+          return
         }
         setPerfil({
           ['DNI']: response.DNI,
