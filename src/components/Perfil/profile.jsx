@@ -1,4 +1,7 @@
+import { useNavigate } from 'react-router-dom'
+
 export const ShowProfile = ({ userData }) => {
+  const navigate = useNavigate()
   const formatFechaNacimiento = (fechaNacimiento) => {
     if (!fechaNacimiento) return '' // Manejo de caso en que la fecha no esté definida
 
@@ -25,7 +28,12 @@ export const ShowProfile = ({ userData }) => {
                 </h3>
                 <p className="text-muted-foreground text-2xl">Estos son los datos de tu perfil</p>
               </div>
-              <button className="focus:ring-ring ml-auto inline-flex h-7 w-7 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
+              <button
+                onClick={() => {
+                  navigate(`/mi_perfil/editar_perfil/${121111111}`)
+                }}
+                className="focus:ring-ring ml-auto inline-flex h-7 w-7 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -103,7 +111,7 @@ export const ShowProfile = ({ userData }) => {
                 >
                   Sucursal más cercana
                 </label>
-                <div className="text-xl font-bold">Sucursal 1</div>
+                <div className="font-bold">{userData.nombreSucursal}</div>
               </div>
             </div>
             <div className="mt-4 flex justify-end">

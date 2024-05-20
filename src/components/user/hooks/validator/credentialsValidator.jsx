@@ -45,6 +45,9 @@ const userSchema = y.object({
       return age > 18
     })
     .required('La fecha de nacimiento es requerida'),
+  sucursal: y
+    .number('Selecciona una sucursal antes de registrarte')
+    .required('La sucursal es requerida'),
   notification: y.boolean().required()
 })
 

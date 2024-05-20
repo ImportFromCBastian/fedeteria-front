@@ -6,13 +6,13 @@ export function MostrarPerfil() {
   const [error, setError] = useState(false)
 
   useEffect(() => {
-    const dniPerfil = 44590363
-    fetch(`${import.meta.env.VITE_BASE_URL}/mi_perfil/${dniPerfil}`, {
+    const dniPerfil = 121111111
+    fetch(`${import.meta.env.VITE_BASE_URL}/user/client/${dniPerfil}`, {
       method: 'GET'
     })
       .then((response) => response.json())
       .then((data) => {
-        setPerfil(data.data)
+        setPerfil(data)
       })
       .catch((error) => {
         console.error('Error al obtener el perfil', error)
@@ -22,5 +22,5 @@ export function MostrarPerfil() {
   if (error) {
     return <div>Error al conseguir el perfil!</div>
   }
-  return <ShowProfile userData={perfil.at(0)} />
+  return <ShowProfile userData={perfil} />
 }
