@@ -9,6 +9,8 @@ export const createSucursal = async (credentials) => {
       },
       body: JSON.stringify(credentials)
     })
+      .then((response) => response.json())
+      .then((data) => data)
 
     if (!result.ok) {
       // Si la respuesta no es exitosa, lanzamos un error con el código de estado

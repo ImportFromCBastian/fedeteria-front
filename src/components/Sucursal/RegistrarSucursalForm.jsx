@@ -97,7 +97,7 @@ export const RegistrarSucursalForm = () => {
                 name="numero"
                 onChange={handleChange}
                 placeholder="Ingresa el número"
-                className="focus:ring-fede-main[&::-webkit-inner-spin-button]:appearance-none w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 [&::-webkit-outer-spin-button]:appearance-none "
+                className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none "
                 type="number"
                 autoComplete="off"
               />

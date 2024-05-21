@@ -59,19 +59,9 @@ export const ProfileEditor = () => {
     const gatherUser = async (token) => {
       const tokenReal = await getToken(token)
       setRol(tokenReal.rol)
-      const user = await fetchUser(tokenReal.rol, dni)
-      if (tokenReal.rol === 'administrador') {
-        const { nombre, apellido, idLocal, mail, fechaNacimiento } = user.admin[0]
-        setUserData({
-          nombre,
-          apellido,
-          idLocal,
-          mail,
-          fechaNacimiento
-        })
-        return
-      }
-      const { nombre, apellido, idLocal, mail, fechaNacimiento } = user
+      const { data } = await fetchUser(tokenReal.rol, dni)
+
+      const { nombre, apellido, idLocal, mail, fechaNacimiento } = data
       setUserData({
         nombre,
         apellido,
@@ -105,18 +95,18 @@ export const ProfileEditor = () => {
   }, [])
 
   return (
-    <div className="flex h-screen flex-col items-center justify-center">
+    <div className="flex h-screen flex-col items-center justify-center ">
       <div
-        className="bg-card text-card-foreground w-full max-w-2xl rounded-lg border bg-fede-secundary shadow-sm"
+        className="bg-card text-card-foreground flex min-h-[400px] w-full max-w-5xl flex-col rounded-lg border-2 border-fede-main  bg-fede-secundary p-6 shadow-sm"
         data-v0-t="card"
       >
         <div className="p-6">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-2xl font-bold leading-none tracking-tight">
+              <h3 className="my-3 text-5xl font-bold leading-none tracking-tight">
                 ¡Edita tu, <span className="text-fede-main">fedeperfil</span>!
               </h3>
-              <p className="text-muted-foreground text-sm">
+              <p className="text-muted-foreground text-2xl">
                 Actualiza los datos viejos de tu perfil
               </p>
             </div>
@@ -161,19 +151,23 @@ export const ProfileEditor = () => {
               >
                 Sucursal más cercana
               </label>
-              <select
-                name="sucursal"
-                onChange={handleChange}
-                className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
-                value={userData.idLocal}
-              >
-                <option value="">Selecciona una sucursal</option>
-                {sucursales.map((sucursal, index) => (
-                  <option className="text-black" key={index} value={sucursal.idLocal}>
-                    {sucursal.nombre}
-                  </option>
-                ))}
-              </select>
+              {userData.idLocal === 'Admin' ? (
+                <div className="text-xl font-bold">{userData.idLocal}</div>
+              ) : (
+                <select
+                  name="sucursal"
+                  onChange={handleChange}
+                  className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
+                  value={userData.idLocal}
+                >
+                  <option value="">Selecciona una sucursal</option>
+                  {sucursales.map((sucursal, index) => (
+                    <option className="text-black" key={index} value={sucursal.idLocal}>
+                      {sucursal.nombre}
+                    </option>
+                  ))}
+                </select>
+              )}
             </div>
 
             <div className="space-y-2">

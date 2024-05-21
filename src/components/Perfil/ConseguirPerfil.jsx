@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ShowProfile } from './profile'
+import { useTranslateRole } from './useTranslateRole'
 export function MostrarPerfil() {
   const [perfil, setPerfil] = useState({
     DNI: '',
@@ -24,16 +25,7 @@ export function MostrarPerfil() {
       .catch((e) => new Error(e))
   }
   const transformFetch = async (rol, dni) => {
-    let translate
-    if (rol === 'cliente') {
-      translate = 'client'
-    }
-    if (rol === 'empleado') {
-      translate = 'worker'
-    }
-    if (rol === 'administrador') {
-      translate = 'admin'
-    }
+    const translate = useTranslateRole(rol)
     return await fetch(`${import.meta.env.VITE_BASE_URL}/user/${translate}/${dni}`)
       .then((response) => response.json())
       .catch((e) => {
@@ -45,28 +37,18 @@ export function MostrarPerfil() {
       try {
         const token = localStorage.getItem('token')
         const decodedToken = await decodeToken(token)
-        const response = await transformFetch(decodedToken.rol, decodedToken.DNI)
-        if (response.ok) {
+        const { data } = await transformFetch(decodedToken.rol, decodedToken.DNI)
+        if (data.ok) {
           throw new Error('Error al obtener el perfil')
         }
-        if (response.nombreSucursal === 'Admin') {
-          setPerfil({
-            ['DNI']: response.admin[0].DNI,
-            ['nombre']: response.admin[0].nombre,
-            ['apellido']: response.admin[0].apellido,
-            ['nombreSucursal']: response.nombreSucursal,
-            ['fechaNacimiento']: response.admin[0].fechaNacimiento,
-            ['mail']: response.admin[0].mail
-          })
-          return
-        }
+
         setPerfil({
-          ['DNI']: response.DNI,
-          ['nombre']: response.nombre,
-          ['apellido']: response.apellido,
-          ['nombreSucursal']: response.nombreSucursal,
-          ['fechaNacimiento']: response.fechaNacimiento,
-          ['mail']: response.mail
+          ['DNI']: data.DNI,
+          ['nombre']: data.nombre,
+          ['apellido']: data.apellido,
+          ['nombreSucursal']: data.idLocal,
+          ['fechaNacimiento']: data.fechaNacimiento,
+          ['mail']: data.mail
         })
       } catch (error) {
         console.error('Error al obtener el perfil', error)
