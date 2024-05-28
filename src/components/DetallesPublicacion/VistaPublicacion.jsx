@@ -62,7 +62,7 @@ export const DetallesPublicacion = () => {
     const fetchFoto = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion}/fotos`
+          `${import.meta.env.VITE_BASE_URL}/add-foto/${idPublicacion}/fotos`
         )
         const data = await response.json()
         setFotos(data)
