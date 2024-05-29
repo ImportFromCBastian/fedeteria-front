@@ -11,6 +11,7 @@ import { ProfileEditor } from './components/Perfil/ProfileEditor'
 import { DetallesPublicacion } from './components/DetallesPublicacion/VistaPublicacion'
 import { ListadoPublicaciones } from './components/Listado-Pub-Aceptacion/ListadoPubAceptacion'
 import { RegisterWorkerForm } from './components/user/worker/RegisterWorkerForm'
+import { HomePage } from './components/Home/HomePage'
 import Layout from './components/Layout/Layout'
 import UnauthorizedAccessPage from './components/Error/Unauthorized.jsx'
 
@@ -19,21 +20,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
-          <Route
-            path="/"
-            element={
-              <div className="flex min-h-[100vh] items-center justify-center">
-                <div className="mx-4 my-5 w-full max-w-md rounded-lg border-4 border-fede-main bg-fede-secundary p-8 shadow-md sm:mx-0">
-                  <h1 className="mb-6 text-center text-2xl font-bold text-fede-texto-base">
-                    ¡Bienvenido a la fedetería!
-                  </h1>
-                  <h3 className="text-l mb-6 text-center font-bold text-fede-texto-base">
-                    ¿Estás listo para intercambiar algunos productos?
-                  </h3>
-                </div>
-              </div>
-            }
-          />
+          <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/sucursal" element={<RegistrarSucursalForm />} />
           <Route path="/registrar/cliente" element={<RegisterClientForm />} />
