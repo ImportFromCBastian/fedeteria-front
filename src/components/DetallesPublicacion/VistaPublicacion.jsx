@@ -1,16 +1,14 @@
 import { useEffect, useState } from 'react'
 import { CommentForm } from './DejarConsulta'
 import { AceptarDenegar } from './Aceptar-Denegar'
-import { useParams } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 export const DetallesPublicacion = () => {
   const navigate = useNavigate()
+  const { id } = useParams()
+  const idPublicacion = id
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0)
   const [comment, setComment] = useState('')
-  const maxLength = 200 // Máximo de caracteres permitidos
-  const { id } = useParams('')
-  const idPublicacion = id
   const [publicacion, setPublicacion] = useState({
     idPublicacion: null,
     nombre: '',
@@ -20,33 +18,50 @@ export const DetallesPublicacion = () => {
     estado: ''
   })
   const [fotos, setFotos] = useState([])
+  const [fotosUrls, setFotosUrls] = useState([])
+  const maxLength = 200 // Máximo de caracteres permitidos
 
   const decodeToken = async (token) => {
-    return await fetch(`${import.meta.env.VITE_BASE_URL}/user/decode_token`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
-      method: 'POST'
-    })
-      .then((response) => response.json())
-      .then((data) => data.data)
-      .catch((e) => new Error(e))
+    try {
+      const response = await fetch(`${import.meta.env.VITE_BASE_URL}/user/decode_token`, {
+        headers: { Authorization: `Bearer ${token}` },
+        method: 'POST'
+      })
+      const data = await response.json()
+      return data.data
+    } catch (e) {
+      console.error('Error decoding token:', e)
+      return null
+    }
   }
+
+  const convertirBlobAUrl = (fotoData) => {
+    return new Promise((resolve, reject) => {
+      try {
+        const blob = new Blob([new Uint8Array(fotoData)], { type: 'image/png' })
+        const reader = new FileReader()
+        reader.onloadend = () => resolve(reader.result)
+        reader.onerror = (error) => reject(error)
+        reader.readAsDataURL(blob)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
   useEffect(() => {
     const fetchPublicacion = async () => {
       const token = localStorage.getItem('token')
-      if (token === null) {
+      if (!token) {
         navigate('/')
         return
       }
-      const fetchData = async () => {
-        const decodedToken = await decodeToken(token)
-        if (decodedToken.rol == 'cliente') {
-          navigate('/')
-          return
-        }
+
+      const decodedToken = await decodeToken(token)
+      if (decodedToken.rol === 'cliente') {
+        navigate('/')
+        return
       }
-      fetchData()
 
       try {
         const response = await fetch(
@@ -59,28 +74,31 @@ export const DetallesPublicacion = () => {
       }
     }
 
-    const fetchFoto = async () => {
+    const fetchFotos = async () => {
       try {
         const response = await fetch(
           `${import.meta.env.VITE_BASE_URL}/add-foto/${idPublicacion}/fotos`
         )
         const data = await response.json()
-        setFotos(data)
+        const urls = await Promise.all(data.map(async (foto) => convertirBlobAUrl(foto.foto.data)))
+        setFotosUrls(urls)
       } catch (error) {
         console.error('Error al obtener la imagen:', error)
       }
     }
 
     fetchPublicacion()
-    fetchFoto()
-  }, [idPublicacion])
+    fetchFotos()
+  }, [idPublicacion, navigate])
 
   const eliminarPublicacion = async (idPublicacion) => {
-    await fetch(`${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion.id}`, {
-      method: 'DELETE'
-    })
-      .then()
-      .catch((error) => console.error('Error al eliminar la publicación:', error))
+    try {
+      await fetch(`${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion.id}`, {
+        method: 'DELETE'
+      })
+    } catch (error) {
+      console.error('Error al eliminar la publicación:', error)
+    }
   }
 
   const aceptarPublicacion = async (idPublicacion, numero) => {
@@ -89,10 +107,8 @@ export const DetallesPublicacion = () => {
         `${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion.id}`,
         {
           method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ numero: numero }) // Envía el número como un JSON en el cuerpo de la solicitud
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ numero })
         }
       )
 
@@ -103,32 +119,6 @@ export const DetallesPublicacion = () => {
       console.error('Error al aceptar la publicación:', error)
     }
   }
-  const convertirBlobAUrl = (foto) => {
-    // Obtener los datos de la foto
-    const fotoData = foto.data
-    // Convertir los datos en una cadena base64
-    const base64String = btoa(String.fromCharCode.apply(null, fotoData))
-    // Crear la URL de datos
-    const imageUrl = `data:image/png;base64,${base64String}`
-    return imageUrl
-  }
-
-  const [fotosUrls, setFotosUrls] = useState([])
-  useEffect(() => {
-    // Verificar si hay fotos
-    if (fotos.length > 0) {
-      // Convertir cada foto a una URL de datos
-      Promise.all(fotos.map((foto) => convertirBlobAUrl(foto.foto)))
-        .then((urls) => {
-          // Actualizar el estado con las URLs de las imágenes convertidas
-          setFotosUrls(urls)
-        })
-        .catch((error) => {
-          console.error('Error al convertir blobs a URLs:', error)
-        })
-    }
-  }, [fotos])
-
   return (
     <div className="mx-auto grid max-w-6xl items-start gap-6 px-4 py-6 md:grid-cols-1 lg:gap-12">
       <div className="grid items-start gap-4 md:gap-10">
