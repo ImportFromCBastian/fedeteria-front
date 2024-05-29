@@ -3,6 +3,7 @@ import { CommentForm } from './DejarConsulta'
 import { AceptarDenegar } from './Aceptar-Denegar'
 import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 
 export const DetallesPublicacion = () => {
   const navigate = useNavigate()
@@ -76,17 +77,23 @@ export const DetallesPublicacion = () => {
   }, [idPublicacion])
 
   const eliminarPublicacion = async (idPublicacion) => {
-    await fetch(`${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion.id}`, {
+    await fetch(`${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion}`, {
       method: 'DELETE'
     })
-      .then()
+      .then(() => {
+        toast.success('Publicación eliminada con éxito!')
+        // Redirige al empleado a el listado
+        setTimeout(() => {
+          navigate('/listado_publicaciones')
+        }, 1000) // 1 segundo1 de espera
+      })
       .catch((error) => console.error('Error al eliminar la publicación:', error))
   }
 
   const aceptarPublicacion = async (idPublicacion, numero) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion.id}`,
+        `${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion}`,
         {
           method: 'PUT',
           headers: {
@@ -95,10 +102,14 @@ export const DetallesPublicacion = () => {
           body: JSON.stringify({ numero: numero }) // Envía el número como un JSON en el cuerpo de la solicitud
         }
       )
-
       if (!response.ok) {
         throw new Error('Error al aceptar la publicación')
       }
+      // Redirige al empleado a el listado
+      toast.success('Publicación aceptada con éxito!')
+      setTimeout(() => {
+        navigate('/listado_publicaciones')
+      }, 1000) // 1 segundo de espera
     } catch (error) {
       console.error('Error al aceptar la publicación:', error)
     }
@@ -160,6 +171,12 @@ export const DetallesPublicacion = () => {
             </div>
           </div>
           <div className="ml-auto text-4xl font-bold">${publicacion.precio}</div>
+          <div className="rounded-md border border-fede-main bg-white p-4">
+            <AceptarDenegar
+              onAccept={(numero) => aceptarPublicacion(publicacion.idPublicacion, numero)}
+              onDelete={() => eliminarPublicacion(publicacion.idPublicacion)}
+            />
+          </div>
         </div>
         <div className="grid gap-4 md:gap-10"></div>
       </div>
@@ -223,7 +240,6 @@ export const DetallesPublicacion = () => {
       </div>
       <div className="grid items-start gap-4 rounded-md border border-fede-main bg-fede-secundary p-4 md:gap-10">
         <div className="grid gap-4">
-          <AceptarDenegar onAccept={aceptarPublicacion} onDelete={eliminarPublicacion} />
           <h2 className="text-2xl font-bold">Consultas</h2>
           <div className="grid gap-6">
             <div className="flex gap-4">
