@@ -20,12 +20,12 @@ export const Login = () => {
     // Al cargar el componente, verificar si hay intentos fallidos en localStorage
     const storedAttempts = localStorage.getItem('loginAttempts')
     if (storedAttempts) {
-      // setAttempts(JSON.parse(storedAttempts))
+      setAttempts(JSON.parse(storedAttempts))
     }
     // Verificar si hay cuentas bloqueadas en localStorage
     const storedIsLocked = localStorage.getItem('isLocked')
     if (storedIsLocked) {
-      // setIsLocked(JSON.parse(storedIsLocked))
+      setIsLocked(JSON.parse(storedIsLocked))
     }
   }, [])
 
@@ -48,6 +48,10 @@ export const Login = () => {
     setShowPassword(!showPassword)
   }
 
+  const recuperarContraseña = () => {
+    navigate('/recuperar_contraseña')
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -57,22 +61,27 @@ export const Login = () => {
       toast.error('Ingrese un DNI válido')
       return
     }
+
     // Verificar si la cuenta está bloqueada
     if (isLocked[credential.dni]) {
       alert('Tu cuenta está bloqueada. Por favor, contacta al administrador.')
       return
     }
+
     // Lógica para verificar el nombre de usuario y contraseña
     const user = await fetch(`${import.meta.env.VITE_BASE_URL}/user/${credential.dni}`)
       .then((data) => data.json())
-      .catch((error) => new Error(error))
+      .catch((error) => {
+        toast.error('Error en la verificación del usuario')
+        return null
+      })
 
-    if (user.message) {
+    if (!user || user.message) {
       toast.error('Los datos ingresados son incorrectos')
       return
     }
-    //solicitud al backend de comparacion de contraseñas <--
 
+    // Solicitud al backend de comparación de contraseñas
     const userCredentials = {
       DNI: credential.dni,
       contra: credential.password
@@ -84,21 +93,28 @@ export const Login = () => {
       body: JSON.stringify(userCredentials)
     })
       .then((data) => data.json())
-      .catch((error) => new Error(error))
+      .catch((error) => {
+        toast.error('Error en la comparación de contraseñas')
+        return null
+      })
 
-    if (!compare.ok) {
-      if (attempts[credential.dni] >= 2) {
-        setIsLocked({ ...isLocked, [credential.dni]: true })
-      } else {
-        // Incrementar el contador de intentos fallidos para este DNI
-        const updatedAttempts = {
-          ...attempts,
-          [credential.dni]: (attempts[credential.dni] || 0) + 1
-        }
-        setAttempts(updatedAttempts)
+    if (!compare || !compare.ok) {
+      // Incrementar el contador de intentos fallidos para este DNI
+      const updatedAttempts = {
+        ...attempts,
+        [credential.dni]: (attempts[credential.dni] || 0) + 1
       }
+      setAttempts(updatedAttempts)
+
+      if (updatedAttempts[credential.dni] >= 3) {
+        setIsLocked({ ...isLocked, [credential.dni]: true })
+      }
+
       toast.error('Inicio de sesión fallido')
+      return
     }
+
+    // Generar y almacenar el token solo si la comparación es exitosa
     const { token } = await fetch(`${import.meta.env.VITE_BASE_URL}/user/generate_token`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -107,11 +123,18 @@ export const Login = () => {
       })
     })
       .then((data) => data.json())
-      .catch((error) => new Error(error))
-    localStorage.setItem('token', token)
-    window.location.reload()
-    // Redirige al usuario a la homepage
-    return navigate('/')
+      .catch((error) => {
+        toast.error('Error en la generación del token')
+        return null
+      })
+
+    if (token) {
+      localStorage.setItem('token', token)
+      window.location.reload()
+      navigate('/')
+    } else {
+      toast.error('Error al iniciar sesión')
+    }
   }
 
   return (
@@ -128,7 +151,7 @@ export const Login = () => {
         <h2 className="mb-6 text-center text-2xl font-bold text-fede-texto-base">Iniciar sesión</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="dni" className="mb-2 block text-sm font-medium text-fede-texto-base">
+            <label htmlFor="dni" className="mb2 block text-sm font-medium text-fede-texto-base">
               DNI
             </label>
             <input
@@ -167,8 +190,8 @@ export const Login = () => {
           <div className="flex items-start">
             <a
               target="_blank"
-              //href="https://www.youtube.com/watch?v=lYBUbBu4W08"
               className="ml-auto text-sm text-fede-texto-base hover:underline"
+              onClick={recuperarContraseña}
             >
               ¿Olvidaste tu contraseña?
             </a>

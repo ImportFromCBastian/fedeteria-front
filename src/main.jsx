@@ -13,6 +13,7 @@ import { ListadoPublicaciones } from './components/Listado-Pub-Aceptacion/Listad
 import { RegisterWorkerForm } from './components/user/worker/RegisterWorkerForm'
 import Layout from './components/Layout/Layout'
 import UnauthorizedAccessPage from './components/Error/Unauthorized.jsx'
+import { RecuperarContraseña } from './components/RecuperacionContraseña/recuperarContraseña.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -41,6 +42,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/agregar_publicacion" element={<PostPublicationForm />} />
           <Route path="/mi_perfil" element={<MostrarPerfil />} />
           <Route path="/listado_publicaciones" element={<ListadoPublicaciones />} />
+          <Route path="/recuperar_contraseña" element={<RecuperarContraseña />} />
           <Route path="/listado_publicaciones/:id" element={<DetallesPublicacion />} />
           <Route path="/mi_perfil/editar_perfil/:dni" element={<ProfileEditor />} />
           <Route path="/unauthorized" element={<UnauthorizedAccessPage />} />
