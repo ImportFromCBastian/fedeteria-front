@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Publicacion } from './Publicacion'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 
 export const ListadoPublicaciones = () => {
   const [publicaciones, setPublicaciones] = useState([])
@@ -36,7 +37,6 @@ export const ListadoPublicaciones = () => {
 
     const fetchData = async () => {
       const decodedToken = await decodeToken(token)
-      console.log(decodedToken.rol)
       if (decodedToken.rol == 'cliente') {
         navigate('/')
         return
@@ -51,8 +51,11 @@ export const ListadoPublicaciones = () => {
       method: 'DELETE'
     })
       .then(() => {
+        toast.success('Publicación eliminada con éxito!')
         // Actualizar la lista de publicaciones después de eliminar
-        setPublicaciones(publicaciones.filter((pub) => pub.idPublicacion !== idPublicacion))
+        setTimeout(() => {
+          setPublicaciones(publicaciones.filter((pub) => pub.idPublicacion !== idPublicacion))
+        }, 1000) // 1 segundo de espera
       })
       .catch((error) => console.error('Error al eliminar la publicación:', error))
   }
@@ -73,6 +76,7 @@ export const ListadoPublicaciones = () => {
       if (!response.ok) {
         throw new Error('Error al aceptar la publicación')
       }
+      toast.success('Publicación aceptada con éxito!')
 
       // Actualizar la lista de publicaciones después de aceptar
       setPublicaciones((prevPublicaciones) =>
@@ -106,8 +110,8 @@ export const ListadoPublicaciones = () => {
               publicationName={pub.nombre}
               idPublicacion={pub.idPublicacion}
               key={index}
-              // onDelete={() => eliminarPublicacion(pub.idPublicacion)}
-              // onAccept={(numero) => aceptarPublicacion(pub.idPublicacion, numero)}
+              onDelete={() => eliminarPublicacion(pub.idPublicacion)}
+              onAccept={(numero) => aceptarPublicacion(pub.idPublicacion, numero)}
             />
           ))
         )}
