@@ -1,35 +1,31 @@
 import { useEffect, useState } from 'react'
-import { fetchData } from '../user/hooks/fetchData'
-import partialUserSchema from './validator/partialCredentialsValidator'
+import { fetchPublicationData } from '../publicaciones/hooks/fetchPublicationData'
+import partialPublicationSchema from './hooks/validator/partialPublicationSchema'
 import { toast } from 'sonner'
-import { updateUser } from '../user/hooks/updateUser'
+import { updatePublication } from './hooks/updatePublication'
 import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
-export const ProfileEditor = () => {
+export const PublicationEditor = () => {
   const navigate = useNavigate()
-  //const { dni } = useParams('')
   const { idPublicacion } = useParams('')
-  //const [sucursales, setSucursales] = useState([])
-  //const [userData, setUserData] = useState({
   const [publicationData, setPublicationData] = useState({
     nombre: '',
     precio: '',
+    estado: '',
     descripcion: '',
     productoACambio: ''
   })
 
-  //const { fetchSucursal, fetchUser } = fetchData()
+  const { fetchPublication } = fetchPublicationData()
 
-  //   const gatherSucursales = async () => {
-  //     const sucursales = await fetchSucursal()
-  //     setSucursales(sucursales)
-  //   }
   const gatherPublication = async () => {
-    const { nombre, precio, descripcion, productoACambio } = await fetchPublication(idPublicacion)
+    const { nombre, precio, estado, descripcion, productoACambio } =
+      await fetchPublication(idPublicacion)
     setPublicationData({
       nombre,
       precio,
+      estado,
       descripcion,
       productoACambio
     })
@@ -45,9 +41,9 @@ export const ProfileEditor = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const user = partialUserSchema.validateSync(userData)
-      updateUser(user, dni)
-      navigate(`/mi_perfil`)
+      const publication = partialPublicationSchema.validateSync(publicationData)
+      updatePublication(publication, idPublicacion)
+      navigate(`/listado_publicaciones`)
     } catch (error) {
       const { errors } = error
       for (let i = 0; i < errors.length; i++) {
@@ -58,8 +54,7 @@ export const ProfileEditor = () => {
   }
 
   useEffect(() => {
-    gatherSucursales()
-    gatherUser()
+    gatherPublication()
   }, [])
 
   return (
@@ -92,7 +87,7 @@ export const ProfileEditor = () => {
               <input
                 name="nombre"
                 type="text"
-                value={userData.nombre}
+                value={publicationData.nombre}
                 onChange={handleChange}
                 className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
               />
@@ -100,15 +95,15 @@ export const ProfileEditor = () => {
             <div className="space-y-2">
               <label
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                htmlFor="apellido"
+                htmlFor="descripcion"
               >
-                Apellido
+                descripcion
               </label>
               <input
-                name="apellido"
+                name="descripcion"
                 type="text"
                 onChange={handleChange}
-                value={userData.apellido}
+                value={publicationData.descripcion}
                 className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
               />
             </div>
@@ -117,15 +112,15 @@ export const ProfileEditor = () => {
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 htmlFor="branch"
               >
-                Sucursal más cercana
+                precio
               </label>
               <select
                 name="sucursal"
                 onChange={handleChange}
                 className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
-                value={userData.idLocal}
+                value={publicationData.precio}
               >
-                <option value="">Selecciona una sucursal</option>
+                <option value="">Selecciona un estado</option>
                 {sucursales.map((sucursal, index) => (
                   <option className="text-black" key={index} value={sucursal.idLocal}>
                     {sucursal.nombre}
@@ -137,29 +132,20 @@ export const ProfileEditor = () => {
             <div className="space-y-2">
               <label
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                htmlFor="email"
+                htmlFor="descripcion"
               >
-                Correo electrónico
+                descripcion
               </label>
-              <div className="font-bold">{userData.mail}</div>
+              <input
+                name="descripcion"
+                type="text"
+                onChange={handleChange}
+                value={publicationData.descripcion}
+                className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
+              />
             </div>
+
             <div className="space-y-2">
-              <label
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                htmlFor="dni"
-              >
-                DNI
-              </label>
-              <div className="font-bold">{dni}</div>
-            </div>
-            <div className="space-y-2">
-              <label
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                htmlFor="birthDate"
-              >
-                Fecha de nacimiento
-              </label>
-              <div className="font-bold">{formatFechaNacimiento(userData.fechaNacimiento)}</div>
               <button
                 type="submit"
                 onClick={handleSubmit}
