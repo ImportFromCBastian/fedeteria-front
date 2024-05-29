@@ -8,6 +8,7 @@ import { toast } from 'sonner'
 export const DetallesPublicacion = () => {
   const navigate = useNavigate()
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0)
+  const [decodedToken, setDecodedToken] = useState({})
   const [comment, setComment] = useState('')
   const maxLength = 200 // Máximo de caracteres permitidos
   const { id } = useParams('')
@@ -41,11 +42,8 @@ export const DetallesPublicacion = () => {
         return
       }
       const fetchData = async () => {
-        const decodedToken = await decodeToken(token)
-        if (decodedToken.rol == 'cliente') {
-          navigate('/')
-          return
-        }
+        const result = await decodeToken(token)
+        setDecodedToken(result)
       }
       fetchData()
 
@@ -171,17 +169,19 @@ export const DetallesPublicacion = () => {
             </div>
           </div>
           <div className="ml-auto text-4xl font-bold">${publicacion.precio}</div>
-          <div className="rounded-md border border-fede-main bg-white p-4">
-            <AceptarDenegar
-              onAccept={(numero) => aceptarPublicacion(publicacion.idPublicacion, numero)}
-              onDelete={() => eliminarPublicacion(publicacion.idPublicacion)}
-            />
-          </div>
+          {decodedToken.rol === 'empleado' ? (
+            <div className="rounded-md border border-fede-main bg-white p-4">
+              <AceptarDenegar
+                onAccept={(numero) => aceptarPublicacion(publicacion.idPublicacion, numero)}
+                onDelete={() => eliminarPublicacion(publicacion.idPublicacion)}
+              />
+            </div>
+          ) : null}
         </div>
         <div className="grid gap-4 md:gap-10"></div>
       </div>
       <div className="grid gap-4 md:gap-10">
-        <div className="grid items-start gap-4 rounded-md border border-fede-main bg-fede-secundary p-4 md:gap-10">
+        <div className="grid gap-4 rounded-md border border-fede-main bg-fede-secundary p-4 md:gap-10">
           {fotosUrls.length === 1 ? (
             // Si solo hay una foto, mostrarla sola y grande
             <img
@@ -218,6 +218,12 @@ export const DetallesPublicacion = () => {
               </div>
             </div>
           )}
+          <button
+            onClick={() => navigate('/sugerir_trueque/' + publicacion.idPublicacion)}
+            className="w-fit rounded border border-red-500 p-1"
+          >
+            Sugerir Trueque
+          </button>
         </div>
         <div className="grid gap-4">
           <div className="grid gap-4">
@@ -232,7 +238,9 @@ export const DetallesPublicacion = () => {
                 className="text-base font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 htmlFor="product"
               >
-                {publicacion.productoACambio}
+                {publicacion.productoACambio === ''
+                  ? 'No especificado'
+                  : publicacion.productoACambio}
               </label>
             </div>
           </div>

@@ -36,7 +36,7 @@ export const Publicacion = ({ publicationName, idPublicacion, onDelete, onAccept
     <div
       className="relative"
       onClick={() => {
-        navigate('/listado_publicaciones/' + idPublicacion)
+        navigate('/ver_publicacion/' + idPublicacion)
       }}
     >
       <Toaster />

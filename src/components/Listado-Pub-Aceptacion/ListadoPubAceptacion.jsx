@@ -100,7 +100,7 @@ export const ListadoPublicaciones = () => {
       </h2>
       <p className="pl-6 pt-2 text-gray-500 md:text-xl/relaxed dark:text-gray-400">
         Revisa y toma acciones sobre las publicaciones enviadas por los usuarios.
-      </p>{' '}
+      </p>
       <div className="space-y-4 px-1 py-1">
         {publicaciones.length === 0 ? (
           <p>No hay publicaciones que aceptar!</p>

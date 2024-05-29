@@ -1,9 +1,14 @@
+import { useNavigate } from 'react-router-dom'
 export const Publication = ({ publication }) => {
+  const navigate = useNavigate()
+  const handleClick = () => {
+    navigate('/ver_publicacion/' + publication.idPublicacion)
+  }
   return (
     <div className="group relative overflow-hidden rounded-lg shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-2 hover:shadow-xl">
-      <a className="absolute inset-0 z-10" href="#">
+      <span onClick={handleClick} className="absolute inset-0 z-10" href="#">
         <span className="sr-only">View</span>
-      </a>
+      </span>
       <img
         src="Fedeteria_Solo_Logo.svg"
         alt="Item 1"
