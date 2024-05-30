@@ -1,13 +1,37 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { ProductsExchange } from './ProductsExchange'
+import { Toaster, toast } from 'sonner'
 
 export const SuggestExchange = () => {
   const { id } = useParams('')
   const navigate = useNavigate()
   const [publication, setPublication] = useState({})
   const [suggestPublications, setSuggestPublications] = useState([])
+  const [message, setMessage] = useState('')
+  const [selectedPublication, setSelectedPublication] = useState([])
+  const [finalPrice, setFinalPrice] = useState(0)
 
+  const fetchData = async () => {
+    const result = await gatherToken()
+    const suggested = await fetchSuggestion(result)
+
+    const filteredSuggested = suggested.filter((suggestion) => {
+      return suggestion.productoDeseado === parseInt(id)
+    })
+    if (filteredSuggested.length > 0) {
+      return navigate(`/ver_publicacion/${id}`)
+    }
+  }
+
+  const fetchSuggestion = async (token) => {
+    return await fetch(`${import.meta.env.VITE_BASE_URL}/exchange/suggestions/${token.DNI}`)
+      .then((res) => res.json())
+      .then((data) => data)
+      .catch((err) => new Error(err))
+  }
+
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
   //0. gather primary publication
   const fetchPublication = async () => {
     await fetch(`${import.meta.env.VITE_BASE_URL}/publication/${id}`)
@@ -35,16 +59,63 @@ export const SuggestExchange = () => {
   }
   const fetchClientPublication = async () => {
     const token = await gatherToken()
-    await fetch(`${import.meta.env.VITE_BASE_URL}/publication/user/${token.DNI}`)
+    const suggest = await fetch(`${import.meta.env.VITE_BASE_URL}/publication/user/${token.DNI}`)
       .then((res) => res.json())
-      .then((data) => setSuggestPublications(data))
+      .then((data) => data)
       .catch((err) => new Error(err))
+
+    if (suggest.length === 0) return navigate('/')
+    setSuggestPublications(suggest)
+    if (publication.DNI === token.DNI) return navigate('/')
   }
 
   useEffect(() => {
+    fetchData()
     fetchPublication()
     fetchClientPublication()
   }, [])
+
+  const handleCancel = () => {
+    navigate('/ver_publicacion/' + publication.idPublicacion)
+    return
+  }
+  const childHandleClick = (index, action) => {
+    if (action === 'remove') {
+      setFinalPrice(finalPrice - suggestPublications[index].precio)
+      setSelectedPublication(
+        selectedPublication.filter(
+          (publication) => publication.idPublicacion !== suggestPublications[index].idPublicacion
+        )
+      )
+    }
+    if (action === 'add') {
+      setFinalPrice(finalPrice + suggestPublications[index].precio)
+      selectedPublication.push(suggestPublications[index].idPublicacion)
+    }
+  }
+  const handleExchange = async () => {
+    if (finalPrice < publication.precio) {
+      toast.error('La diferencia de precios entre las publicaciones es demasiado alta')
+      return
+    }
+    setMessage('realizando sugerencia')
+    const result = await fetch(`${import.meta.env.VITE_BASE_URL}/exchange`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        mainPublication: publication.idPublicacion,
+        publicationList: selectedPublication
+      })
+    })
+      .then((res) => res.json())
+      .catch((err) => console.log(err))
+    if (!result.ok) return toast.error('Error al realizar la sugerencia de intercambio')
+    toast.success('Sugerencia realizada con exito')
+    await delay(2000)
+    navigate('/ver_publicacion/' + publication.idPublicacion)
+  }
 
   return (
     <>
@@ -52,6 +123,7 @@ export const SuggestExchange = () => {
         <h1>no hay pubs</h1>
       ) : (
         <>
+          <Toaster expand="true" richColors="true" />
           <div className="grid grid-cols-[2fr_1fr_2fr]  gap-6 border bg-white p-10  lg:gap-12">
             <div className=" grid items-start gap-4  md:gap-10">
               <div className="items-start md:flex">
@@ -81,9 +153,9 @@ export const SuggestExchange = () => {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 className="h-8 w-8 text-gray-500 "
               >
                 <path d="M8 3 4 7l4 4"></path>
@@ -96,15 +168,28 @@ export const SuggestExchange = () => {
               <h2 className="text-2xl font-bold">Productos a Ofrecer</h2>
               <div className="grid gap-4">
                 {suggestPublications.map((publication, index) => (
-                  <ProductsExchange key={index} publication={publication} />
+                  <ProductsExchange
+                    key={index}
+                    onChildChange={childHandleClick}
+                    publication={publication}
+                    index={index}
+                  />
                 ))}
               </div>
               <hr className="flex-1  border-gray-200 " />
-              <span className="text-3xl font-bold">Categoria Final: IX</span>
-              <button className=" ring-offset-background focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-11 items-center justify-center whitespace-nowrap rounded-md border bg-fede-main-claro px-8 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
+              {/* cambiar final price por catgoria handle (useConversion(finalPrice)) */}
+              <span className="text-3xl font-bold">Categoria Final: {finalPrice}</span>
+              <button
+                onClick={handleExchange}
+                className=" ring-offset-background focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-11 items-center justify-center whitespace-nowrap rounded-md border bg-fede-main-claro px-8 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+                disabled={message !== ''}
+              >
                 Confirmar
               </button>
-              <button className=" ring-offset-background focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-11 items-center justify-center whitespace-nowrap rounded-md border px-8 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
+              <button
+                onClick={handleCancel}
+                className=" ring-offset-background focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-11 items-center justify-center whitespace-nowrap rounded-md border px-8 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+              >
                 Cancelar
               </button>
             </div>

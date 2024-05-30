@@ -8,6 +8,8 @@ import { toast } from 'sonner'
 export const DetallesPublicacion = () => {
   const navigate = useNavigate()
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0)
+  const [suggestPublications, setSuggestPublications] = useState([])
+  const [isSuggested, setIsSuggested] = useState(false)
   const [decodedToken, setDecodedToken] = useState({})
   const [comment, setComment] = useState('')
   const maxLength = 200 // Máximo de caracteres permitidos
@@ -19,7 +21,8 @@ export const DetallesPublicacion = () => {
     precio: null,
     descripcion: '',
     productoACambio: '',
-    estado: ''
+    estado: '',
+    DNI: 0
   })
   const [fotos, setFotos] = useState([])
 
@@ -34,6 +37,15 @@ export const DetallesPublicacion = () => {
       .then((data) => data.data)
       .catch((e) => new Error(e))
   }
+  const fetchSuggestion = async (token) => {
+    return await fetch(`${import.meta.env.VITE_BASE_URL}/exchange/suggestions/${token.DNI}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setSuggestPublications(data)
+        return data
+      })
+      .catch((err) => new Error(err))
+  }
   useEffect(() => {
     const fetchPublicacion = async () => {
       const token = localStorage.getItem('token')
@@ -43,9 +55,15 @@ export const DetallesPublicacion = () => {
       }
       const fetchData = async () => {
         const result = await decodeToken(token)
+        const suggested = await fetchSuggestion(result)
         setDecodedToken(result)
+
+        const filteredSuggested = suggested.filter((suggestion) => {
+          return suggestion.productoDeseado === parseInt(idPublicacion)
+        })
+        if (filteredSuggested.length > 0) setIsSuggested(true)
       }
-      fetchData()
+      await fetchData()
 
       try {
         const response = await fetch(
@@ -218,12 +236,14 @@ export const DetallesPublicacion = () => {
               </div>
             </div>
           )}
-          <button
-            onClick={() => navigate('/sugerir_trueque/' + publicacion.idPublicacion)}
-            className="w-fit rounded border border-red-500 p-1"
-          >
-            Sugerir Trueque
-          </button>
+          {parseInt(decodedToken.DNI) !== publicacion.DNI && !isSuggested ? (
+            <button
+              onClick={() => navigate('/sugerir_trueque/' + publicacion.idPublicacion)}
+              className="w-fit rounded border border-red-500 p-1"
+            >
+              Sugerir Trueque
+            </button>
+          ) : null}
         </div>
         <div className="grid gap-4">
           <div className="grid gap-4">

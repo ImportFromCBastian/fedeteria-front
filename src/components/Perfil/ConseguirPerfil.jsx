@@ -8,7 +8,8 @@ export function MostrarPerfil() {
     apellido: '',
     nombreSucursal: '',
     fechaNacimiento: '',
-    mail: ''
+    mail: '',
+    idLocal: 0
   })
 
   const [error, setError] = useState(false)
@@ -46,7 +47,7 @@ export function MostrarPerfil() {
           ['DNI']: data.DNI,
           ['nombre']: data.nombre,
           ['apellido']: data.apellido,
-          ['nombreSucursal']: data.idLocal,
+          ['nombreSucursal']: data.nombreSucursal,
           ['fechaNacimiento']: data.fechaNacimiento,
           ['mail']: data.mail
         })
