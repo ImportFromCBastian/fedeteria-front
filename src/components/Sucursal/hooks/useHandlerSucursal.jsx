@@ -4,9 +4,10 @@ import sucursalSchema from './validator/sucursalValidator.jsx'
 
 export const useHandlerSucursal = (credentials, setCredentials) => {
   const handleChange = (e) => {
+    const { name, value } = e.target
     setCredentials({
       ...credentials,
-      [e.target.name]: e.target.value
+      [name]: value === '' ? null : value
     })
   }
 
@@ -23,7 +24,7 @@ export const useHandlerSucursal = (credentials, setCredentials) => {
     }
 
     createSucursal(credentials)
-    //redirect to login page
+    // Add redirection to login page or other appropriate action
   }
 
   return {
