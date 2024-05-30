@@ -64,9 +64,13 @@ export const SuggestExchange = () => {
       .then((data) => data)
       .catch((err) => new Error(err))
 
-    if (suggest.length === 0) return navigate('/')
+    if (suggest.length === 0) {
+      alert('No tienes publicaciones para intercambiar')
+      return navigate(`/ver_publicacion/${id}`)
+    }
     setSuggestPublications(suggest)
-    if (publication.DNI === token.DNI) return navigate('/')
+    if (publication.DNI === token.DNI)
+      return navigate(`/ver_publicacion/${publication.idPublicacion}`)
   }
 
   useEffect(() => {
