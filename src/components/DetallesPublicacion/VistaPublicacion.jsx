@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { CommentForm } from './DejarConsulta'
 import { AceptarDenegar } from './Aceptar-Denegar'
 import { useParams, useNavigate } from 'react-router-dom'
-
+import getCategory from '/src/utils/useConversor.jsx'
 export const DetallesPublicacion = () => {
   const navigate = useNavigate()
   const { id } = useParams()
@@ -149,7 +149,9 @@ export const DetallesPublicacion = () => {
               <p>Descripción del artículo: {publicacion.descripcion}</p>
             </div>
           </div>
-          <div className="ml-auto text-4xl font-bold">${publicacion.precio}</div>
+          <div className="ml-auto text-4xl font-bold">
+            Categoria: {getCategory(publicacion.precio)}
+          </div>
         </div>
         <div className="grid gap-4 md:gap-10"></div>
       </div>
