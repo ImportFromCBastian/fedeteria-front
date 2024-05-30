@@ -12,7 +12,10 @@ export const Login = () => {
   const exceptThisSymbols = ['e', 'E', '+', '-', ',']
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
+    let token = localStorage.getItem('token')
+    if (token == 'undefined') {
+      token = null
+    }
     if (token != null) {
       navigate('/')
       return

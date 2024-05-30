@@ -17,7 +17,10 @@ export const Header = () => {
   }
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
+    let token = localStorage.getItem('token')
+    if (token == 'undefined') {
+      token = null
+    }
     if (token) {
       const fetchData = async () => {
         const decodedToken = await decodeToken(token)
