@@ -73,10 +73,6 @@ export const DetallesPublicacion = () => {
       }
 
       const decodedToken = await decodeToken(token)
-      if (decodedToken.rol === 'cliente') {
-        navigate('/')
-        return
-      }
 
       const fetchData = async () => {
         const result = await decodeToken(token)
@@ -89,7 +85,6 @@ export const DetallesPublicacion = () => {
         if (filteredSuggested.length > 0) setIsSuggested(true)
       }
       await fetchData()
-
 
       try {
         const response = await fetch(
@@ -127,7 +122,6 @@ export const DetallesPublicacion = () => {
     } catch (error) {
       console.error('Error al eliminar la publicación:', error)
     }
-
   }
 
   const aceptarPublicacion = async (idPublicacion, numero) => {

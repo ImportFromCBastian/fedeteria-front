@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { ProductsExchange } from './ProductsExchange'
+import useConversor from '../../utils/useConversor'
 import { Toaster, toast } from 'sonner'
 
 export const SuggestExchange = () => {
@@ -98,10 +99,14 @@ export const SuggestExchange = () => {
     }
   }
   const handleExchange = async () => {
-    if (finalPrice < publication.precio) {
-      toast.error('La diferencia de precios entre las publicaciones es demasiado alta')
+    const finalPriceCategory = useConversor(finalPrice)
+    const publicationCategory = useConversor(publication.precio)
+
+    if (finalPriceCategory !== publicationCategory) {
+      toast.error('La diferencia de categorias entre las publicaciones es demasiado alta')
       return
     }
+
     setMessage('realizando sugerencia')
     const result = await fetch(`${import.meta.env.VITE_BASE_URL}/exchange`, {
       method: 'POST',
@@ -144,6 +149,7 @@ export const SuggestExchange = () => {
                     <div className="grid gap-2">
                       <h3 className="text-xl font-semibold">{publication.nombre}</h3>
                       <p className="text-sm text-gray-500 ">{publication.descripcion}</p>
+                      <h3 className="text-x ">Categoria: {useConversor(publication.precio)}</h3>
                     </div>
                   </div>
                 </div>
@@ -182,7 +188,9 @@ export const SuggestExchange = () => {
               </div>
               <hr className="flex-1  border-gray-200 " />
               {/* cambiar final price por catgoria handle (useConversion(finalPrice)) */}
-              <span className="text-3xl font-bold">Categoria Final: {finalPrice}</span>
+              <span className="text-3xl font-bold">
+                Categoria Final: {useConversor(finalPrice)}
+              </span>
               <button
                 onClick={handleExchange}
                 className=" ring-offset-background focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-11 items-center justify-center whitespace-nowrap rounded-md border bg-fede-main-claro px-8 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
