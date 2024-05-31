@@ -55,7 +55,7 @@ export const DetallesPublicacion = () => {
     })
   }
   const fetchSuggestion = async (token) => {
-    return await fetch(`${import.meta.env.VITE_BASE_URL}/exchange/suggestions/${token.DNI}`)
+    return await fetch(`${import.meta.env.VITE_BASE_URL}/exchange/suggestions/dni/${token.DNI}`)
       .then((res) => res.json())
       .then((data) => {
         setSuggestPublications(data)

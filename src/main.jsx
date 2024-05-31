@@ -16,6 +16,7 @@ import { SuggestExchange } from './components/Exchanges/SuggestExchange'
 import Layout from './components/Layout/Layout'
 import UnauthorizedAccessPage from './components/Error/Unauthorized.jsx'
 import { ListarSucursales } from './components/Layout/Listar-Sucursales/ListarSucursales.jsx'
+import { SuggestedExchangesList } from './components/MySuggestionsList/SuggestedExchangesList.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -34,6 +35,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/sugerir_trueque/:id" element={<SuggestExchange />} />
           <Route path="/mi_perfil/editar_perfil/:dni" element={<ProfileEditor />} />
           <Route path="/listado_sucursales" element={<ListarSucursales />} />
+          <Route path="/ver_mis_sugerencias" element={<SuggestedExchangesList />} />
           <Route path="/unauthorized" element={<UnauthorizedAccessPage />} />
         </Route>
       </Routes>

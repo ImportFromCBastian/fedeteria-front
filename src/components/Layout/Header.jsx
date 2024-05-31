@@ -117,6 +117,12 @@ export const Header = () => {
             >
               Cargar Publicación
             </Link>
+            <Link
+              className="font-medium underline-offset-4 hover:underline"
+              to="/ver_mis_sugerencias"
+            >
+              Ver mis sugerencias de trueque
+            </Link>
             {(user.rol === 'empleado' || user.rol === 'administrador') && (
               <Link
                 className="font-medium underline-offset-4 hover:underline"

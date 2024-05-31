@@ -26,7 +26,7 @@ export const SuggestExchange = () => {
   }
 
   const fetchSuggestion = async (token) => {
-    return await fetch(`${import.meta.env.VITE_BASE_URL}/exchange/suggestions/${token.DNI}`)
+    return await fetch(`${import.meta.env.VITE_BASE_URL}/exchange/suggestions/dni/${token.DNI}`)
       .then((res) => res.json())
       .then((data) => data)
       .catch((err) => new Error(err))
