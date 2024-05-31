@@ -2,6 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { ProductsExchange } from './ProductsExchange'
 import useConversor from '../../utils/useConversor'
+import enviarNotificacion from '../Notificaciones/enviarNotificacion'
 import { Toaster, toast } from 'sonner'
 
 export const SuggestExchange = () => {
@@ -121,6 +122,11 @@ export const SuggestExchange = () => {
       .then((res) => res.json())
       .catch((err) => console.log(err))
     if (!result.ok) return toast.error('Error al realizar la sugerencia de intercambio')
+    enviarNotificacion(
+      'intercambio',
+      `Tienes una sugerencia de trueque nueva en ${publication.nombre}`,
+      publication.DNI
+    )
     toast.success('Sugerencia realizada con exito')
     await delay(2000)
     navigate('/ver_publicacion/' + publication.idPublicacion)
@@ -189,7 +195,7 @@ export const SuggestExchange = () => {
               <hr className="flex-1  border-gray-200 " />
               {/* cambiar final price por catgoria handle (useConversion(finalPrice)) */}
               <span className="text-3xl font-bold">
-                Categoria Final: {useConversor(finalPrice)}
+                Categoria Final: {useConversor(finalPrice) === '0' ? '-' : useConversor(finalPrice)}
               </span>
               <button
                 onClick={handleExchange}

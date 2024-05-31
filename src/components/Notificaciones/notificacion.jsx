@@ -1,5 +1,5 @@
 import React from 'react'
-import { toast, Toaster } from 'sonner'
+import { Toaster } from 'sonner'
 
 const icono = {
   default: (

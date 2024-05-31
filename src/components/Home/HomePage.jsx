@@ -20,7 +20,7 @@ export const HomePage = () => {
           ¡Bienvenido a la fedetería!
         </h1>
         <h3 className="text-l mb-6 text-center font-bold text-fede-texto-base">
-          ¿Estás listo para intercambiar algunos productos?
+          no hay publicaciones que mostrar.
         </h3>
       </div>
     </div>
