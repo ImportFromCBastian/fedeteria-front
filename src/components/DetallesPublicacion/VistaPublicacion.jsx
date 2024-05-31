@@ -132,6 +132,29 @@ export const DetallesPublicacion = () => {
   return (
     <div className="mx-auto grid max-w-6xl items-start gap-6 px-4 py-6 md:grid-cols-1 lg:gap-12">
       <div className="grid items-start gap-4 md:gap-10">
+        <button
+          onClick={() => {
+            navigate(`/publicaciones/editar_publicacion/${publicacion.idPublicacion}`)
+          }}
+          className="focus:ring-ring ml-auto inline-flex h-7 w-7 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="h-5 w-5 text-fede-main"
+          >
+            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
+            <path d="m15 5 4 4"></path>
+          </svg>
+          <span className="sr-only">Editar publicacion</span>
+        </button>
         <div className="hidden  items-start md:flex">
           <div className="grid gap-4">
             <h1 className="text-3xl font-bold">{publicacion.nombre}</h1>

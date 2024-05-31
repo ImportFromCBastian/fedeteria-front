@@ -8,6 +8,7 @@ import { RegisterClientForm } from './components/user/client/RegisterClientForm'
 import { PostPublicationForm } from './components/publicaciones/PostPublicationForm'
 import { MostrarPerfil } from './components/Perfil/ConseguirPerfil'
 import { ProfileEditor } from './components/Perfil/ProfileEditor'
+import { ModificarPublicacion } from './components/publicaciones/ModificarPublicacion'
 import { DetallesPublicacion } from './components/DetallesPublicacion/VistaPublicacion'
 import { ListadoPublicaciones } from './components/Listado-Pub-Aceptacion/ListadoPubAceptacion'
 import { RegisterWorkerForm } from './components/user/worker/RegisterWorkerForm'
@@ -43,6 +44,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/listado_publicaciones" element={<ListadoPublicaciones />} />
           <Route path="/listado_publicaciones/:id" element={<DetallesPublicacion />} />
           <Route path="/mi_perfil/editar_perfil/:dni" element={<ProfileEditor />} />
+          <Route path="/publicaciones/editar_publicacion/:id" element={<ModificarPublicacion />} />
           <Route path="/unauthorized" element={<UnauthorizedAccessPage />} />
         </Route>
       </Routes>
