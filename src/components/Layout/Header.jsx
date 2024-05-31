@@ -136,6 +136,12 @@ export const Header = () => {
                 >
                   Registrar Empleado
                 </Link>
+                <Link
+                  className="font-medium underline-offset-4 hover:underline"
+                  to="/listado_sucursales"
+                >
+                  Listar Sucursales
+                </Link>
               </>
             )}
           </div>
