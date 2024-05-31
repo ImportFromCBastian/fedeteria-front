@@ -13,7 +13,7 @@ export const ModificarPublicacion = () => {
   const [publicationData, setPublicationData] = useState({
     idPublicacion: null,
     nombre: '',
-    precio: '',
+    precio: 1,
     estado: '',
     descripcion: '',
     productoACambio: ''
@@ -31,7 +31,6 @@ export const ModificarPublicacion = () => {
     e.preventDefault()
     try {
       const publication = partialPublicationSchema.validateSync(publicationData)
-      console.log('holaaaaaaaaaaaaaaaaaaa')
       updatePublication(publication, idPublicacion)
       navigate(`/listado_publicaciones`)
     } catch (error) {
