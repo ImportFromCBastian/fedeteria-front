@@ -2,12 +2,17 @@ import { useEffect, useState } from 'react'
 import { CommentForm } from './DejarConsulta'
 import { AceptarDenegar } from './Aceptar-Denegar'
 import { useParams, useNavigate } from 'react-router-dom'
+import getCategory from '/src/utils/useConversor.jsx'
+import { toast } from 'sonner'
 
 export const DetallesPublicacion = () => {
   const navigate = useNavigate()
   const { id } = useParams()
   const idPublicacion = id
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0)
+  const [suggestPublications, setSuggestPublications] = useState([])
+  const [isSuggested, setIsSuggested] = useState(false)
+  const [decodedToken, setDecodedToken] = useState({})
   const [comment, setComment] = useState('')
   const [publicacion, setPublicacion] = useState({
     idPublicacion: null,
@@ -15,7 +20,8 @@ export const DetallesPublicacion = () => {
     precio: null,
     descripcion: '',
     productoACambio: '',
-    estado: ''
+    estado: '',
+    DNI: 0
   })
   const [fotos, setFotos] = useState([])
   const [fotosUrls, setFotosUrls] = useState([])
@@ -48,6 +54,15 @@ export const DetallesPublicacion = () => {
       }
     })
   }
+  const fetchSuggestion = async (token) => {
+    return await fetch(`${import.meta.env.VITE_BASE_URL}/exchange/suggestions/dni/${token.DNI}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setSuggestPublications(data)
+        return data
+      })
+      .catch((err) => new Error(err))
+  }
 
   useEffect(() => {
     const fetchPublicacion = async () => {
@@ -58,10 +73,18 @@ export const DetallesPublicacion = () => {
       }
 
       const decodedToken = await decodeToken(token)
-      if (decodedToken.rol === 'cliente') {
-        navigate('/')
-        return
+
+      const fetchData = async () => {
+        const result = await decodeToken(token)
+        const suggested = await fetchSuggestion(result)
+        setDecodedToken(result)
+
+        const filteredSuggested = suggested.filter((suggestion) => {
+          return suggestion.productoDeseado === parseInt(idPublicacion)
+        })
+        if (filteredSuggested.length > 0) setIsSuggested(true)
       }
+      await fetchData()
 
       try {
         const response = await fetch(
@@ -104,17 +127,21 @@ export const DetallesPublicacion = () => {
   const aceptarPublicacion = async (idPublicacion, numero) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion.id}`,
+        `${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion}`,
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ numero })
         }
       )
-
       if (!response.ok) {
         throw new Error('Error al aceptar la publicación')
       }
+      // Redirige al empleado a el listado
+      toast.success('Publicación aceptada con éxito!')
+      setTimeout(() => {
+        navigate('/listado_publicaciones')
+      }, 1000) // 1 segundo de espera
     } catch (error) {
       console.error('Error al aceptar la publicación:', error)
     }
@@ -149,12 +176,14 @@ export const DetallesPublicacion = () => {
               <p>Descripción del artículo: {publicacion.descripcion}</p>
             </div>
           </div>
-          <div className="ml-auto text-4xl font-bold">${publicacion.precio}</div>
+          <div className="ml-auto text-4xl font-bold">
+            Categoria: {getCategory(publicacion.precio)}
+          </div>
         </div>
         <div className="grid gap-4 md:gap-10"></div>
       </div>
       <div className="grid gap-4 md:gap-10">
-        <div className="grid items-start gap-4 rounded-md border border-fede-main bg-fede-secundary p-4 md:gap-10">
+        <div className="grid gap-4 rounded-md border border-fede-main bg-fede-secundary p-4 md:gap-10">
           {fotosUrls.length === 1 ? (
             // Si solo hay una foto, mostrarla sola y grande
             <img
@@ -191,6 +220,14 @@ export const DetallesPublicacion = () => {
               </div>
             </div>
           )}
+          {parseInt(decodedToken.DNI) !== publicacion.DNI && !isSuggested ? (
+            <button
+              onClick={() => navigate('/sugerir_trueque/' + publicacion.idPublicacion)}
+              className="w-fit rounded border border-red-500 p-1"
+            >
+              Sugerir Trueque
+            </button>
+          ) : null}
         </div>
         <div className="grid gap-4">
           <div className="grid gap-4">
@@ -205,7 +242,9 @@ export const DetallesPublicacion = () => {
                 className="text-base font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 htmlFor="product"
               >
-                {publicacion.productoACambio}
+                {publicacion.productoACambio === ''
+                  ? 'No especificado'
+                  : publicacion.productoACambio}
               </label>
             </div>
           </div>
@@ -213,7 +252,6 @@ export const DetallesPublicacion = () => {
       </div>
       <div className="grid items-start gap-4 rounded-md border border-fede-main bg-fede-secundary p-4 md:gap-10">
         <div className="grid gap-4">
-          <AceptarDenegar onAccept={aceptarPublicacion} onDelete={eliminarPublicacion} />
           <h2 className="text-2xl font-bold">Consultas</h2>
           <div className="grid gap-6">
             <div className="flex gap-4">
