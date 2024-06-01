@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Publicacion } from './Publicacion'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 
 export const ListadoPublicaciones = () => {
   const [publicaciones, setPublicaciones] = useState([])
@@ -36,7 +37,6 @@ export const ListadoPublicaciones = () => {
 
     const fetchData = async () => {
       const decodedToken = await decodeToken(token)
-      console.log(decodedToken.rol)
       if (decodedToken.rol == 'cliente') {
         navigate('/')
         return
@@ -51,8 +51,11 @@ export const ListadoPublicaciones = () => {
       method: 'DELETE'
     })
       .then(() => {
+        toast.success('Publicación eliminada con éxito!')
         // Actualizar la lista de publicaciones después de eliminar
-        setPublicaciones(publicaciones.filter((pub) => pub.idPublicacion !== idPublicacion))
+        setTimeout(() => {
+          setPublicaciones(publicaciones.filter((pub) => pub.idPublicacion !== idPublicacion))
+        }, 1000) // 1 segundo de espera
       })
       .catch((error) => console.error('Error al eliminar la publicación:', error))
   }
@@ -73,6 +76,7 @@ export const ListadoPublicaciones = () => {
       if (!response.ok) {
         throw new Error('Error al aceptar la publicación')
       }
+      toast.success('Publicación aceptada con éxito!')
 
       // Actualizar la lista de publicaciones después de aceptar
       setPublicaciones((prevPublicaciones) =>
@@ -96,7 +100,7 @@ export const ListadoPublicaciones = () => {
       </h2>
       <p className="pl-6 pt-2 text-gray-500 md:text-xl/relaxed dark:text-gray-400">
         Revisa y toma acciones sobre las publicaciones enviadas por los usuarios.
-      </p>{' '}
+      </p>
       <div className="space-y-4 px-1 py-1">
         {publicaciones.length === 0 ? (
           <p>No hay publicaciones que aceptar!</p>
@@ -106,8 +110,8 @@ export const ListadoPublicaciones = () => {
               publicationName={pub.nombre}
               idPublicacion={pub.idPublicacion}
               key={index}
-              // onDelete={() => eliminarPublicacion(pub.idPublicacion)}
-              // onAccept={(numero) => aceptarPublicacion(pub.idPublicacion, numero)}
+              onDelete={() => eliminarPublicacion(pub.idPublicacion)}
+              onAccept={(numero) => aceptarPublicacion(pub.idPublicacion, numero)}
             />
           ))
         )}

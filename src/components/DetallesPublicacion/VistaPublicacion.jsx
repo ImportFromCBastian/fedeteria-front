@@ -1,52 +1,90 @@
 import { useEffect, useState } from 'react'
 import { CommentForm } from './DejarConsulta'
 import { AceptarDenegar } from './Aceptar-Denegar'
-import { useParams } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
+import getCategory from '/src/utils/useConversor.jsx'
+import { toast } from 'sonner'
 
 export const DetallesPublicacion = () => {
   const navigate = useNavigate()
-  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0)
-  const [comment, setComment] = useState('')
-  const maxLength = 200 // Máximo de caracteres permitidos
-  const { id } = useParams('')
+  const { id } = useParams()
   const idPublicacion = id
+  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0)
+  const [suggestPublications, setSuggestPublications] = useState([])
+  const [isSuggested, setIsSuggested] = useState(false)
+  const [decodedToken, setDecodedToken] = useState({})
+  const [comment, setComment] = useState('')
   const [publicacion, setPublicacion] = useState({
     idPublicacion: null,
     nombre: '',
     precio: null,
     descripcion: '',
     productoACambio: '',
-    estado: ''
+    estado: '',
+    DNI: 0
   })
   const [fotos, setFotos] = useState([])
+  const [fotosUrls, setFotosUrls] = useState([])
+  const maxLength = 200 // Máximo de caracteres permitidos
 
   const decodeToken = async (token) => {
-    return await fetch(`${import.meta.env.VITE_BASE_URL}/user/decode_token`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
-      method: 'POST'
-    })
-      .then((response) => response.json())
-      .then((data) => data.data)
-      .catch((e) => new Error(e))
+    try {
+      const response = await fetch(`${import.meta.env.VITE_BASE_URL}/user/decode_token`, {
+        headers: { Authorization: `Bearer ${token}` },
+        method: 'POST'
+      })
+      const data = await response.json()
+      return data.data
+    } catch (e) {
+      console.error('Error decoding token:', e)
+      return null
+    }
   }
+
+  const convertirBlobAUrl = (fotoData) => {
+    return new Promise((resolve, reject) => {
+      try {
+        const blob = new Blob([new Uint8Array(fotoData)], { type: 'image/png' })
+        const reader = new FileReader()
+        reader.onloadend = () => resolve(reader.result)
+        reader.onerror = (error) => reject(error)
+        reader.readAsDataURL(blob)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+  const fetchSuggestion = async (token) => {
+    return await fetch(`${import.meta.env.VITE_BASE_URL}/exchange/suggestions/dni/${token.DNI}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setSuggestPublications(data)
+        return data
+      })
+      .catch((err) => new Error(err))
+  }
+
   useEffect(() => {
     const fetchPublicacion = async () => {
       const token = localStorage.getItem('token')
-      if (token === null) {
+      if (!token) {
         navigate('/')
         return
       }
+
+      const decodedToken = await decodeToken(token)
+
       const fetchData = async () => {
-        const decodedToken = await decodeToken(token)
-        if (decodedToken.rol == 'cliente') {
-          navigate('/')
-          return
-        }
+        const result = await decodeToken(token)
+        const suggested = await fetchSuggestion(result)
+        setDecodedToken(result)
+
+        const filteredSuggested = suggested.filter((suggestion) => {
+          return suggestion.productoDeseado === parseInt(idPublicacion)
+        })
+        if (filteredSuggested.length > 0) setIsSuggested(true)
       }
-      fetchData()
+      await fetchData()
 
       try {
         const response = await fetch(
@@ -59,76 +97,55 @@ export const DetallesPublicacion = () => {
       }
     }
 
-    const fetchFoto = async () => {
+    const fetchFotos = async () => {
       try {
         const response = await fetch(
           `${import.meta.env.VITE_BASE_URL}/add-foto/${idPublicacion}/fotos`
         )
         const data = await response.json()
-        setFotos(data)
+        const urls = await Promise.all(data.map(async (foto) => convertirBlobAUrl(foto.foto.data)))
+        setFotosUrls(urls)
       } catch (error) {
         console.error('Error al obtener la imagen:', error)
       }
     }
 
     fetchPublicacion()
-    fetchFoto()
-  }, [idPublicacion])
+    fetchFotos()
+  }, [idPublicacion, navigate])
 
   const eliminarPublicacion = async (idPublicacion) => {
-    await fetch(`${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion.id}`, {
-      method: 'DELETE'
-    })
-      .then()
-      .catch((error) => console.error('Error al eliminar la publicación:', error))
+    try {
+      await fetch(`${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion.id}`, {
+        method: 'DELETE'
+      })
+    } catch (error) {
+      console.error('Error al eliminar la publicación:', error)
+    }
   }
 
   const aceptarPublicacion = async (idPublicacion, numero) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion.id}`,
+        `${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion}`,
         {
           method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ numero: numero }) // Envía el número como un JSON en el cuerpo de la solicitud
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ numero })
         }
       )
-
       if (!response.ok) {
         throw new Error('Error al aceptar la publicación')
       }
+      // Redirige al empleado a el listado
+      toast.success('Publicación aceptada con éxito!')
+      setTimeout(() => {
+        navigate('/listado_publicaciones')
+      }, 1000) // 1 segundo de espera
     } catch (error) {
       console.error('Error al aceptar la publicación:', error)
     }
   }
-  const convertirBlobAUrl = (foto) => {
-    // Obtener los datos de la foto
-    const fotoData = foto.data
-    // Convertir los datos en una cadena base64
-    const base64String = btoa(String.fromCharCode.apply(null, fotoData))
-    // Crear la URL de datos
-    const imageUrl = `data:image/png;base64,${base64String}`
-    return imageUrl
-  }
-
-  const [fotosUrls, setFotosUrls] = useState([])
-  useEffect(() => {
-    // Verificar si hay fotos
-    if (fotos.length > 0) {
-      // Convertir cada foto a una URL de datos
-      Promise.all(fotos.map((foto) => convertirBlobAUrl(foto.foto)))
-        .then((urls) => {
-          // Actualizar el estado con las URLs de las imágenes convertidas
-          setFotosUrls(urls)
-        })
-        .catch((error) => {
-          console.error('Error al convertir blobs a URLs:', error)
-        })
-    }
-  }, [fotos])
-
   return (
     <div className="mx-auto grid max-w-6xl items-start gap-6 px-4 py-6 md:grid-cols-1 lg:gap-12">
       <div className="grid items-start gap-4 md:gap-10">
@@ -182,12 +199,14 @@ export const DetallesPublicacion = () => {
               <p>Descripción del artículo: {publicacion.descripcion}</p>
             </div>
           </div>
-          <div className="ml-auto text-4xl font-bold">${publicacion.precio}</div>
+          <div className="ml-auto text-4xl font-bold">
+            Categoria: {getCategory(publicacion.precio)}
+          </div>
         </div>
         <div className="grid gap-4 md:gap-10"></div>
       </div>
       <div className="grid gap-4 md:gap-10">
-        <div className="grid items-start gap-4 rounded-md border border-fede-main bg-fede-secundary p-4 md:gap-10">
+        <div className="grid gap-4 rounded-md border border-fede-main bg-fede-secundary p-4 md:gap-10">
           {fotosUrls.length === 1 ? (
             // Si solo hay una foto, mostrarla sola y grande
             <img
@@ -224,6 +243,14 @@ export const DetallesPublicacion = () => {
               </div>
             </div>
           )}
+          {parseInt(decodedToken.DNI) !== publicacion.DNI && !isSuggested ? (
+            <button
+              onClick={() => navigate('/sugerir_trueque/' + publicacion.idPublicacion)}
+              className="w-fit rounded border border-red-500 p-1"
+            >
+              Sugerir Trueque
+            </button>
+          ) : null}
         </div>
         <div className="grid gap-4">
           <div className="grid gap-4">
@@ -238,7 +265,9 @@ export const DetallesPublicacion = () => {
                 className="text-base font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 htmlFor="product"
               >
-                {publicacion.productoACambio}
+                {publicacion.productoACambio === ''
+                  ? 'No especificado'
+                  : publicacion.productoACambio}
               </label>
             </div>
           </div>
@@ -246,7 +275,6 @@ export const DetallesPublicacion = () => {
       </div>
       <div className="grid items-start gap-4 rounded-md border border-fede-main bg-fede-secundary p-4 md:gap-10">
         <div className="grid gap-4">
-          <AceptarDenegar onAccept={aceptarPublicacion} onDelete={eliminarPublicacion} />
           <h2 className="text-2xl font-bold">Consultas</h2>
           <div className="grid gap-6">
             <div className="flex gap-4">
