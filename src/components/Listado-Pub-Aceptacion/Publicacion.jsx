@@ -1,12 +1,29 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { toast, Toaster } from 'sonner'
 import { useNavigate } from 'react-router-dom'
+import { fetchFotosUrls } from '../../utils/fotoUtils'
 
 export const Publicacion = ({ publicationName, idPublicacion, onDelete, onAccept }) => {
   const [showInputModal, setShowInputModal] = useState(false)
   const [numero, setNumero] = useState('')
+  const [fotoUrl, setFotoUrl] = useState(null) // Inicializa con null para indicar que la URL de la foto aún no se ha cargado
   const exceptThisSymbols = ['e', 'E', '+', '-', ',']
   const navigate = useNavigate()
+
+  useEffect(() => {
+    const fetchFotos = async () => {
+      try {
+        const urls = await fetchFotosUrls(idPublicacion)
+        if (urls.length > 0) {
+          setFotoUrl(urls[0]) // Usa la primera foto como la principal
+        }
+      } catch (error) {
+        console.error('Error al obtener las fotos:', error)
+      }
+    }
+
+    fetchFotos()
+  }, [idPublicacion])
 
   const handleChangeNumero = (event) => {
     if (event.target.value === '-' || event.target.value === 'e') {
@@ -40,29 +57,45 @@ export const Publicacion = ({ publicationName, idPublicacion, onDelete, onAccept
       }}
     >
       <Toaster />
-      <div className="rounded-lg bg-white p-4 shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-xl">
-        <h3 className="mb-2 text-lg font-medium">{publicationName}</h3>
-        <div className="flex items-center justify-end space-x-2">
-          <button
-            onClick={(e) => {
-              e.stopPropagation() // Evitar la propagación del clic al contenedor principal
-              setShowInputModal(true)
-            }}
-            className="ring-offset-background focus-visible:ring-ring border-input bg-background inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border px-3 text-sm font-medium transition-colors hover:scale-105 hover:bg-green-500 hover:text-white focus-visible:outline-none focus-visible:ring-2  focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-          >
-            Aceptar
-            <span className="material-symbols-outlined pl-1.5">check</span>
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation() // Evitar la propagación del clic al contenedor principal
-              onDelete()
-            }}
-            className="ring-offset-background focus-visible:ring-ring border-input bg-background inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border px-3 text-sm font-medium transition-colors hover:scale-105 hover:bg-red-500 hover:text-white focus-visible:outline-none focus-visible:ring-2  focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-          >
-            Rechazar
-            <span className="material-symbols-outlined pl-1.5">close</span>
-          </button>
+      <div className="flex items-center rounded-lg bg-white p-4 shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+        {fotoUrl ? ( // Si hay una URL de foto, muestra la imagen
+          <img
+            src={fotoUrl}
+            alt={publicationName}
+            width="64"
+            height="64"
+            className="mr-4 h-16 w-16 rounded-full object-cover"
+          />
+        ) : (
+          // Si no hay una URL de foto, muestra un texto de carga
+          <div className="mr-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-200 text-xs">
+            Cargando...
+          </div>
+        )}
+        <div>
+          <h3 className="mb-2 text-lg font-medium">{publicationName}</h3>
+          <div className="flex items-center justify-end space-x-2">
+            <button
+              onClick={(e) => {
+                e.stopPropagation() // Evitar la propagación del clic al contenedor principal
+                setShowInputModal(true)
+              }}
+              className="ring-offset-background focus-visible:ring-ring border-input bg-background inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border px-3 text-sm font-medium transition-colors hover:scale-105 hover:bg-green-500 hover:text-white focus-visible:outline-none focus-visible:ring-2  focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+            >
+              Aceptar
+              <span className="material-symbols-outlined pl-1.5">check</span>
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation() // Evitar la propagación del clic al contenedor principal
+                onDelete()
+              }}
+              className="ring-offset-background focus-visible:ring-ring border-input bg-background inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border px-3 text-sm font-medium transition-colors hover:scale-105 hover:bg-red-500 hover:text-white focus-visible:outline-none focus-visible:ring-2  focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+            >
+              Rechazar
+              <span className="material-symbols-outlined pl-1.5">close</span>
+            </button>
+          </div>
         </div>
       </div>
       {showInputModal && (

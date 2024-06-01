@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { CommentForm } from './DejarConsulta'
-import { AceptarDenegar } from './Aceptar-Denegar'
 import { useParams, useNavigate } from 'react-router-dom'
 import getCategory from '/src/utils/useConversor.jsx'
 import { toast } from 'sonner'
+import { fetchFotosUrls } from '../../utils/fotoUtils'
 
 export const DetallesPublicacion = () => {
   const navigate = useNavigate()
@@ -23,7 +23,6 @@ export const DetallesPublicacion = () => {
     estado: '',
     DNI: 0
   })
-  const [fotos, setFotos] = useState([])
   const [fotosUrls, setFotosUrls] = useState([])
   const maxLength = 200 // Máximo de caracteres permitidos
 
@@ -41,19 +40,6 @@ export const DetallesPublicacion = () => {
     }
   }
 
-  const convertirBlobAUrl = (fotoData) => {
-    return new Promise((resolve, reject) => {
-      try {
-        const blob = new Blob([new Uint8Array(fotoData)], { type: 'image/png' })
-        const reader = new FileReader()
-        reader.onloadend = () => resolve(reader.result)
-        reader.onerror = (error) => reject(error)
-        reader.readAsDataURL(blob)
-      } catch (error) {
-        reject(error)
-      }
-    })
-  }
   const fetchSuggestion = async (token) => {
     return await fetch(`${import.meta.env.VITE_BASE_URL}/exchange/suggestions/dni/${token.DNI}`)
       .then((res) => res.json())
@@ -99,14 +85,10 @@ export const DetallesPublicacion = () => {
 
     const fetchFotos = async () => {
       try {
-        const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL}/add-foto/${idPublicacion}/fotos`
-        )
-        const data = await response.json()
-        const urls = await Promise.all(data.map(async (foto) => convertirBlobAUrl(foto.foto.data)))
+        const urls = await fetchFotosUrls(idPublicacion)
         setFotosUrls(urls)
       } catch (error) {
-        console.error('Error al obtener la imagen:', error)
+        console.error('Error al obtener las fotos:', error)
       }
     }
 
@@ -146,6 +128,7 @@ export const DetallesPublicacion = () => {
       console.error('Error al aceptar la publicación:', error)
     }
   }
+
   return (
     <div className="mx-auto grid max-w-6xl items-start gap-6 px-4 py-6 md:grid-cols-1 lg:gap-12">
       <div className="grid items-start gap-4 md:gap-10">
@@ -201,7 +184,7 @@ export const DetallesPublicacion = () => {
                 className="mx-auto rounded-md border border-gray-400"
                 style={{ width: '800px', height: '400px', objectFit: 'contain', cursor: 'pointer' }}
               />
-              <div className="mt-2 grid grid-cols-4 gap-4">
+              <div className="mt-4 grid grid-cols-5 gap-4">
                 {fotosUrls.map((photoUrl, index) => (
                   <img
                     key={index}
