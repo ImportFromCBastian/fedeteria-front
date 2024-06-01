@@ -12,9 +12,8 @@ export const ModificarPublicacion = () => {
   const idPublicacion = id
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0)
   const [publicationData, setPublicationData] = useState({
-    idPublicacion: null,
     nombre: '',
-    precio: null,
+    precio: 0,
     descripcion: '',
     productoACambio: '',
     estado: '',
@@ -67,7 +66,7 @@ export const ModificarPublicacion = () => {
     }
     const fetchData = async () => {
       const decodedToken = await decodeToken(token)
-      if (decodedToken.rol == 'cliente') {
+      if (decodedToken.rol !== 'administrador' && decodedToken.rol !== 'empleado') {
         navigate('/')
         return
       }
@@ -138,11 +137,10 @@ export const ModificarPublicacion = () => {
             <h1 className="text-3xl font-bold">
               <input
                 type="text"
-                name="nombre"
+                className="border-b-2 border-black"
                 value={publicationData.nombre}
                 onChange={handleChange}
-                placeholder="Nombre del artículo"
-                className="w-full border-b border-gray-300 bg-transparent text-3xl font-bold focus:outline-none"
+                name="nombre"
               />
             </h1>
             <div className="flex items-center gap-4">
@@ -163,39 +161,42 @@ export const ModificarPublicacion = () => {
                   <circle cx="7.5" cy="7.5" r=".5" fill="currentColor"></circle>
                 </svg>
                 <span className="text-sm font-medium">
-                  <input
-                    type="text"
-                    name="estado"
+                  <select
+                    className="border-b-2 border-black"
                     value={publicationData.estado}
                     onChange={handleChange}
-                    placeholder="Estado"
-                    className="w-20 border-b border-gray-300 bg-transparent text-sm font-medium focus:outline-none"
-                  />
+                    name="estado"
+                  >
+                    <option value="Nuevo">Nuevo</option>
+                    <option value="Usado">Usado</option>
+                  </select>
                 </span>
               </div>
             </div>
             <div>
               <p>
-                <textarea
-                  name="descripcion"
+                Descripción del artículo:{' '}
+                <input
+                  type="text"
+                  className="border-b-2 border-black"
                   value={publicationData.descripcion}
                   onChange={handleChange}
-                  placeholder="Descripción del artículo"
-                  className="w-full border-b border-gray-300 bg-transparent focus:outline-none"
+                  name="descripcion"
                 />
               </p>
             </div>
           </div>
-          <div className="ml-auto text-4xl font-bold">
-            <input
-              type="number"
-              name="precio"
-              value={publicationData.precio}
-              onChange={handleChange}
-              placeholder="Precio"
-              className="w-20 border-b border-gray-300 bg-transparent text-4xl font-bold focus:outline-none"
-            />
-          </div>
+          {publicationData.precio !== 0 && (
+            <div className="ml-auto text-4xl font-bold">
+              <input
+                type="number"
+                className="border-b-2 border-black"
+                value={publicationData.precio}
+                onChange={handleChange}
+                name="precio"
+              />
+            </div>
+          )}
         </div>
         <div className="grid gap-4 md:gap-10"></div>
       </div>
@@ -247,29 +248,22 @@ export const ModificarPublicacion = () => {
               >
                 Producto que espera a cambio:
               </label>
-              <label
-                className="text-base font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                htmlFor="product"
-              >
-                <input
-                  type="text"
-                  name="productoACambio"
-                  value={publicationData.productoACambio}
-                  onChange={handleChange}
-                  placeholder="Producto que espera a cambio"
-                  className="w-full border-b border-gray-300 bg-transparent text-base font-medium focus:outline-none"
-                />
-              </label>
+              <input
+                type="text"
+                className="border-b-2 border-black"
+                value={publicationData.productoACambio}
+                onChange={handleChange}
+                name="productoACambio"
+              />
             </div>
           </div>
         </div>
-      </div>
-      <div className="flex justify-center">
         <button
+          className="focus:shadow-outline rounded bg-yellow-500 px-4 py-2 font-bold text-white focus:outline-none"
+          type="button"
           onClick={handleSubmit}
-          className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
         >
-          Guardar cambios
+          Guardar Cambios
         </button>
       </div>
     </div>
