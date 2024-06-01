@@ -70,9 +70,10 @@ export const ListarSucursales = () => {
       <h2 className="pl-6 pt-4 text-3xl font-bold tracking-tighter md:text-4xl">
         Listado de sucursales
       </h2>
-      <p className="pl-6 pt-2 text-gray-500 md:text-xl/relaxed dark:text-gray-400"></p>
-
-      <div className="space-y-4 px-1 py-1">
+      <p className="pl-6 pt-2 text-gray-500 md:text-xl/relaxed">
+        Administra las sucursales de tu ferretería.
+      </p>
+      <div className="space-y-4 py-1 pl-6">
         {sucursales.length === 0 ? (
           <p>No hay sucursales que mostrar!</p>
         ) : (
