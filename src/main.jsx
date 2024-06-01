@@ -35,6 +35,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/ver_publicacion/:id" element={<DetallesPublicacion />} />
           <Route path="/sugerir_trueque/:id" element={<SuggestExchange />} />
           <Route path="/mi_perfil/editar_perfil/:dni" element={<ProfileEditor />} />
+          <Route
+            path="/publicaciones/modificar_publicacion/:id"
+            element={<ModificarPublicacion />}
+          />
           <Route path="/listado_sucursales" element={<ListarSucursales />} />
           <Route path="/ver_mis_sugerencias" element={<SuggestedExchangesList />} />
           <Route path="/unauthorized" element={<UnauthorizedAccessPage />} />

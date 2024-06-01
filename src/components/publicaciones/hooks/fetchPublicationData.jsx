@@ -4,7 +4,7 @@ export const fetchPublicationData = () => {
       method: 'GET'
     })
       .then((res) => res.json())
-      .then((data) => data.publication)
+      .then((data) => data)
       .catch((error) => console.error(error))
     return response
   }

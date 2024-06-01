@@ -11,9 +11,6 @@ export const ModificarPublicacion = () => {
   const { id } = useParams()
   const idPublicacion = id
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0)
-  const [suggestPublications, setSuggestPublications] = useState([])
-  const [isSuggested, setIsSuggested] = useState(false)
-  const [decodedToken, setDecodedToken] = useState({})
   const [publicationData, setPublicationData] = useState({
     idPublicacion: null,
     nombre: '',
@@ -33,15 +30,6 @@ export const ModificarPublicacion = () => {
       [e.target.name]: e.target.value
     })
   }
-  const fetchSuggestion = async (token) => {
-    return await fetch(`${import.meta.env.VITE_BASE_URL}/exchange/suggestions/dni/${token.DNI}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setSuggestPublications(data)
-        return data
-      })
-      .catch((err) => new Error(err))
-  }
   const decodeToken = async (token) => {
     return await fetch(`${import.meta.env.VITE_BASE_URL}/user/decode_token`, {
       headers: {
@@ -59,7 +47,7 @@ export const ModificarPublicacion = () => {
     try {
       const publication = partialPublicationSchema.validateSync(publicationData)
       updatePublication(publication, idPublicacion)
-      navigate(`/listado_publicaciones/${idPublicacion}`)
+      navigate(`/ver_publicacion/${idPublicacion}`)
     } catch (error) {
       const { errors } = error
       for (let i = 0; i < errors.length; i++) {
@@ -85,10 +73,10 @@ export const ModificarPublicacion = () => {
       }
     }
     const gatherPublication = async () => {
-      const [result] = await fetchPublication(idPublicacion)
-      const { nombre, precio, estado, descripcion, productoACambio } = result[0]
-      console.log(result[0])
+      const result = await fetchPublication(idPublicacion)
+      const { nombre, precio, estado, descripcion, productoACambio } = result
       setPublicationData({
+        idPublicacion,
         nombre,
         precio,
         estado,
@@ -96,30 +84,35 @@ export const ModificarPublicacion = () => {
         productoACambio
       })
     }
-    const fetchFoto = async () => {
+    const fetchFotos = async () => {
       try {
         const response = await fetch(
           `${import.meta.env.VITE_BASE_URL}/add-foto/${idPublicacion}/fotos`
         )
         const data = await response.json()
-        setFotos(data)
+        const urls = await Promise.all(data.map(async (foto) => convertirBlobAUrl(foto.foto.data)))
+        setFotosUrls(urls)
       } catch (error) {
         console.error('Error al obtener la imagen:', error)
       }
     }
     fetchData()
     gatherPublication()
-    fetchFoto()
+    fetchFotos()
   }, [idPublicacion])
 
-  const convertirBlobAUrl = (foto) => {
-    // Obtener los datos de la foto
-    const fotoData = foto.data
-    // Convertir los datos en una cadena base64
-    const base64String = btoa(String.fromCharCode.apply(null, fotoData))
-    // Crear la URL de datos
-    const imageUrl = `data:image/png;base64,${base64String}`
-    return imageUrl
+  const convertirBlobAUrl = (fotoData) => {
+    return new Promise((resolve, reject) => {
+      try {
+        const blob = new Blob([new Uint8Array(fotoData)], { type: 'image/png' })
+        const reader = new FileReader()
+        reader.onloadend = () => resolve(reader.result)
+        reader.onerror = (error) => reject(error)
+        reader.readAsDataURL(blob)
+      } catch (error) {
+        reject(error)
+      }
+    })
   }
 
   useEffect(() => {
@@ -142,7 +135,16 @@ export const ModificarPublicacion = () => {
       <div className="grid items-start gap-4 md:gap-10">
         <div className="hidden  items-start md:flex">
           <div className="grid gap-4">
-            <h1 className="text-3xl font-bold">{publicationData.nombre}</h1>
+            <h1 className="text-3xl font-bold">
+              <input
+                type="text"
+                name="nombre"
+                value={publicationData.nombre}
+                onChange={handleChange}
+                placeholder="Nombre del artículo"
+                className="w-full border-b border-gray-300 bg-transparent text-3xl font-bold focus:outline-none"
+              />
+            </h1>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-0.5">
                 <svg
@@ -160,14 +162,40 @@ export const ModificarPublicacion = () => {
                   <path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"></path>
                   <circle cx="7.5" cy="7.5" r=".5" fill="currentColor"></circle>
                 </svg>
-                <span className="text-sm font-medium">{publicationData.estado}</span>
+                <span className="text-sm font-medium">
+                  <input
+                    type="text"
+                    name="estado"
+                    value={publicationData.estado}
+                    onChange={handleChange}
+                    placeholder="Estado"
+                    className="w-20 border-b border-gray-300 bg-transparent text-sm font-medium focus:outline-none"
+                  />
+                </span>
               </div>
             </div>
             <div>
-              <p>Descripción del artículo: {publicationData.descripcion}</p>
+              <p>
+                <textarea
+                  name="descripcion"
+                  value={publicationData.descripcion}
+                  onChange={handleChange}
+                  placeholder="Descripción del artículo"
+                  className="w-full border-b border-gray-300 bg-transparent focus:outline-none"
+                />
+              </p>
             </div>
           </div>
-          <div className="ml-auto text-4xl font-bold">${publicationData.precio}</div>
+          <div className="ml-auto text-4xl font-bold">
+            <input
+              type="number"
+              name="precio"
+              value={publicationData.precio}
+              onChange={handleChange}
+              placeholder="Precio"
+              className="w-20 border-b border-gray-300 bg-transparent text-4xl font-bold focus:outline-none"
+            />
+          </div>
         </div>
         <div className="grid gap-4 md:gap-10"></div>
       </div>
@@ -223,11 +251,26 @@ export const ModificarPublicacion = () => {
                 className="text-base font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 htmlFor="product"
               >
-                {publicationData.productoACambio}
+                <input
+                  type="text"
+                  name="productoACambio"
+                  value={publicationData.productoACambio}
+                  onChange={handleChange}
+                  placeholder="Producto que espera a cambio"
+                  className="w-full border-b border-gray-300 bg-transparent text-base font-medium focus:outline-none"
+                />
               </label>
             </div>
           </div>
         </div>
+      </div>
+      <div className="flex justify-center">
+        <button
+          onClick={handleSubmit}
+          className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
+        >
+          Guardar cambios
+        </button>
       </div>
     </div>
   )

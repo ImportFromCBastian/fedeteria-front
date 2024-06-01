@@ -69,7 +69,6 @@ export const Login = () => {
     const user = await fetch(`${import.meta.env.VITE_BASE_URL}/user/${credential.dni}`)
       .then((data) => data.json())
       .catch((error) => new Error(error))
-
     if (user.message) {
       toast.error('Los datos ingresados son incorrectos')
       return
@@ -80,15 +79,17 @@ export const Login = () => {
       DNI: credential.dni,
       contra: credential.password
     }
-
     const compare = await fetch(`${import.meta.env.VITE_BASE_URL}/user/compare`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(userCredentials)
+      body: JSON.stringify({
+        DNI: userCredentials.DNI,
+        contra: userCredentials.contra
+      })
     })
       .then((data) => data.json())
       .catch((error) => new Error(error))
-
+    console.log(compare.ok)
     if (!compare.ok) {
       if (attempts[credential.dni] >= 2) {
         setIsLocked({ ...isLocked, [credential.dni]: true })
@@ -111,10 +112,12 @@ export const Login = () => {
     })
       .then((data) => data.json())
       .catch((error) => new Error(error))
-    localStorage.setItem('token', token)
-    window.location.reload()
-    // Redirige al usuario a la homepage
-    return navigate('/')
+    if (compare.ok) {
+      localStorage.setItem('token', token)
+      window.location.reload()
+      // Redirige al usuario a la homepage
+      return navigate('/')
+    }
   }
 
   return (

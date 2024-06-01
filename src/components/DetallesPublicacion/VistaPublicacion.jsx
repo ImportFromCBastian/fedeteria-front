@@ -151,7 +151,7 @@ export const DetallesPublicacion = () => {
       <div className="grid items-start gap-4 md:gap-10">
         <button
           onClick={() => {
-            navigate(`/publicaciones/editar_publicacion/${publicacion.idPublicacion}`)
+            navigate(`/publicaciones/modificar_publicacion/${publicacion.idPublicacion}`)
           }}
           className="focus:ring-ring ml-auto inline-flex h-7 w-7 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
         >
