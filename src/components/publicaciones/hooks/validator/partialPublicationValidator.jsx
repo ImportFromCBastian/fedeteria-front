@@ -4,7 +4,7 @@ const partialPublicationSchema = y.object({
   //validacion de nombre de la publicacion
   nombre: y.string().optional(),
   //validacion del precio
-  precio: y.number().positive().optional(),
+  precio: y.number().min(0).optional(),
   //validacion de la descripcion
   descripcion: y.string().optional(),
   //validacion de la descripcion
