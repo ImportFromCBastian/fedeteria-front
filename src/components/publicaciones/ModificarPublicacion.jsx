@@ -46,6 +46,7 @@ export const ModificarPublicacion = () => {
     try {
       const publication = partialPublicationSchema.validateSync(publicationData)
       updatePublication(publication, idPublicacion)
+
       navigate(`/ver_publicacion/${idPublicacion}`)
     } catch (error) {
       const { errors } = error
