@@ -59,8 +59,6 @@ export const DetallesPublicacion = () => {
         return
       }
 
-      const decodedToken = await decodeToken(token)
-
       const fetchData = async () => {
         const result = await decodeToken(token)
         const suggested = await fetchSuggestion(result)
@@ -98,13 +96,17 @@ export const DetallesPublicacion = () => {
   }, [idPublicacion, navigate])
 
   const eliminarPublicacion = async (idPublicacion) => {
-    try {
-      await fetch(`${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion.id}`, {
-        method: 'DELETE'
+    await fetch(`${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion}`, {
+      method: 'DELETE'
+    })
+      .then(() => {
+        toast.success('Publicación eliminada con éxito!')
+        // Redirige al empleado a el listado
+        setTimeout(() => {
+          navigate('/listado_publicaciones')
+        }, 1000) // 1 segundo1 de espera
       })
-    } catch (error) {
-      console.error('Error al eliminar la publicación:', error)
-    }
+      .catch((error) => console.error('Error al eliminar la publicación:', error))
   }
 
   const aceptarPublicacion = async (idPublicacion, numero) => {
@@ -183,6 +185,12 @@ export const DetallesPublicacion = () => {
           <div className="grid gap-4">
             <h1 className="text-3xl font-bold">{publicacion.nombre}</h1>
             <div className="flex items-center gap-4">
+              {decodedToken.rol !== 'cliente' && publicacion.precio === 0 && (
+                <AceptarDenegar
+                  onAccept={(numero) => aceptarPublicacion(publicacion.idPublicacion, numero)}
+                  onDelete={() => eliminarPublicacion(publicacion.idPublicacion)}
+                />
+              )}
               <div className="flex items-center gap-0.5">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
