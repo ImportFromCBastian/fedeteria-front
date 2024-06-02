@@ -12,7 +12,10 @@ export const Login = () => {
   const exceptThisSymbols = ['e', 'E', '+', '-', ',']
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
+    let token = localStorage.getItem('token')
+    if (token == 'undefined') {
+      token = null
+    }
     if (token != null) {
       navigate('/')
       return
@@ -71,12 +74,8 @@ export const Login = () => {
     // Lógica para verificar el nombre de usuario y contraseña
     const user = await fetch(`${import.meta.env.VITE_BASE_URL}/user/${credential.dni}`)
       .then((data) => data.json())
-      .catch((error) => {
-        toast.error('Error en la verificación del usuario')
-        return null
-      })
-
-    if (!user || user.message) {
+      .catch((error) => new Error(error))
+    if (user.message) {
       toast.error('Los datos ingresados son incorrectos')
       return
     }
@@ -86,27 +85,19 @@ export const Login = () => {
       DNI: credential.dni,
       contra: credential.password
     }
-
     const compare = await fetch(`${import.meta.env.VITE_BASE_URL}/user/compare`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(userCredentials)
+      body: JSON.stringify({
+        DNI: userCredentials.DNI,
+        contra: userCredentials.contra
+      })
     })
       .then((data) => data.json())
-      .catch((error) => {
-        toast.error('Error en la comparación de contraseñas')
-        return null
-      })
-
-    if (!compare || !compare.ok) {
-      // Incrementar el contador de intentos fallidos para este DNI
-      const updatedAttempts = {
-        ...attempts,
-        [credential.dni]: (attempts[credential.dni] || 0) + 1
-      }
-      setAttempts(updatedAttempts)
-
-      if (updatedAttempts[credential.dni] >= 3) {
+      .catch((error) => new Error(error))
+    console.log(compare.ok)
+    if (!compare.ok) {
+      if (attempts[credential.dni] >= 2) {
         setIsLocked({ ...isLocked, [credential.dni]: true })
       }
 
@@ -123,17 +114,12 @@ export const Login = () => {
       })
     })
       .then((data) => data.json())
-      .catch((error) => {
-        toast.error('Error en la generación del token')
-        return null
-      })
-
-    if (token) {
+      .catch((error) => new Error(error))
+    if (compare.ok) {
       localStorage.setItem('token', token)
       window.location.reload()
-      navigate('/')
-    } else {
-      toast.error('Error al iniciar sesión')
+      // Redirige al usuario a la homepage
+      return navigate('/')
     }
   }
 

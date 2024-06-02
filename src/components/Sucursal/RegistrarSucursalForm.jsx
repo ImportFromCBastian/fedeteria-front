@@ -8,8 +8,8 @@ export const RegistrarSucursalForm = () => {
     nombre: '',
     calle: '',
     numero: null,
-    piso: 0,
-    depto: 0
+    piso: null,
+    depto: null
   })
   const { handleChange, handleSubmit } = useHandlerSucursal(credentials, setCredentials)
   const decodeToken = async (token) => {

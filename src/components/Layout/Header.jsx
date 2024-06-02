@@ -1,5 +1,6 @@
-import { Link } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import Notificaciones from '../Notificaciones/Notificaciones'
 
 export const Header = () => {
   const [user, setUser] = useState(null)
@@ -17,7 +18,10 @@ export const Header = () => {
   }
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
+    let token = localStorage.getItem('token')
+    if (token == 'undefined') {
+      token = null
+    }
     if (token) {
       const fetchData = async () => {
         const decodedToken = await decodeToken(token)
@@ -67,6 +71,7 @@ export const Header = () => {
           </Link>
           {user ? (
             <div className="flex items-center gap-4">
+              <Notificaciones />
               <Link
                 to="/mi_perfil"
                 className="ring-offset-background focus-visible:ring-ring hover:bg-accent hover:text-accent-foreground inline-flex h-10 w-10 items-center justify-center whitespace-nowrap rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
@@ -86,6 +91,7 @@ export const Header = () => {
                   <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
                   <circle cx="12" cy="7" r="4"></circle>
                 </svg>
+
                 <span className="sr-only">Perfil</span>
               </Link>
             </div>
@@ -117,6 +123,12 @@ export const Header = () => {
             >
               Cargar Publicación
             </Link>
+            <Link
+              className="font-medium underline-offset-4 hover:underline"
+              to="/ver_mis_sugerencias"
+            >
+              Ver mis sugerencias de trueque
+            </Link>
             {(user.rol === 'empleado' || user.rol === 'administrador') && (
               <Link
                 className="font-medium underline-offset-4 hover:underline"
@@ -135,6 +147,12 @@ export const Header = () => {
                   to="/registrar/empleado"
                 >
                   Registrar Empleado
+                </Link>
+                <Link
+                  className="font-medium underline-offset-4 hover:underline"
+                  to="/listado_sucursales"
+                >
+                  Listar Sucursales
                 </Link>
               </>
             )}

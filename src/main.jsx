@@ -8,33 +8,24 @@ import { RegisterClientForm } from './components/user/client/RegisterClientForm'
 import { PostPublicationForm } from './components/publicaciones/PostPublicationForm'
 import { MostrarPerfil } from './components/Perfil/ConseguirPerfil'
 import { ProfileEditor } from './components/Perfil/ProfileEditor'
+import { ModificarPublicacion } from './components/publicaciones/ModificarPublicacion'
 import { DetallesPublicacion } from './components/DetallesPublicacion/VistaPublicacion'
 import { ListadoPublicaciones } from './components/Listado-Pub-Aceptacion/ListadoPubAceptacion'
 import { RegisterWorkerForm } from './components/user/worker/RegisterWorkerForm'
+import { HomePage } from './components/Home/HomePage'
+import { SuggestExchange } from './components/Exchanges/SuggestExchange'
 import Layout from './components/Layout/Layout'
 import UnauthorizedAccessPage from './components/Error/Unauthorized.jsx'
 import { RecuperarContraseña } from './components/RecuperacionContraseña/recuperarContraseña.jsx'
+import { ListarSucursales } from './components/Layout/Listar-Sucursales/ListarSucursales.jsx'
+import { SuggestedExchangesList } from './components/MySuggestionsList/SuggestedExchangesList.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
-          <Route
-            path="/"
-            element={
-              <div className="flex min-h-[100vh] items-center justify-center">
-                <div className="mx-4 my-5 w-full max-w-md rounded-lg border-4 border-fede-main bg-fede-secundary p-8 shadow-md sm:mx-0">
-                  <h1 className="mb-6 text-center text-2xl font-bold text-fede-texto-base">
-                    ¡Bienvenido a la fedetería!
-                  </h1>
-                  <h3 className="text-l mb-6 text-center font-bold text-fede-texto-base">
-                    ¿Estás listo para intercambiar algunos productos?
-                  </h3>
-                </div>
-              </div>
-            }
-          />
+          <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/sucursal" element={<RegistrarSucursalForm />} />
           <Route path="/registrar/cliente" element={<RegisterClientForm />} />
@@ -44,7 +35,15 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/listado_publicaciones" element={<ListadoPublicaciones />} />
           <Route path="/recuperar_contraseña" element={<RecuperarContraseña />} />
           <Route path="/listado_publicaciones/:id" element={<DetallesPublicacion />} />
+          <Route path="/ver_publicacion/:id" element={<DetallesPublicacion />} />
+          <Route path="/sugerir_trueque/:id" element={<SuggestExchange />} />
           <Route path="/mi_perfil/editar_perfil/:dni" element={<ProfileEditor />} />
+          <Route
+            path="/publicaciones/modificar_publicacion/:id"
+            element={<ModificarPublicacion />}
+          />
+          <Route path="/listado_sucursales" element={<ListarSucursales />} />
+          <Route path="/ver_mis_sugerencias" element={<SuggestedExchangesList />} />
           <Route path="/unauthorized" element={<UnauthorizedAccessPage />} />
         </Route>
       </Routes>
