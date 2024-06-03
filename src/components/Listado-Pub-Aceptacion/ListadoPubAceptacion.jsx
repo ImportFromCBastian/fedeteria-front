@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Publicacion } from './Publicacion'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
-
+import enviarNotificacion from '../Notificaciones/enviarNotificacion'
 export const ListadoPublicaciones = () => {
   const [publicaciones, setPublicaciones] = useState([])
   const navigate = useNavigate()
@@ -46,21 +46,22 @@ export const ListadoPublicaciones = () => {
     fetchData()
   }, [])
 
-  const eliminarPublicacion = async (idPublicacion) => {
+  const eliminarPublicacion = async (idPublicacion, dni, nombre) => {
     await fetch(`${import.meta.env.VITE_BASE_URL}/publicaciones/${idPublicacion}`, {
       method: 'DELETE'
     })
       .then(() => {
         toast.success('Publicación eliminada con éxito!')
+        enviarNotificacion('rechazada', `Tu publicación ${nombre} ha sido rechazada`, dni)
         // Actualizar la lista de publicaciones después de eliminar
         setTimeout(() => {
-          setPublicaciones(publicaciones.filter((pub) => pub.idPublicacion !== idPublicacion))
-        }, 1000) // 1 segundo de espera
+          window.location.reload()
+        }, 500) // 1 segundo de espera
       })
       .catch((error) => console.error('Error al eliminar la publicación:', error))
   }
 
-  const aceptarPublicacion = async (idPublicacion, numero) => {
+  const aceptarPublicacion = async (idPublicacion, numero, dni, nombre) => {
     try {
       const response = await fetch(
         `${import.meta.env.VITE_BASE_URL}/publicaciones/${idPublicacion}`,
@@ -77,6 +78,11 @@ export const ListadoPublicaciones = () => {
         throw new Error('Error al aceptar la publicación')
       }
       toast.success('Publicación aceptada con éxito!')
+      setTimeout(() => {
+        window.location.reload()
+      }, 500) // 1 segundo de espera
+
+      enviarNotificacion('aceptada', `Tu publicación ${nombre} ha sido aceptada`, dni)
 
       // Actualizar la lista de publicaciones después de aceptar
       setPublicaciones((prevPublicaciones) =>
@@ -110,8 +116,10 @@ export const ListadoPublicaciones = () => {
               publicationName={pub.nombre}
               idPublicacion={pub.idPublicacion}
               key={index}
-              onDelete={() => eliminarPublicacion(pub.idPublicacion)}
-              onAccept={(numero) => aceptarPublicacion(pub.idPublicacion, numero)}
+              onDelete={() => eliminarPublicacion(pub.idPublicacion, pub.DNI, pub.nombre)}
+              onAccept={(numero) =>
+                aceptarPublicacion(pub.idPublicacion, numero, pub.DNI, pub.nombre)
+              }
             />
           ))
         )}

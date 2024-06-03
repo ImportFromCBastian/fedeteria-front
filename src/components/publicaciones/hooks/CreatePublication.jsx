@@ -19,7 +19,7 @@ export const CreatePublication = async (publicationData) => {
     for (const foto of publicationData.fotos) {
       await insertarFoto(foto, idPublicacion)
     }
-    toast.success('Publicación agregada correctamente')
+    toast.success('Publicación agregada correctamente. Ahora se encuentra en estado de aprobación.')
     return { result: result.status }
   } catch (error) {
     console.error('Error al agregar la publicación:', error)

@@ -21,10 +21,5 @@ export const updatePublication = async (publication, idPublicacion) => {
     .then((res) => res.json())
     .catch((error) => new Error(error))
 
-  if (result.ok) {
-    toast.success('Publicacion actualizado correctamente')
-  } else {
-    toast.error(result.message)
-  }
   return { result: result.status }
 }

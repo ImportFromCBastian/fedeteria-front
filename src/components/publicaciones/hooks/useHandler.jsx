@@ -41,6 +41,9 @@ export const useHandler = (publicationData, setPublicationData) => {
     try {
       const publication = publicationSchema.validateSync(publicationData, { abortEarly: false })
       CreatePublication(publication)
+      setTimeout(() => {
+        window.location.reload()
+      }, 500) // 1 segundo de espera
     } catch (error) {
       const { errors } = error
       for (let i = 0; i < errors.length; i++) {

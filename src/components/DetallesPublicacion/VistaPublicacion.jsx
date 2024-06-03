@@ -3,7 +3,7 @@ import { CommentForm } from './DejarConsulta'
 import { useParams, useNavigate } from 'react-router-dom'
 import getCategory from '/src/utils/useConversor.jsx'
 import { toast, Toaster } from 'sonner'
-
+import { AceptarDenegar } from './Aceptar-Denegar'
 import { fetchFotosUrls } from '../../utils/fotoUtils'
 
 export const DetallesPublicacion = () => {

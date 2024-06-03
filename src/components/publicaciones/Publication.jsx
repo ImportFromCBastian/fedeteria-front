@@ -37,7 +37,7 @@ export const Publication = ({ publication }) => {
           alt={publication.nombre}
           width="300"
           height="300"
-          className="aspect-square h-64 w-full object-cover"
+          className="aspect-square h-64 w-full bg-white object-contain"
         />
       ) : (
         // Si no hay una URL de foto, muestra un texto de carga

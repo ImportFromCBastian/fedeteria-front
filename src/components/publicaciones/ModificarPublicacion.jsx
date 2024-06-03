@@ -47,12 +47,12 @@ export const ModificarPublicacion = () => {
       const publication = partialPublicationSchema.validateSync(publicationData)
       updatePublication(publication, idPublicacion)
       navigate(`/ver_publicacion/${idPublicacion}`)
+      return
     } catch (error) {
       const { errors } = error
       for (let i = 0; i < errors.length; i++) {
         toast.error(errors[i])
       }
-      return
     }
   }
   useEffect(() => {

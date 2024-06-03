@@ -95,12 +95,17 @@ export const Login = () => {
     })
       .then((data) => data.json())
       .catch((error) => new Error(error))
-    console.log(compare.ok)
     if (!compare.ok) {
       if (attempts[credential.dni] >= 2) {
         setIsLocked({ ...isLocked, [credential.dni]: true })
+      } else {
+        // Incrementar el contador de intentos fallidos para este DNI
+        const updatedAttempts = {
+          ...attempts,
+          [credential.dni]: (attempts[credential.dni] || 0) + 1
+        }
+        setAttempts(updatedAttempts)
       }
-
       toast.error('Inicio de sesión fallido')
       return
     }

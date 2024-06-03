@@ -64,7 +64,7 @@ export const Publicacion = ({ publicationName, idPublicacion, onDelete, onAccept
             alt={publicationName}
             width="64"
             height="64"
-            className="mr-4 h-16 w-16 rounded-full object-cover"
+            className="mr-4 h-16 w-16 rounded-full bg-white object-contain "
           />
         ) : (
           // Si no hay una URL de foto, muestra un texto de carga
