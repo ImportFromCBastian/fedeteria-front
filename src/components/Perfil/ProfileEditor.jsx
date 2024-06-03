@@ -156,14 +156,14 @@ export const ProfileEditor = () => {
                 <div className="text-xl font-bold">{userData.idLocal}</div>
               ) : (
                 <select
-                  name="sucursal"
+                  name="idLocal"
                   onChange={handleChange}
                   className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
                   value={userData.idLocal}
                 >
                   <option value="">Selecciona una sucursal</option>
                   {sucursales.map((sucursal, index) => (
-                    <option className="text-black" key={index} value={sucursal.idLocal}>
+                    <option className="text-black" key={index} value={parseInt(sucursal.idLocal)}>
                       {sucursal.nombre}
                     </option>
                   ))}

@@ -116,7 +116,9 @@ export const ShowProfile = ({ userData }) => {
                 >
                   Sucursal más cercana
                 </label>
-                <div className="text-xl font-bold">{userData.nombreSucursal}</div>
+                <div className="text-xl font-bold">
+                  {userData.idLocal === 'Admin' ? 'Admin' : userData.nombreSucursal}
+                </div>
               </div>
             </div>
             <div className="mt-4 flex justify-end">

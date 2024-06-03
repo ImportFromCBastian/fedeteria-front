@@ -48,6 +48,7 @@ export function MostrarPerfil() {
           ['nombre']: data.nombre,
           ['apellido']: data.apellido,
           ['nombreSucursal']: data.nombreSucursal,
+          ['idLocal']: data.idLocal,
           ['fechaNacimiento']: data.fechaNacimiento,
           ['mail']: data.mail
         })
