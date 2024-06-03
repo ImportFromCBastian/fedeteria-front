@@ -13,31 +13,62 @@ export const Login = () => {
 
   useEffect(() => {
     let token = localStorage.getItem('token')
-    if (token == 'undefined') {
+    if (token === 'undefined') {
       token = null
     }
     if (token != null) {
       navigate('/')
       return
     }
-    // Al cargar el componente, verificar si hay intentos fallidos en localStorage
+
     const storedAttempts = localStorage.getItem('loginAttempts')
     if (storedAttempts) {
       setAttempts(JSON.parse(storedAttempts))
     }
-    // Verificar si hay cuentas bloqueadas en localStorage
+
     const storedIsLocked = localStorage.getItem('isLocked')
     if (storedIsLocked) {
       setIsLocked(JSON.parse(storedIsLocked))
     }
   }, [])
 
+  const avisarBloqueo = async () => {
+    try {
+      const userResponse = await fetch(`${import.meta.env.VITE_BASE_URL}/user/${credential.dni}`)
+      const user = await userResponse.json()
+
+      if (!user || user.message) {
+        return
+      }
+      await sendMail(user[0].mail, user[0].nombre)
+    } catch (error) {
+      console.error('Error al enviar el correo de bloqueo')
+    }
+  }
+
   useEffect(() => {
-    // Almacenar los intentos de inicio de sesión en localStorage
     localStorage.setItem('loginAttempts', JSON.stringify(attempts))
-    // Almacenar las cuentas bloqueadas en localStorage
     localStorage.setItem('isLocked', JSON.stringify(isLocked))
   }, [attempts, isLocked])
+
+  const sendMail = async (email, nombre) => {
+    try {
+      const mailResponse = await fetch(`${import.meta.env.VITE_BASE_URL}/mailing/bloqueo`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, nombre })
+      })
+      if (mailResponse.ok) {
+        toast.success('Correo de bloqueo enviado')
+      } else {
+        toast.error('Error al enviar el correo de bloqueo')
+      }
+    } catch (error) {
+      console.error('Error al enviar el correo de bloqueo')
+    }
+  }
 
   const handleChange = (e) => {
     setCredential({
@@ -58,73 +89,69 @@ export const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    // Verificar si credential.dni es un entero positivo
     const dniAsInt = parseInt(credential.dni, 10)
     if (isNaN(dniAsInt) || dniAsInt <= 0) {
       toast.error('Ingrese un DNI válido')
       return
     }
 
-    // Verificar si la cuenta está bloqueada
     if (isLocked[credential.dni]) {
       alert('Tu cuenta está bloqueada. Por favor, contacta al administrador.')
+      avisarBloqueo()
       return
     }
 
-    // Lógica para verificar el nombre de usuario y contraseña
-    const user = await fetch(`${import.meta.env.VITE_BASE_URL}/user/${credential.dni}`)
-      .then((data) => data.json())
-      .catch((error) => new Error(error))
-    if (user.message) {
-      toast.error('Los datos ingresados son incorrectos')
-      return
-    }
+    try {
+      const userResponse = await fetch(`${import.meta.env.VITE_BASE_URL}/user/${credential.dni}`)
+      const user = await userResponse.json()
 
-    // Solicitud al backend de comparación de contraseñas
-    const userCredentials = {
-      DNI: credential.dni,
-      contra: credential.password
-    }
-    const compare = await fetch(`${import.meta.env.VITE_BASE_URL}/user/compare`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        DNI: userCredentials.DNI,
-        contra: userCredentials.contra
-      })
-    })
-      .then((data) => data.json())
-      .catch((error) => new Error(error))
-    if (!compare.ok) {
-      if (attempts[credential.dni] >= 2) {
-        setIsLocked({ ...isLocked, [credential.dni]: true })
-      } else {
-        // Incrementar el contador de intentos fallidos para este DNI
-        const updatedAttempts = {
-          ...attempts,
-          [credential.dni]: (attempts[credential.dni] || 0) + 1
-        }
-        setAttempts(updatedAttempts)
+      if (user.message) {
+        toast.error('Los datos ingresados son incorrectos')
+        return
       }
-      toast.error('Inicio de sesión fallido')
-      return
-    }
 
-    // Generar y almacenar el token solo si la comparación es exitosa
-    const { token } = await fetch(`${import.meta.env.VITE_BASE_URL}/user/generate_token`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        DNI: userCredentials.DNI
+      const userCredentials = {
+        DNI: credential.dni,
+        contra: credential.password
+      }
+
+      const compareResponse = await fetch(`${import.meta.env.VITE_BASE_URL}/user/compare`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userCredentials)
       })
-    })
-      .then((data) => data.json())
-      .catch((error) => new Error(error))
-    if (compare.ok) {
-      localStorage.setItem('token', token)
-      window.location.reload()
-      // Redirige al usuario a la homepage
-      return navigate('/')
+      const compare = await compareResponse.json()
+
+      if (!compare.ok) {
+        if (attempts[credential.dni] >= 2) {
+          setIsLocked({ ...isLocked, [credential.dni]: true })
+          avisarBloqueo()
+        } else {
+          const updatedAttempts = {
+            ...attempts,
+            [credential.dni]: (attempts[credential.dni] || 0) + 1
+          }
+          setAttempts(updatedAttempts)
+        }
+        toast.error('Inicio de sesión fallido')
+        return
+      }
+
+      const tokenResponse = await fetch(`${import.meta.env.VITE_BASE_URL}/user/generate_token`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ DNI: userCredentials.DNI })
+      })
+      const { token } = await tokenResponse.json()
+
+      if (compare.ok) {
+        localStorage.setItem('token', token)
+        window.location.reload()
+        navigate('/')
+      }
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error)
+      toast.error('Error al iniciar sesión')
     }
   }
 
@@ -142,7 +169,7 @@ export const Login = () => {
         <h2 className="mb-6 text-center text-2xl font-bold text-fede-texto-base">Iniciar sesión</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="dni" className="mb2 block text-sm font-medium text-fede-texto-base">
+            <label htmlFor="dni" className="mb-2 block text-sm font-medium text-fede-texto-base">
               DNI
             </label>
             <input
@@ -153,7 +180,7 @@ export const Login = () => {
               onKeyDown={(e) => exceptThisSymbols.includes(e.key) && e.preventDefault()}
               onWheel={(e) => e.target.blur()}
               onChange={handleChange}
-              className=" w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-base shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-base shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
               required
               type="number"
             />
@@ -180,7 +207,6 @@ export const Login = () => {
 
           <div className="flex items-start">
             <a
-              target="_blank"
               className="ml-auto text-sm text-fede-texto-base hover:underline"
               onClick={recuperarContraseña}
             >
