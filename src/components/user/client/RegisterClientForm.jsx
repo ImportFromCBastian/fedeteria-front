@@ -3,11 +3,9 @@ import { RenderVisibility } from '../Visibility'
 import { useHandler } from '../hooks/useHandler'
 import { fetchData } from '../hooks/fetchData'
 import { Toaster } from 'sonner'
-import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
 
 export const RegisterClientForm = () => {
   const [showPassword, setShowPassword] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
   const [sucursal, setSucursal] = useState([])
   const exceptThisSymbols = ['e', 'E', '+', '-', ',']
   const [credentials, setCredentials] = useState({

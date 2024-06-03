@@ -15,9 +15,15 @@ export const SuggestExchange = () => {
   const [selectedPublication, setSelectedPublication] = useState([])
   const [finalPrice, setFinalPrice] = useState(0)
   const [fotoUrl, setFotoUrl] = useState('')
-
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+  const [showCategorias, setCategorias] = useState(false)
+  const handleMouseEnter = () => {
+    setCategorias(true)
+  }
 
+  const handleMouseLeave = () => {
+    setCategorias(false)
+  }
   const fetchToken = async () => {
     const localToken = localStorage.getItem('token')
     if (!localToken) {
@@ -175,7 +181,7 @@ export const SuggestExchange = () => {
                     <div className="grid gap-4">
                       <h1 className="text-3xl font-bold">Producto a Intercambiar</h1>
                       <div className="flex items-center gap-4">
-                        {fotoUrl ? ( // Si hay una URL de foto, muestra la imagen
+                        {fotoUrl ? (
                           <img
                             src={fotoUrl}
                             alt="Producto a Intercambiar"
@@ -184,7 +190,6 @@ export const SuggestExchange = () => {
                             className="aspect-square overflow-hidden rounded-lg border border-gray-200 object-cover"
                           />
                         ) : (
-                          // Si no hay una URL de foto, muestra un texto de carga
                           <div className="mr-4 flex aspect-square h-72 w-72 items-center justify-center rounded-lg bg-gray-200 text-xs">
                             Cargando...
                           </div>
@@ -231,6 +236,32 @@ export const SuggestExchange = () => {
                   </div>
                   <hr className="flex-1 border-gray-200" />
                   <span className="text-3xl font-bold">
+                    {showCategorias && (
+                      <div className="z-5 absolute -right-0 bottom-80 mb-2 w-64 -translate-x-1/2 transform rounded-xl bg-fede-main/40 p-4 shadow-lg backdrop-blur-md">
+                        <h3 className="text-base font-medium text-fede-texto-input">
+                          Conversión de categorías
+                        </h3>
+                        <ul className="mt-2 text-sm text-fede-texto-input/50">
+                          <li> I $1-1000</li>
+                          <li> II $1000-2500</li>
+                          <li> III $2500-5000</li>
+                          <li> IV $5000-7500</li>
+                          <li> V $7500-10000</li>
+                          <li> VI $10000-20000</li>
+                          <li> VII $20000-40000</li>
+                          <li> VIII $40000-70000</li>
+                          <li> IX $70000-100000</li>
+                          <li> X $100000</li>
+                        </ul>
+                      </div>
+                    )}
+                    <span
+                      className="material-symbols-outlined float-right cursor-pointer rounded-full outline-dotted"
+                      onMouseEnter={handleMouseEnter}
+                      onMouseLeave={handleMouseLeave}
+                    >
+                      question_mark
+                    </span>
                     Categoria Final:{' '}
                     {useConversor(finalPrice) === '0' ? '-' : useConversor(finalPrice)}
                   </span>
