@@ -16,7 +16,6 @@ export const createSucursal = async (credentials) => {
       // Si la respuesta no es exitosa, lanzamos un error con el código de estado
       throw new Error(`Error: ${result.status}`)
     }
-
     toast.success('Sucursal registrada correctamente')
 
     return { result: result.status }
