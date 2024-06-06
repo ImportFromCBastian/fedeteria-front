@@ -60,9 +60,7 @@ export const Login = () => {
         },
         body: JSON.stringify({ email, nombre })
       })
-      if (mailResponse.ok) {
-        toast.success('Correo de bloqueo enviado')
-      } else {
+      if (!mailResponse.ok) {
         toast.error('Error al enviar el correo de bloqueo')
       }
     } catch (error) {
@@ -96,7 +94,7 @@ export const Login = () => {
     }
 
     if (isLocked[credential.dni]) {
-      alert('Tu cuenta está bloqueada. Por favor, contacta al administrador.')
+      alert('Tu cuenta está bloqueada. Te enviamos al mail los pasos para recuperarla.')
       avisarBloqueo()
       return
     }
