@@ -119,9 +119,8 @@ export const SuggestExchange = () => {
     const selected = suggestPublications[index]
     if (action === 'remove') {
       setFinalPrice(finalPrice - selected.precio)
-      setSelectedPublication(
-        selectedPublication.filter((pub) => pub.idPublicacion !== selected.idPublicacion)
-      )
+      const newSelected = selectedPublication.filter((id) => id !== selected.idPublicacion)
+      setSelectedPublication(newSelected)
     } else if (action === 'add') {
       setFinalPrice(finalPrice + selected.precio)
       setSelectedPublication([...selectedPublication, selected.idPublicacion])
@@ -268,7 +267,7 @@ export const SuggestExchange = () => {
                   <button
                     onClick={handleExchange}
                     className="ring-offset-background focus-visible:ring-ring border-input bg-background inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border px-3 text-sm font-medium transition-colors hover:scale-105 hover:bg-green-500 hover:text-white focus-visible:outline-none focus-visible:ring-2  focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-                    disabled={message !== ''}
+                    // disabled={message !== ''}
                   >
                     Confirmar
                   </button>
