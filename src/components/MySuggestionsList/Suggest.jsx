@@ -1,8 +1,10 @@
 import { fetchFotosUrls } from '../../utils/fotoUtils'
 import { publicationInfo } from './hooks/publicationInfo'
+import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
-export const Suggest = ({ mainPublicationID, publicationCount }) => {
+export const Suggest = ({ mainPublicationID, publicationCount, exchangeID }) => {
+  const navigate = useNavigate()
   const [fotoUrl, setFotoUrl] = useState('')
   const [publication, setPublication] = useState({})
 
@@ -22,8 +24,15 @@ export const Suggest = ({ mainPublicationID, publicationCount }) => {
     publicationInfo(mainPublicationID, setPublication)
   }, [])
 
+  const handleClick = () => {
+    navigate(`/ver_sugerencia/${exchangeID}`)
+  }
+
   return (
-    <div className="grid grid-cols-[2fr_1fr_2fr] gap-6 rounded-lg border bg-white p-10 lg:gap-12">
+    <div
+      onClick={handleClick}
+      className="grid grid-cols-[2fr_1fr_2fr] gap-6 rounded-lg border bg-white p-10 lg:gap-12"
+    >
       <div>
         <h2 className="text-2xl font-bold">{publication.nombre}</h2>
         <img

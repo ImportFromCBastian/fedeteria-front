@@ -19,6 +19,8 @@ import UnauthorizedAccessPage from './components/Error/Unauthorized.jsx'
 import { RecuperarContraseña } from './components/RecuperacionContraseña/recuperarContraseña.jsx'
 import { ListarSucursales } from './components/Layout/Listar-Sucursales/ListarSucursales.jsx'
 import { SuggestedExchangesList } from './components/MySuggestionsList/SuggestedExchangesList.jsx'
+import { SuggestDetail } from './components/MySuggestionsList/SuggestDetatil.jsx'
+import { ActiveExchanges } from './components/ActiveExchanges/ActiveExchanges.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -45,6 +47,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/listado_sucursales" element={<ListarSucursales />} />
           <Route path="/ver_mis_sugerencias" element={<SuggestedExchangesList />} />
           <Route path="/unauthorized" element={<UnauthorizedAccessPage />} />
+          <Route path="/ver_sugerencia/:id" element={<SuggestDetail />} />
+          <Route path="/mis_trueques_activos" element={<ActiveExchanges />} />
         </Route>
       </Routes>
     </BrowserRouter>

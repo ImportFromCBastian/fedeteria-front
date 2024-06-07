@@ -28,6 +28,7 @@ export const SuggestedExchangesList = () => {
               key={index}
               mainPublicationID={suggestion.productoDeseado}
               publicationCount={suggestion.countPublication}
+              exchangeID={suggestion.idTrueque}
             />
           ))
         )}
