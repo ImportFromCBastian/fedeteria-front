@@ -119,9 +119,8 @@ export const SuggestExchange = () => {
     const selected = suggestPublications[index]
     if (action === 'remove') {
       setFinalPrice(finalPrice - selected.precio)
-      setSelectedPublication(
-        selectedPublication.filter((pub) => pub.idPublicacion !== selected.idPublicacion)
-      )
+      const newSelected = selectedPublication.filter((id) => id !== selected.idPublicacion)
+      setSelectedPublication(newSelected)
     } else if (action === 'add') {
       setFinalPrice(finalPrice + selected.precio)
       setSelectedPublication([...selectedPublication, selected.idPublicacion])

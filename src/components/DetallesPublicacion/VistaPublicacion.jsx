@@ -52,6 +52,18 @@ export const DetallesPublicacion = () => {
   }
 
   useEffect(() => {
+    const exchangable = async () => {
+      const pending = await fetch(`${import.meta.env.VITE_BASE_URL}/exchange/state/pending`)
+        .then((res) => res.json())
+        .then((data) => data.rows)
+        .catch((err) => new Error(err))
+      for (let i = 0; i < pending.length; i++) {
+        if (parseInt(pending[i].productoDeseado) === parseInt(idPublicacion)) {
+          setIsSuggested(true)
+          break
+        }
+      }
+    }
     const fetchPublicacion = async () => {
       const token = localStorage.getItem('token')
       if (!token) {
@@ -90,7 +102,7 @@ export const DetallesPublicacion = () => {
         console.error('Error al obtener las fotos:', error)
       }
     }
-
+    exchangable()
     fetchPublicacion()
     fetchFotos()
   }, [idPublicacion, navigate])

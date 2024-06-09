@@ -1,17 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { toast, Toaster } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 import { fetchFotosUrls } from '../../utils/fotoUtils'
 
-export const ProductsExchange = ({
-  onChildChange,
-  selectedPublication,
-  setSelectedPublication,
-  setFinalPrice,
-  finalPrice,
-  publication,
-  index
-}) => {
+export const ProductsExchange = ({ onChildChange, publication, index }) => {
   const [style, setStyle] = useState(
     'group relative flex items-center gap-4 overflow-hidden rounded-lg shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-2 hover:shadow-xl'
   )
@@ -39,14 +30,7 @@ export const ProductsExchange = ({
       setStyle(
         'group relative flex items-center gap-4 overflow-hidden rounded-lg shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-2 hover:shadow-xl'
       )
-      onChildChange(
-        index,
-        'remove',
-        setFinalPrice,
-        finalPrice,
-        setSelectedPublication,
-        selectedPublication
-      )
+      onChildChange(index, 'remove')
     } else {
       setStyle(
         'group relative flex items-center gap-4 overflow-hidden rounded-lg shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-2 hover:shadow-xl border-2 rounded border-fede-main'
