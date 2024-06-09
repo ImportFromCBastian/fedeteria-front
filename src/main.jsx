@@ -21,6 +21,7 @@ import { ListarSucursales } from './components/Layout/Listar-Sucursales/ListarSu
 import { SuggestedExchangesList } from './components/MySuggestionsList/SuggestedExchangesList.jsx'
 import { SuggestDetail } from './components/MySuggestionsList/SuggestDetatil.jsx'
 import { ActiveExchanges } from './components/ActiveExchanges/ActiveExchanges.jsx'
+import { RegisterDetails } from './components/MySuggestionsList/RegisterDetails.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -49,6 +50,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/unauthorized" element={<UnauthorizedAccessPage />} />
           <Route path="/ver_sugerencia/:id" element={<SuggestDetail />} />
           <Route path="/mis_trueques_activos" element={<ActiveExchanges />} />
+          <Route path="/registrar-detalles" element={<RegisterDetails />} />
         </Route>
       </Routes>
     </BrowserRouter>
