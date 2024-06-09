@@ -9,7 +9,7 @@ export const SuggestedExchangesList = () => {
 
   useEffect(() => {
     fetchSuggestions(setSuggestions, navigate)
-  }, [])
+  }, [navigate])
 
   return (
     <section className="mx-auto w-full max-w-4xl px-4 pb-6 pt-8 md:px-6">
@@ -17,7 +17,7 @@ export const SuggestedExchangesList = () => {
         Listado de tus sugerencias
       </h2>
       <p className="pl-6 pt-2 text-gray-500 md:text-xl/relaxed ">
-        Acá podés ver las las propuestas de trueque de tus publicaciones.
+        Acá podés ver las propuestas de trueque de tus publicaciones.
       </p>
       <div className="space-y-4 py-1 pl-6">
         {suggestions.length === 0 ? (

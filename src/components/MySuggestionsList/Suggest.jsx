@@ -8,21 +8,24 @@ export const Suggest = ({ mainPublicationID, publicationCount, exchangeID }) => 
   const [fotoUrl, setFotoUrl] = useState('')
   const [publication, setPublication] = useState({})
 
-  const fetchFotos = async () => {
-    try {
-      const urls = await fetchFotosUrls(mainPublicationID)
-      if (urls.length > 0) {
-        setFotoUrl(urls[0])
-      }
-    } catch (error) {
-      console.error('Error fetching photos:', error)
-    }
-  }
-
   useEffect(() => {
-    fetchFotos(mainPublicationID)
-    publicationInfo(mainPublicationID, setPublication)
-  }, [])
+    const fetchData = async () => {
+      try {
+        const urls = await fetchFotosUrls(mainPublicationID)
+        if (urls.length > 0) {
+          setFotoUrl(urls[0])
+        }
+        // Fetch publication information after fetching photo URL
+        const pubInfo = await publicationInfo(mainPublicationID)
+
+        setPublication(pubInfo)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+
+    fetchData()
+  }, [mainPublicationID])
 
   const handleClick = () => {
     navigate(`/ver_sugerencia/${exchangeID}`)
@@ -31,34 +34,62 @@ export const Suggest = ({ mainPublicationID, publicationCount, exchangeID }) => 
   return (
     <div
       onClick={handleClick}
-      className="grid grid-cols-[2fr_1fr_2fr] gap-6 rounded-lg border bg-white p-10 lg:gap-12"
+      className="relative rounded-lg border bg-white p-4 shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-xl"
     >
-      <div>
-        <h2 className="text-2xl font-bold">{publication.nombre}</h2>
+      {/* Siempre se muestra la imagen y el nombre del producto principal */}
+      <div className="flex items-center">
         <img
-          src={fotoUrl}
-          alt="Producto a Intercambiar"
-          className=" aspect-square  overflow-hidden rounded-lg border border-gray-200 object-cover"
+          src={fotoUrl || '/placeholder-image.jpg'}
+          alt={publication.nombre || 'Cargando...'}
+          className="h-32 w-32 rounded-xl bg-white object-contain"
         />
+        <h3 className="mb-2 ml-4 text-lg font-medium">
+          {publication.nombre || 'Nombre del Producto'}
+        </h3>
       </div>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="h-8 w-8 text-gray-500"
-      >
-        <path d="M8 3L4 7l4 4"></path>
-        <path d="M4 7h16"></path>
-        <path d="m16 21 4-4-4-4"></path>
-        <path d="M20 17H4"></path>
-      </svg>
-      <h1>{publicationCount} productos a cambio...</h1>
+
+      {/* Ícono de intercambio y cantidad de productos ofrecidos */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="relative">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="h-8 w-8 text-gray-500"
+          >
+            <path d="M8 3L4 7l4 4"></path>
+            <path d="M4 7h16"></path>
+            <path d="m16 21 4-4-4-4"></path>
+            <path d="M20 17H4"></path>
+          </svg>
+        </div>
+
+        <div className="absolute right-4 flex items-center">
+          {/* Se muestra la imagen del producto ofrecido solo si hay uno */}
+          {publicationCount === 1 ? (
+            <div className="flex items-center justify-center">
+              <h3 className="mb-2 mr-4 text-lg font-medium">
+                {publication.nombre || 'Nombre del Producto'}
+              </h3>
+              <img
+                src={fotoUrl || '/placeholder-image.jpg'}
+                alt={publication.nombre || 'Cargando...'}
+                className="h-32 w-32 rounded-xl bg-white object-contain"
+              />
+            </div>
+          ) : (
+            <h3 className="mb-2 ml-4 text-lg font-medium">
+              {publicationCount} productos a cambio...
+            </h3>
+          )}
+        </div>
+      </div>
     </div>
   )
 }

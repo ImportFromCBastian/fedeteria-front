@@ -127,14 +127,14 @@ export const Header = () => {
               className="font-medium underline-offset-4 hover:underline"
               to="/ver_mis_sugerencias"
             >
-              Ver mis sugerencias de trueque
+              Sugerencias de trueque
             </Link>
             {(user.rol === 'empleado' || user.rol === 'administrador') && (
               <Link
                 className="font-medium underline-offset-4 hover:underline"
                 to="/listado_publicaciones"
               >
-                Publicaciones
+                Evaluar publicaciones
               </Link>
             )}
             {user.rol === 'administrador' && (

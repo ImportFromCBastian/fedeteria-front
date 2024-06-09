@@ -82,7 +82,7 @@ export const Publicacion = ({ publicationName, idPublicacion, onDelete, onAccept
               }}
               className="ring-offset-background focus-visible:ring-ring border-input bg-background inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border px-3 text-sm font-medium transition-colors hover:scale-105 hover:bg-green-500 hover:text-white focus-visible:outline-none focus-visible:ring-2  focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
             >
-              Aceptar
+              Colocar precio
               <span className="material-symbols-outlined pl-1.5">check</span>
             </button>
             <button
@@ -128,7 +128,7 @@ export const Publicacion = ({ publicationName, idPublicacion, onDelete, onAccept
                 onClick={handleSubmit}
                 className="ring-offset-background focus-visible:ring-ring border-input bg-background inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border px-3 text-sm font-medium transition-colors hover:scale-105 hover:bg-green-500 hover:text-white focus-visible:outline-none focus-visible:ring-2  focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
               >
-                Enviar
+                Aceptar
                 <span className="material-symbols-outlined pl-1.5">check</span>
               </button>
 

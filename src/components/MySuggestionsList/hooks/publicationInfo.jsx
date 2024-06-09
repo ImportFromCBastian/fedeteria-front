@@ -1,8 +1,8 @@
-export async function publicationInfo(id, setPublication) {
-  fetch(`${import.meta.env.VITE_BASE_URL}/publication/${id}`)
+export async function publicationInfo(id) {
+  return fetch(`${import.meta.env.VITE_BASE_URL}/publication/${id}`)
     .then((res) => res.json())
-    .then((data) => {
-      setPublication(data)
+    .catch((err) => {
+      console.error('Error fetching publication info:', err)
+      throw err
     })
-    .catch((err) => new Error(err))
 }

@@ -7,6 +7,8 @@ import { ProductSuggested } from './ProductSuggested'
 import { createPendingExchange } from './hooks/createPendingExchange'
 import { deleteSuggestions } from './hooks/deleteSuggestions'
 import { sendContactEmail } from './hooks/sendContactEmail'
+import { fetchFotosUrls } from '../../utils/fotoUtils'
+import useConversor from '../../utils/useConversor'
 
 export const SuggestDetail = () => {
   const navigate = useNavigate()
@@ -15,16 +17,50 @@ export const SuggestDetail = () => {
     idPublicacion: '',
     DNI: '',
     nombre: '',
-    estado: ''
+    estado: '',
+    precio: 0
   })
-  const [offeredProducts, setOfferedProducts] = useState([mainProduct])
+  const [offeredProducts, setOfferedProducts] = useState([])
+  const [mainProductFotoUrl, setMainProductFotoUrl] = useState('')
+  const [offeredProductsFotos, setOfferedProductsFotos] = useState([])
 
   useEffect(() => {
-    fetchMainProduct(id, setMainProduct)
-    fetchProducts(id, setOfferedProducts)
-  }, [])
+    const init = async () => {
+      await fetchMainProduct(id, setMainProduct)
+      const fetchedProducts = await fetchProducts(id)
+      setOfferedProducts(fetchedProducts)
+      await fetchFotos()
+      await fetchOfferedProductsFotos(fetchedProducts)
+    }
+    init()
+  }, [id])
+
+  const fetchFotos = async () => {
+    try {
+      const urls = await fetchFotosUrls(id)
+      if (urls.length > 0) {
+        setMainProductFotoUrl(urls[0])
+      }
+    } catch (error) {
+      console.error('Error fetching photos:', error)
+    }
+  }
+
+  const fetchOfferedProductsFotos = async (products) => {
+    try {
+      const urlsPromises = products.map(async (product) => {
+        const urls = await fetchFotosUrls(product.idPublicacion)
+        return urls.length > 0 ? urls[0] : ''
+      })
+      const urls = await Promise.all(urlsPromises)
+      setOfferedProductsFotos(urls)
+    } catch (error) {
+      console.error('Error fetching offered products photos:', error)
+    }
+  }
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
   const handleAcceptExchange = async (e) => {
     e.preventDefault()
     const resultPending = await createPendingExchange(id)
@@ -50,12 +86,27 @@ export const SuggestDetail = () => {
             <div className="grid items-start gap-4 md:gap-10">
               <div className="items-start md:flex">
                 <div className="grid gap-4">
-                  <h1 className="text-3xl font-bold">Producto a Intercambiar</h1>
+                  <h1 className=" text-3xl font-bold">Tu producto</h1>
                   <div className="flex items-center gap-4">
-                    <div className="grid gap-2">
-                      <h3 className="text-xl font-semibold">{mainProduct.nombre}</h3>
-                      <p className="text-sm text-gray-500">{mainProduct.estado}</p>
-                      <h3 className="text-x"></h3>
+                    {mainProductFotoUrl ? (
+                      <img
+                        src={mainProductFotoUrl}
+                        alt="Producto a Intercambiar"
+                        width="300"
+                        height="300"
+                        className="aspect-square overflow-hidden rounded-lg border border-gray-200 object-cover"
+                      />
+                    ) : (
+                      <div className="mr-4 flex aspect-square h-72 w-72 items-center justify-center rounded-lg bg-gray-200 text-xs">
+                        Cargando...
+                      </div>
+                    )}
+                    <div className="grid gap-1">
+                      <h3 className="text-xl font-bold">{mainProduct.nombre}</h3>
+                      <p className="text-sm text-gray-500">{mainProduct.descripcion}</p>
+                      <p className="text-sm text-gray-500">
+                        Categoria: {useConversor(mainProduct.precio)}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -81,10 +132,39 @@ export const SuggestDetail = () => {
               </svg>
             </div>
             <div className="grid gap-4">
-              <h2 className="text-2xl font-bold">Productos Ofrecidos</h2>
+              <h1 className="text-3xl font-bold">Productos que te ofrecen</h1>
               <div className="grid gap-4">
                 {offeredProducts.map((product, index) => (
-                  <ProductSuggested key={index} product={product} />
+                  <div
+                    key={index}
+                    onClick={() => handleClick(index)}
+                    className={
+                      'group relative flex items-center gap-4 overflow-hidden rounded-lg shadow-lg transition-transform duration-300 '
+                    }
+                  >
+                    {offeredProductsFotos[index] ? (
+                      <img
+                        src={offeredProductsFotos[index]}
+                        alt={`Producto ${product.nombre}`}
+                        width="100"
+                        height="100"
+                        className="aspect-square overflow-hidden rounded-lg border object-cover"
+                      />
+                    ) : (
+                      <div className="mr-4 flex h-24 w-24 items-center justify-center rounded-lg bg-gray-200 text-xs">
+                        Cargando...
+                      </div>
+                    )}
+                    <div className="p-4">
+                      <div className="grid gap-1">
+                        <h3 className="text-xl font-bold">{product.nombre}</h3>
+                        <p className="text-sm text-gray-500">{product.descripcion}</p>
+                        <p className="text-sm text-gray-500">
+                          Categoria: {useConversor(product.precio)}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 ))}
               </div>
               <button
