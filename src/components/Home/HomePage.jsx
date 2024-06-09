@@ -13,7 +13,7 @@ export const HomePage = () => {
     fetchPublication()
   }, [])
 
-  return publication.length === 0 ? (
+  return publication.length == 0 ? (
     <div className="flex min-h-[100vh] items-center justify-center">
       <div className="mx-4 my-5 w-full max-w-md rounded-lg border-4 border-fede-main bg-fede-secundary p-8 shadow-md sm:mx-0">
         <h1 className="mb-6 text-center text-2xl font-bold text-fede-texto-base">

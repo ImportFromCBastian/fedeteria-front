@@ -12,7 +12,6 @@ export const CreatePublication = async (publicationData) => {
     if (!result.ok) {
       throw new Error('Error al agregar publicación')
     }
-
     // Obtener el ID de la publicación creada desde la respuesta
     const idPublicacion = result.message // Ajusta esto según la estructura de tu respuesta
     // Insertar fotos asociadas a la publicación

@@ -33,7 +33,7 @@ export const CommentForm = ({ comment, setComment, maxLength }) => {
       <div className="text-sm text-gray-500">
         {comment.length}/{maxLength}
       </div>
-      <button className="text-primary-foreground active:bg-primary/80 focus:ring-primary inline-flex items-center justify-center rounded-lg bg-fede-main px-4 py-2 text-sm font-medium shadow-lg hover:scale-105 hover:bg-fede-hover-button focus:outline-none focus:ring-2 focus:ring-offset-2">
+      <button className="active:bg-primary/80 focus:ring-primary inline-flex items-center justify-center rounded-lg bg-fede-main px-4 py-2 text-sm font-medium text-white shadow-lg hover:scale-100 hover:bg-fede-hover-button focus:outline-none focus:ring-2 focus:ring-offset-2">
         Enviar consulta
       </button>
     </div>
