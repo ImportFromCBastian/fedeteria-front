@@ -129,6 +129,12 @@ export const Header = () => {
             >
               Sugerencias de trueque
             </Link>
+            <Link
+              className="font-medium underline-offset-4 hover:underline"
+              to="/registrar-detalles"
+            >
+              Registrar detalles de trueque
+            </Link>
             {(user.rol === 'empleado' || user.rol === 'administrador') && (
               <Link
                 className="font-medium underline-offset-4 hover:underline"
