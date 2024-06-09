@@ -54,7 +54,7 @@ export const Suggest = ({ mainPublicationID, publicationCount, exchangeID }) => 
         <img
           src={fotoUrl || '/placeholder-image.jpg'}
           alt={publication.nombre || 'Cargando...'}
-          className="h-16 w-16 rounded-xl bg-white object-contain"
+          className="h-24 w-24 rounded-xl bg-white object-fill"
         />
         <h3 className="mb-2 ml-4 text-lg font-medium">
           {publication.nombre || 'Nombre del Producto'}
@@ -93,7 +93,7 @@ export const Suggest = ({ mainPublicationID, publicationCount, exchangeID }) => 
               <img
                 src={offeredFotoUrl || '/placeholder-image.jpg'}
                 alt={offeredPublication.nombre || 'Cargando...'}
-                className="ml-2 h-16 w-16 rounded-xl bg-white object-contain"
+                className="ml-2 h-24 w-24 rounded-xl bg-white object-fill"
               />
             </div>
           ) : (

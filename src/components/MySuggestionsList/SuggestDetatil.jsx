@@ -163,14 +163,13 @@ export const SuggestDetail = () => {
                         Cargando...
                       </div>
                     )}
+
                     <div>
-                      <div className="grid ">
-                        <h3 className="text-xl font-bold">{offeredProducts.nombre}</h3>
-                        <p className="text-sm text-gray-500">{offeredProducts.descripcion}</p>
-                        <p className="text-sm text-gray-500">
-                          Categoria: {useConversor(offeredProducts.precio)}
-                        </p>
-                      </div>
+                      <h3 className="text-xl font-bold">{product.nombre}</h3>
+                      <p className="text-sm text-gray-500">{product.descripcion}</p>
+                      <p className="text-sm text-gray-500">
+                        Categoria: {useConversor(product.precio)}
+                      </p>
                     </div>
                   </div>
                 ))}

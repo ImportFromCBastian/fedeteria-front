@@ -5,7 +5,6 @@ import { toast } from 'sonner'
 import { updateUser } from '../user/hooks/updateUser'
 import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
-import enviarNotificacion from '../Notificaciones/enviarNotificacion'
 export const ProfileEditor = () => {
   const navigate = useNavigate()
   const { dni } = useParams('')
@@ -44,7 +43,6 @@ export const ProfileEditor = () => {
     try {
       const user = partialUserSchema.validateSync(userData)
       updateUser(user, dni, rol)
-      enviarNotificacion('aceptada', 'Tu perfil ha sido actualizado', dni)
       navigate(`/mi_perfil`)
     } catch (error) {
       const { errors } = error
