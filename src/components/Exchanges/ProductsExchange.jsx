@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchFotosUrls } from '../../utils/fotoUtils'
+import getCategory from '../../utils/useConversor'
 
 export const ProductsExchange = ({ onChildChange, publication, index }) => {
   const [style, setStyle] = useState(
@@ -59,6 +60,7 @@ export const ProductsExchange = ({ onChildChange, publication, index }) => {
       <div className="p-4">
         <h3 className="text-xl font-bold">{publication.nombre}</h3>
         <p className="text-sm text-gray-500 ">{publication.descripcion}</p>
+        <p className="text-sm text-gray-500 ">Categoría: {getCategory(publication.precio)}</p>
       </div>
     </div>
   )

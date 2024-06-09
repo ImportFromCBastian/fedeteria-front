@@ -133,13 +133,13 @@ export const SuggestDetail = () => {
             </div>
             <div className="grid gap-4">
               <h1 className="text-3xl font-bold">Productos que te ofrecen</h1>
-              <div className="grid gap-4">
+              <div className="grid h-full gap-4">
                 {offeredProducts.map((product, index) => (
                   <div
                     key={index}
-                    onClick={() => handleClick(index)}
+                    onClick={() => navigate(`/ver_publicacion/${product.idPublicacion}`)}
                     className={
-                      'group relative flex items-center gap-4 overflow-hidden rounded-lg shadow-lg transition-transform duration-300 '
+                      'group relative flex h-full items-center gap-4 overflow-hidden rounded-lg shadow-lg transition-transform duration-300 '
                     }
                   >
                     {offeredProductsFotos[index] ? (
@@ -148,15 +148,15 @@ export const SuggestDetail = () => {
                         alt={`Producto ${product.nombre}`}
                         width="100"
                         height="100"
-                        className="aspect-square overflow-hidden rounded-lg border object-cover"
+                        className="aspect-square overflow-hidden rounded-lg object-cover "
                       />
                     ) : (
                       <div className="mr-4 flex h-24 w-24 items-center justify-center rounded-lg bg-gray-200 text-xs">
                         Cargando...
                       </div>
                     )}
-                    <div className="p-4">
-                      <div className="grid gap-1">
+                    <div>
+                      <div className="grid ">
                         <h3 className="text-xl font-bold">{product.nombre}</h3>
                         <p className="text-sm text-gray-500">{product.descripcion}</p>
                         <p className="text-sm text-gray-500">
