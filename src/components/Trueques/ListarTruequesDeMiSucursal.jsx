@@ -5,7 +5,7 @@ import { fetchExchangeMainProduct } from './fetchExchangeMainProduct'
 import { fetchFotosUrls } from '../../utils/fotoUtils'
 
 export const ListarTruequesDeMiSucursal = () => {
-  const [truequesID, setTruequesID] = useState([])
+  const [truequesINFO, setTruequesINFO] = useState([])
   const [offeredProducts, setOfferedProducts] = useState([])
   const [offeredProductsFotos, setOfferedProductsFotos] = useState([])
   const [mainProduct, setMainProduct] = useState([])
@@ -71,16 +71,14 @@ export const ListarTruequesDeMiSucursal = () => {
           .catch((e) => {
             console.log(e)
           })
-        console.log(trueques[0])
-        setTruequesID(trueques)
+        console.log(trueques)
+        setTruequesINFO(trueques)
       } catch (error) {
         console.error('Error al obtener los trueques', error)
       }
-      console.log(truequesID)
-      fetchExchangeMainProduct(truequesID[0], setMainProduct)
     }
-
     obtenerTruequesDeUnaSucursal()
+    console.log(truequesINFO)
   }, [])
 
   return (
@@ -92,7 +90,7 @@ export const ListarTruequesDeMiSucursal = () => {
         Revisá y tomá acciones sobre las publicaciones enviadas por los usuarios.
       </p>
       <div className="space-y-4 py-1 pl-6">
-        {truequesID.length === 0 ? (
+        {truequesINFO.length === 0 ? (
           <p>No hay trueques en tu sucursal!</p>
         ) : (
           <p> hay trueques .-. </p>
