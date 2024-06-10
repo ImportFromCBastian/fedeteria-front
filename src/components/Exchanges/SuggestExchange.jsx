@@ -6,6 +6,28 @@ import enviarNotificacion from '../Notificaciones/enviarNotificacion'
 import { Toaster, toast } from 'sonner'
 import { fetchFotosUrls } from '../../utils/fotoUtils'
 
+const CategoryRules = ({ showCategorias }) => {
+  return (
+    showCategorias && (
+      <div className="absolute z-50 -mt-80 ml-32 w-64 rounded-xl bg-fede-main/40 p-4 shadow-lg backdrop-blur-md">
+        <h3 className="text-base font-medium text-fede-texto-input">Conversión de categorías</h3>
+        <ul className="mt-2 text-sm text-fede-texto-input/50">
+          <li>I $1-1000</li>
+          <li>II $1000-2500</li>
+          <li>III $2500-5000</li>
+          <li>IV $5000-7500</li>
+          <li>V $7500-10000</li>
+          <li>VI $10000-20000</li>
+          <li>VII $20000-40000</li>
+          <li>VIII $40000-70000</li>
+          <li>IX $70000-100000</li>
+          <li>X $100000+</li>
+        </ul>
+      </div>
+    )
+  )
+}
+
 export const SuggestExchange = () => {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -235,25 +257,6 @@ export const SuggestExchange = () => {
                   </div>
                   <hr className="flex-1 border-gray-200" />
                   <span className="text-3xl font-bold">
-                    {showCategorias && (
-                      <div className="z-5 absolute -right-0 bottom-80 mb-2 w-64 -translate-x-1/2 transform rounded-xl bg-fede-main/40 p-4 shadow-lg backdrop-blur-md">
-                        <h3 className="text-base font-medium text-fede-texto-input">
-                          Conversión de categorías
-                        </h3>
-                        <ul className="mt-2 text-sm text-fede-texto-input/50">
-                          <li> I $1-1000</li>
-                          <li> II $1000-2500</li>
-                          <li> III $2500-5000</li>
-                          <li> IV $5000-7500</li>
-                          <li> V $7500-10000</li>
-                          <li> VI $10000-20000</li>
-                          <li> VII $20000-40000</li>
-                          <li> VIII $40000-70000</li>
-                          <li> IX $70000-100000</li>
-                          <li> X $100000</li>
-                        </ul>
-                      </div>
-                    )}
                     <span
                       className="material-symbols-outlined float-right cursor-pointer rounded-full outline-dotted"
                       onMouseEnter={handleMouseEnter}
@@ -263,6 +266,7 @@ export const SuggestExchange = () => {
                     </span>
                     Categoria Final:{' '}
                     {useConversor(finalPrice) === '0' ? '-' : useConversor(finalPrice)}
+                    <CategoryRules showCategorias={showCategorias} />
                   </span>
                   <button
                     onClick={handleExchange}
