@@ -5,9 +5,10 @@ import { fetchExchangeMainProduct } from './fetchExchangeMainProduct'
 import { fetchFotosUrls } from '../../utils/fotoUtils'
 
 export const ListarTruequesDeMiSucursal = () => {
-  const [trueques, setTrueques] = useState([])
+  const [truequesID, setTruequesID] = useState([])
   const [offeredProducts, setOfferedProducts] = useState([])
   const [offeredProductsFotos, setOfferedProductsFotos] = useState([])
+  const [mainProduct, setMainProduct] = useState([])
   const [mainProductFotoUrl, setMainProductFotoUrl] = useState('')
   const [perfil, setPerfil] = useState({
     DNI: '',
@@ -63,23 +64,40 @@ export const ListarTruequesDeMiSucursal = () => {
           ['fechaNacimiento']: data.fechaNacimiento,
           ['mail']: data.mail
         })
-        const trueques = await fetch(`${import.meta.env.VITE_BASE_URL}/exchange/${data.idLocal}`)
+        const trueques = await fetch(
+          `${import.meta.env.VITE_BASE_URL}/trueques/truequeLocal/${data.idLocal}`
+        )
           .then((response) => response.json())
           .catch((e) => {
             console.log(e)
           })
-        setTrueques(trueques)
+        console.log(trueques[0])
+        setTruequesID(trueques)
       } catch (error) {
         console.error('Error al obtener los trueques', error)
       }
+      console.log(truequesID)
+      fetchExchangeMainProduct(truequesID[0], setMainProduct)
     }
 
     obtenerTruequesDeUnaSucursal()
   }, [])
 
   return (
-    <div>
-      <h1>ListarTruequesDeMiSucursal</h1>
-    </div>
+    <section className="mx-auto w-full max-w-4xl px-4 pb-6 pt-8 md:px-6">
+      <h2 className="pl-6 pt-4 text-3xl font-bold tracking-tighter md:text-4xl">
+        Publicaciones pendientes de revisión
+      </h2>
+      <p className="pl-6 pt-2 text-gray-500 md:text-xl/relaxed ">
+        Revisá y tomá acciones sobre las publicaciones enviadas por los usuarios.
+      </p>
+      <div className="space-y-4 py-1 pl-6">
+        {truequesID.length === 0 ? (
+          <p>No hay trueques en tu sucursal!</p>
+        ) : (
+          <p> hay trueques .-. </p>
+        )}
+      </div>
+    </section>
   )
 }
