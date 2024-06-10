@@ -43,7 +43,7 @@ export const useHandler = (publicationData, setPublicationData) => {
       CreatePublication(publication)
       setTimeout(() => {
         window.location.reload()
-      }, 500) // 1 segundo de espera
+      }, 1000) // 1 segundo de espera
     } catch (error) {
       const { errors } = error
       for (let i = 0; i < errors.length; i++) {

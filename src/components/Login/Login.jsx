@@ -41,6 +41,7 @@ export const Login = () => {
         return
       }
       await sendMail(user[0].mail, user[0].nombre)
+      alert('Tu cuenta está bloqueada. Te enviamos al mail los pasos para recuperarla.')
     } catch (error) {
       console.error('Error al enviar el correo de bloqueo')
     }
@@ -93,12 +94,6 @@ export const Login = () => {
       return
     }
 
-    if (isLocked[credential.dni]) {
-      alert('Tu cuenta está bloqueada. Te enviamos al mail los pasos para recuperarla.')
-      avisarBloqueo()
-      return
-    }
-
     try {
       const userResponse = await fetch(`${import.meta.env.VITE_BASE_URL}/user/${credential.dni}`)
       const user = await userResponse.json()
@@ -129,6 +124,7 @@ export const Login = () => {
             ...attempts,
             [credential.dni]: (attempts[credential.dni] || 0) + 1
           }
+          console.log(updatedAttempts)
           setAttempts(updatedAttempts)
         }
         toast.error('Inicio de sesión fallido')
@@ -178,7 +174,7 @@ export const Login = () => {
               onKeyDown={(e) => exceptThisSymbols.includes(e.key) && e.preventDefault()}
               onWheel={(e) => e.target.blur()}
               onChange={handleChange}
-              className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-base shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main"
+              className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-base shadow-sm focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               required
               type="number"
             />

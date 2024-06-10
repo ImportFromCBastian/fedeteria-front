@@ -19,7 +19,7 @@ export const SuggestAccept = ({ mainPublicationID, publicationCount, exchangeID 
 
   return (
     <option value={exchangeID}>
-      {publication.nombre} - tiene {publicationCount} sugerencias
+      {publication.nombre} - tiene {publicationCount} artículos a cambio
     </option>
   )
 }

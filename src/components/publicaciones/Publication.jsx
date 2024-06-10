@@ -33,7 +33,7 @@ export const Publication = ({ publication, onError }) => {
   }
 
   return (
-    <div className="group relative overflow-hidden rounded-lg shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-2 hover:shadow-xl">
+    <div className="group relative overflow-hidden rounded-lg bg-gray-950 shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-2 hover:shadow-xl">
       <span onClick={handleClick} className="absolute inset-0 z-10" href="#">
         <span className="sr-only">View</span>
       </span>
