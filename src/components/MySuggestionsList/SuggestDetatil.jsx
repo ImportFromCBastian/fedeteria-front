@@ -29,35 +29,43 @@ export const SuggestDetail = () => {
       await fetchMainProduct(id, setMainProduct)
       const fetchedProducts = await fetchProducts(id)
       setOfferedProducts(fetchedProducts)
-      await fetchFotos()
-      await fetchOfferedProductsFotos(fetchedProducts)
     }
     init()
   }, [id])
 
-  const fetchFotos = async () => {
-    try {
-      const urls = await fetchFotosUrls(id)
-      if (urls.length > 0) {
-        setMainProductFotoUrl(urls[0])
+  useEffect(() => {
+    const fetchProductFotos = async () => {
+      try {
+        if (mainProduct.idPublicacion) {
+          const urls = await fetchFotosUrls(mainProduct.idPublicacion)
+          if (urls.length > 0) {
+            setMainProductFotoUrl(urls[0])
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching photos:', error)
       }
-    } catch (error) {
-      console.error('Error fetching photos:', error)
     }
-  }
 
-  const fetchOfferedProductsFotos = async (products) => {
-    try {
-      const urlsPromises = products.map(async (product) => {
-        const urls = await fetchFotosUrls(product.idPublicacion)
-        return urls.length > 0 ? urls[0] : ''
-      })
-      const urls = await Promise.all(urlsPromises)
-      setOfferedProductsFotos(urls)
-    } catch (error) {
-      console.error('Error fetching offered products photos:', error)
+    fetchProductFotos()
+  }, [mainProduct.idPublicacion])
+
+  useEffect(() => {
+    const fetchOfferedProductsFotos = async () => {
+      try {
+        const urlsPromises = offeredProducts.map(async (product) => {
+          const urls = await fetchFotosUrls(product.idPublicacion)
+          return urls.length > 0 ? urls[0] : ''
+        })
+        const urls = await Promise.all(urlsPromises)
+        setOfferedProductsFotos(urls)
+      } catch (error) {
+        console.error('Error fetching offered products photos:', error)
+      }
     }
-  }
+
+    fetchOfferedProductsFotos()
+  }, [offeredProducts])
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -155,14 +163,13 @@ export const SuggestDetail = () => {
                         Cargando...
                       </div>
                     )}
+
                     <div>
-                      <div className="grid ">
-                        <h3 className="text-xl font-bold">{product.nombre}</h3>
-                        <p className="text-sm text-gray-500">{product.descripcion}</p>
-                        <p className="text-sm text-gray-500">
-                          Categoria: {useConversor(product.precio)}
-                        </p>
-                      </div>
+                      <h3 className="text-xl font-bold">{product.nombre}</h3>
+                      <p className="text-sm text-gray-500">{product.descripcion}</p>
+                      <p className="text-sm text-gray-500">
+                        Categoria: {useConversor(product.precio)}
+                      </p>
                     </div>
                   </div>
                 ))}

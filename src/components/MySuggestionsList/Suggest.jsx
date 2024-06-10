@@ -2,30 +2,43 @@ import { fetchFotosUrls } from '../../utils/fotoUtils'
 import { publicationInfo } from './hooks/publicationInfo'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-
+import { fetchProducts } from './hooks/fetchProducts'
 export const Suggest = ({ mainPublicationID, publicationCount, exchangeID }) => {
   const navigate = useNavigate()
   const [fotoUrl, setFotoUrl] = useState('')
   const [publication, setPublication] = useState({})
+  const [offeredPublication, setOfferedPublication] = useState({})
+  const [offeredFotoUrl, setOfferedFotoUrl] = useState('')
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Fetch the main publication data
         const urls = await fetchFotosUrls(mainPublicationID)
         if (urls.length > 0) {
           setFotoUrl(urls[0])
         }
-        // Fetch publication information after fetching photo URL
         const pubInfo = await publicationInfo(mainPublicationID)
-
         setPublication(pubInfo)
+
+        // Fetch the offered publication data if there is only one offered publication
+        if (publicationCount === 1) {
+          const offeredPubInfo = await fetchProducts(exchangeID)
+          if (offeredPubInfo.length > 0) {
+            setOfferedPublication(offeredPubInfo[0])
+            const offeredUrls = await fetchFotosUrls(offeredPubInfo[0].idPublicacion)
+            if (offeredUrls.length > 0) {
+              setOfferedFotoUrl(offeredUrls[0])
+            }
+          }
+        }
       } catch (error) {
         console.error('Error fetching data:', error)
       }
     }
 
     fetchData()
-  }, [mainPublicationID])
+  }, [mainPublicationID, exchangeID, publicationCount])
 
   const handleClick = () => {
     navigate(`/ver_sugerencia/${exchangeID}`)
@@ -41,7 +54,7 @@ export const Suggest = ({ mainPublicationID, publicationCount, exchangeID }) => 
         <img
           src={fotoUrl || '/placeholder-image.jpg'}
           alt={publication.nombre || 'Cargando...'}
-          className="h-32 w-32 rounded-xl bg-white object-contain"
+          className="h-24 w-24 rounded-xl bg-white object-fill"
         />
         <h3 className="mb-2 ml-4 text-lg font-medium">
           {publication.nombre || 'Nombre del Producto'}
@@ -74,13 +87,13 @@ export const Suggest = ({ mainPublicationID, publicationCount, exchangeID }) => 
           {/* Se muestra la imagen del producto ofrecido solo si hay uno */}
           {publicationCount === 1 ? (
             <div className="flex items-center justify-center">
-              <h3 className="mb-2 mr-4 text-lg font-medium">
-                {publication.nombre || 'Nombre del Producto'}
+              <h3 className="mb-2 ml-4 text-lg font-medium">
+                {offeredPublication.nombre || 'Nombre del Producto'}
               </h3>
               <img
-                src={fotoUrl || '/placeholder-image.jpg'}
-                alt={publication.nombre || 'Cargando...'}
-                className="h-32 w-32 rounded-xl bg-white object-contain"
+                src={offeredFotoUrl || '/placeholder-image.jpg'}
+                alt={offeredPublication.nombre || 'Cargando...'}
+                className="ml-2 h-24 w-24 rounded-xl bg-white object-fill"
               />
             </div>
           ) : (
