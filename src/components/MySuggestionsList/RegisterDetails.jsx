@@ -44,10 +44,35 @@ export const RegisterDetails = () => {
 
     return times
   }
+  const decodeToken = async (token) => {
+    return await fetch(`${import.meta.env.VITE_BASE_URL}/user/decode_token`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      method: 'POST'
+    })
+      .then((response) => response.json())
+      .then((data) => data.data)
+      .catch((e) => new Error(e))
+  }
 
   useEffect(() => {
-    fetchSuggestionsAccepteds(setSuggestions, navigate)
-    wrapper()
+    const token = localStorage.getItem('token')
+    if (token === null) {
+      navigate('/')
+      return
+    }
+
+    const fetchData = async () => {
+      const decodedToken = await decodeToken(token)
+      if (!decodedToken.rol) {
+        navigate('/')
+        return
+      }
+      fetchSuggestionsAccepteds(setSuggestions, navigate)
+      wrapper()
+    }
+    fetchData()
   }, [navigate])
 
   const handleSuggestionSelect = (event) => {

@@ -5,7 +5,16 @@ export const SuggestAccept = ({ mainPublicationID, publicationCount, exchangeID 
   const [publication, setPublication] = useState({})
 
   useEffect(() => {
-    publicationInfo(mainPublicationID, setPublication)
+    const fetchPublication = async () => {
+      try {
+        const data = await publicationInfo(mainPublicationID)
+        setPublication(data)
+      } catch (error) {
+        console.error('Error fetching publication info:', error)
+      }
+    }
+
+    fetchPublication()
   }, [mainPublicationID])
 
   return (
