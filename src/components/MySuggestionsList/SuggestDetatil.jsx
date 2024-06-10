@@ -9,6 +9,7 @@ import { deleteSuggestions } from './hooks/deleteSuggestions'
 import { sendContactEmail } from './hooks/sendContactEmail'
 import { fetchFotosUrls } from '../../utils/fotoUtils'
 import useConversor from '../../utils/useConversor'
+import enviarNotificacion from '../Notificaciones/enviarNotificacion'
 
 export const SuggestDetail = () => {
   const navigate = useNavigate()
@@ -83,10 +84,17 @@ export const SuggestDetail = () => {
     const resultDeletion = await deleteSuggestions(mainProduct.idPublicacion)
     if (!resultDeletion.ok) return toast.error('Error al eliminar las sugerencias')
 
+    offeredProducts.forEach(async (product) => {
+      const result = await deleteSuggestions(product.idPublicacion)
+      if (!result.ok) toast.error('Error al eliminar las sugerencias')
+    })
+
     const sendMail = await sendContactEmail(mainProduct.DNI, offeredProducts[0].DNI)
     if (!sendMail.ok) return toast.error('Error al enviar el correo')
 
     toast.success('Trueque aceptado')
+    enviarNotificacion('default', 'Revisa tu correo electronico asociado', mainProduct.DNI)
+    enviarNotificacion('default', 'Revisa tu correo electronico asociado', offeredProducts[0].DNI)
     await delay(2500)
     navigate('/')
   }
