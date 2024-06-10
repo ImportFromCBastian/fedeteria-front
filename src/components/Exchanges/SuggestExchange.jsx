@@ -9,7 +9,7 @@ import { fetchFotosUrls } from '../../utils/fotoUtils'
 const CategoryRules = ({ showCategorias }) => {
   return (
     showCategorias && (
-      <div className="absolute z-50 -mt-80 ml-32 w-64 rounded-xl bg-fede-main/40 p-4 shadow-lg backdrop-blur-md">
+      <div className="absolute z-50 -mt-80 ml-56 w-64 rounded-xl bg-fede-main/40 p-4 shadow-lg backdrop-blur-md">
         <h3 className="text-base font-medium text-fede-texto-input">Conversión de categorías</h3>
         <ul className="mt-2 text-sm text-fede-texto-input/50">
           <li>I $1-1000</li>
@@ -39,6 +39,7 @@ export const SuggestExchange = () => {
   const [fotoUrl, setFotoUrl] = useState('')
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
   const [showCategorias, setCategorias] = useState(false)
+  const [usuario, setUsuario] = useState({})
   const handleMouseEnter = () => {
     setCategorias(true)
   }
@@ -72,6 +73,9 @@ export const SuggestExchange = () => {
       const response = await fetch(`${import.meta.env.VITE_BASE_URL}/publication/${id}`)
       const data = await response.json()
       setPublication(data)
+      const userResponse = await fetch(`${import.meta.env.VITE_BASE_URL}/user/${data.DNI}`)
+      const userData = await userResponse.json()
+      setUsuario(userData[0])
     } catch (error) {
       console.error('Error fetching publication:', error)
     }
@@ -196,7 +200,7 @@ export const SuggestExchange = () => {
           <Toaster expand="true" richColors="true" />
           <div className="flex items-center justify-center">
             <div className="mx-4 my-5 w-full max-w-6xl rounded-lg border-2 border-fede-main bg-fede-secundary p-8 shadow-md">
-              <div className="grid grid-cols-[2fr_1fr_2fr] gap-6 lg:gap-12">
+              <div className="grid grid-cols-[2fr_0fr_2fr] gap-2 lg:gap-6">
                 <div className="grid items-start gap-4 md:gap-10">
                   <div className="items-start md:flex">
                     <div className="grid gap-4">
@@ -219,6 +223,9 @@ export const SuggestExchange = () => {
                           <h3 className="text-xl font-semibold">{publication.nombre}</h3>
                           <p className="text-sm text-gray-500">{publication.descripcion}</p>
                           <h3 className="text-x">Categoria: {useConversor(publication.precio)}</h3>
+                          <h3 className="text-x">
+                            Dueño: {usuario.nombre} {usuario.apellido}
+                          </h3>
                         </div>
                       </div>
                     </div>
