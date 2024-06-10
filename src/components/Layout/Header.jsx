@@ -137,6 +137,14 @@ export const Header = () => {
                 Evaluar publicaciones
               </Link>
             )}
+            {(user.rol === 'empleado' || user.rol === 'administrador') && (
+              <Link
+                className="font-medium underline-offset-4 hover:underline"
+                to="/listado_de_trueques_de_mi_sucursal"
+              >
+                Listar trueques de mi sucursal
+              </Link>
+            )}
             {user.rol === 'administrador' && (
               <>
                 <Link className="font-medium underline-offset-4 hover:underline" to="/sucursal">

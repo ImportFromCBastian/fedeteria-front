@@ -21,6 +21,7 @@ import { ListarSucursales } from './components/Layout/Listar-Sucursales/ListarSu
 import { SuggestedExchangesList } from './components/MySuggestionsList/SuggestedExchangesList.jsx'
 import { SuggestDetail } from './components/MySuggestionsList/SuggestDetatil.jsx'
 import { ActiveExchanges } from './components/ActiveExchanges/ActiveExchanges.jsx'
+import { ListarTruequesDeMiSucursal } from './components/Trueques/ListarTruequesDeMiSucursal.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -45,6 +46,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             element={<ModificarPublicacion />}
           />
           <Route path="/listado_sucursales" element={<ListarSucursales />} />
+          <Route
+            path="/listado_de_trueques_de_mi_sucursal"
+            element={<ListarTruequesDeMiSucursal />}
+          />
           <Route path="/ver_mis_sugerencias" element={<SuggestedExchangesList />} />
           <Route path="/unauthorized" element={<UnauthorizedAccessPage />} />
           <Route path="/ver_sugerencia/:id" element={<SuggestDetail />} />
