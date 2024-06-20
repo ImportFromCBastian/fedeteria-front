@@ -4,6 +4,7 @@ import Notificaciones from '../Notificaciones/Notificaciones'
 
 export const Header = () => {
   const [user, setUser] = useState(null)
+  const [nombre, setNombre] = useState({})
 
   const decodeToken = async (token) => {
     return await fetch(`${import.meta.env.VITE_BASE_URL}/user/decode_token`, {
@@ -18,14 +19,18 @@ export const Header = () => {
   }
 
   useEffect(() => {
-    let token = localStorage.getItem('token')
-    if (token == 'undefined') {
-      token = null
-    }
-    if (token) {
+    const token = localStorage.getItem('token')
+    if (token && token !== 'undefined') {
       const fetchData = async () => {
         const decodedToken = await decodeToken(token)
         setUser(decodedToken)
+        if (decodedToken && decodedToken.DNI) {
+          const userResponse = await fetch(
+            `${import.meta.env.VITE_BASE_URL}/user/${decodedToken.DNI}`
+          )
+          const userData = await userResponse.json()
+          setNombre(userData[0])
+        }
       }
       fetchData()
     }
@@ -74,7 +79,7 @@ export const Header = () => {
               <Notificaciones />
               <Link
                 to="/mi_perfil"
-                className="ring-offset-background focus-visible:ring-ring hover:bg-accent hover:text-accent-foreground inline-flex h-10 w-10 items-center justify-center whitespace-nowrap rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+                className="ring-offset-background focus-visible:ring-ring hover:bg-accent hover:text-accent-foreground inline-flex h-10 items-center justify-center whitespace-nowrap rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -91,8 +96,11 @@ export const Header = () => {
                   <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
                   <circle cx="12" cy="7" r="4"></circle>
                 </svg>
-
                 <span className="sr-only">Perfil</span>
+                <div className="ml-2">
+                  <h1 className="font-semibold">{nombre.nombre}</h1>
+                  {user.rol !== 'cliente' && <h2 className="text-xs">{user.rol}</h2>}
+                </div>
               </Link>
             </div>
           ) : (
