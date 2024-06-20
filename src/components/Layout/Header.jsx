@@ -162,6 +162,12 @@ export const Header = () => {
                 </Link>
               </>
             )}
+            <Link
+              className="font-medium underline-offset-4 hover:underline"
+              to="/ver_mis_publicaciones"
+            >
+              Mis publicaciones
+            </Link>
           </div>
         )}
       </header>
