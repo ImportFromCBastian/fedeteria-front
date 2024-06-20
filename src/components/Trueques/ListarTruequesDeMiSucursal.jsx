@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslateRole } from '../Perfil/useTranslateRole'
-import { fetchExchangeMainProduct } from './fetchExchangeMainProduct'
-import { fetchFotosUrls } from '../../utils/fotoUtils'
+import { Exchange } from './Exchange'
 
 export const ListarTruequesDeMiSucursal = () => {
   const [truequesINFO, setTruequesINFO] = useState([])
-  const [offeredProducts, setOfferedProducts] = useState([])
-  const [offeredProductsFotos, setOfferedProductsFotos] = useState([])
-  const [mainProduct, setMainProduct] = useState([])
-  const [mainProductFotoUrl, setMainProductFotoUrl] = useState('')
   const [perfil, setPerfil] = useState({
     DNI: '',
     nombre: '',
@@ -71,29 +66,35 @@ export const ListarTruequesDeMiSucursal = () => {
           .catch((e) => {
             console.log(e)
           })
-        console.log(trueques)
         setTruequesINFO(trueques)
       } catch (error) {
         console.error('Error al obtener los trueques', error)
       }
     }
     obtenerTruequesDeUnaSucursal()
-    console.log(truequesINFO)
   }, [])
 
   return (
     <section className="mx-auto w-full max-w-4xl px-4 pb-6 pt-8 md:px-6">
       <h2 className="pl-6 pt-4 text-3xl font-bold tracking-tighter md:text-4xl">
-        Publicaciones pendientes de revisión
+        Trueques en la sucursal {perfil.nombreSucursal}
       </h2>
       <p className="pl-6 pt-2 text-gray-500 md:text-xl/relaxed ">
-        Revisá y tomá acciones sobre las publicaciones enviadas por los usuarios.
+        Revisá las publicaciones llevadas a cabo en tu sucursal.
       </p>
       <div className="space-y-4 py-1 pl-6">
         {truequesINFO.length === 0 ? (
           <p>No hay trueques en tu sucursal!</p>
         ) : (
-          <p> hay trueques .-. </p>
+          truequesINFO.map((trueque, index) => (
+            <Exchange
+              key={index}
+              mainPublicationID={trueque.productoDeseado}
+              publicationCount={trueque.countPublication}
+              exchangeID={trueque.idTrueque}
+              state={trueque.realizado}
+            />
+          ))
         )}
       </div>
     </section>
