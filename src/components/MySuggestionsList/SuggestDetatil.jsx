@@ -8,9 +8,9 @@ import { createPendingExchange } from './hooks/createPendingExchange'
 import { deleteSuggestions } from './hooks/deleteSuggestions'
 import { sendContactEmail } from './hooks/sendContactEmail'
 import { fetchFotosUrls } from '../../utils/fotoUtils'
+import { decodeToken } from '../../utils/tokenUtils'
 import useConversor from '../../utils/useConversor'
 import enviarNotificacion from '../Notificaciones/enviarNotificacion'
-
 export const SuggestDetail = () => {
   const navigate = useNavigate()
   const { id } = useParams('')
@@ -25,20 +25,48 @@ export const SuggestDetail = () => {
   const [mainProductFotoUrl, setMainProductFotoUrl] = useState('')
   const [offeredProductsFotos, setOfferedProductsFotos] = useState([])
   const [usuario, setUsuario] = useState({})
+  const [usuario2, setUsuario2] = useState({})
+  const [tokenDNI, setDecodedToken] = useState('')
 
   useEffect(() => {
     const init = async () => {
-      await fetchMainProduct(id, setMainProduct)
-      const fetchedProducts = await fetchProducts(id)
-      setOfferedProducts(fetchedProducts)
-      const userResponse = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/user/${fetchedProducts[0].DNI}`
-      )
-      const userData = await userResponse.json()
-      setUsuario(userData[0])
+      try {
+        // Obtener el producto principal
+        const token = localStorage.getItem('token')
+        const decodedToken = await decodeToken(token)
+        setDecodedToken(decodedToken.DNI.toString())
+        await fetchMainProduct(id, setMainProduct)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
     }
-    init()
+
+    if (id) init()
   }, [id])
+
+  useEffect(() => {
+    const fetchAdditionalData = async () => {
+      try {
+        // Obtener productos ofrecidos
+        const fetchedProducts = await fetchProducts(id)
+        setOfferedProducts(fetchedProducts)
+
+        // Obtener datos de los usuarios
+        const userResponse = await fetch(`${import.meta.env.VITE_BASE_URL}/user/${mainProduct.DNI}`)
+        const userResponse2 = await fetch(
+          `${import.meta.env.VITE_BASE_URL}/user/${fetchedProducts[0].DNI}`
+        )
+        const userData = await userResponse.json()
+        setUsuario(userData[0])
+        const userData2 = await userResponse2.json()
+        setUsuario2(userData2[0])
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+
+    if (mainProduct.DNI) fetchAdditionalData()
+  }, [mainProduct.DNI])
 
   useEffect(() => {
     const fetchProductFotos = async () => {
@@ -78,27 +106,33 @@ export const SuggestDetail = () => {
 
   const handleAcceptExchange = async (e) => {
     e.preventDefault()
-    const resultPending = await createPendingExchange(id)
-    if (!resultPending.ok) return toast.error('Error al aceptar el trueque')
+    try {
+      const resultPending = await createPendingExchange(id)
+      if (!resultPending.ok) throw new Error('Error al aceptar el trueque')
 
-    const resultDeletion = await deleteSuggestions(mainProduct.idPublicacion)
-    if (!resultDeletion.ok) return toast.error('Error al eliminar las sugerencias')
+      const resultDeletion = await deleteSuggestions(mainProduct.idPublicacion)
+      if (!resultDeletion.ok) throw new Error('Error al eliminar las sugerencias')
 
-    offeredProducts.forEach(async (product) => {
-      const result = await deleteSuggestions(product.idPublicacion)
-      if (!result.ok) toast.error('Error al eliminar las sugerencias')
-    })
+      await Promise.all(
+        offeredProducts.map(async (product) => {
+          const result = await deleteSuggestions(product.idPublicacion)
+          if (!result.ok) throw new Error('Error al eliminar las sugerencias')
+        })
+      )
 
-    const sendMail = await sendContactEmail(mainProduct.DNI, offeredProducts[0].DNI)
-    if (!sendMail.ok) return toast.error('Error al enviar el correo')
+      const sendMail = await sendContactEmail(mainProduct.DNI, offeredProducts[0].DNI)
+      if (!sendMail.ok) throw new Error('Error al enviar el correo')
 
-    toast.success('Trueque aceptado')
-    enviarNotificacion('default', 'Revisa tu correo electronico asociado', mainProduct.DNI)
-    enviarNotificacion('default', 'Revisa tu correo electronico asociado', offeredProducts[0].DNI)
-    await delay(2500)
-    navigate('/')
+      toast.success('Trueque aceptado')
+      enviarNotificacion('default', 'Revisa tu correo electrónico asociado', mainProduct.DNI)
+      enviarNotificacion('default', 'Revisa tu correo electrónico asociado', offeredProducts[0].DNI)
+      await delay(2500)
+      navigate('/')
+    } catch (error) {
+      console.error('Error handling exchange:', error)
+      toast.error(error.message || 'Hubo un error al procesar la solicitud')
+    }
   }
-
   return (
     <>
       <Toaster richColors={true} duration={1500} />
@@ -108,15 +142,21 @@ export const SuggestDetail = () => {
             <div className="grid items-start gap-4 md:gap-10">
               <div className="items-start md:flex">
                 <div className="grid gap-4">
-                  <h1 className=" text-3xl font-bold">Tu producto</h1>
-                  <div className="flex items-center gap-4">
+                  <h1 className="text-3xl font-bold">
+                    Producto ofrecido por {usuario.nombre} {usuario.apellido}
+                  </h1>
+
+                  <div
+                    className="duration-300items-center group relative flex  h-full items-center gap-4 overflow-hidden rounded-lg shadow-lg transition-transform hover:scale-105 hover:cursor-pointer"
+                    onClick={() => navigate(`/ver_publicacion/${mainProduct.idPublicacion}`)}
+                  >
                     {mainProductFotoUrl ? (
                       <img
                         src={mainProductFotoUrl}
                         alt="Producto a Intercambiar"
                         width="300"
                         height="300"
-                        className="aspect-square overflow-hidden rounded-lg border border-gray-200 object-cover"
+                        className="aspect-square overflow-hidden rounded-lg border-gray-200 object-cover"
                       />
                     ) : (
                       <div className="mr-4 flex aspect-square h-72 w-72 items-center justify-center rounded-lg bg-gray-200 text-xs">
@@ -154,16 +194,18 @@ export const SuggestDetail = () => {
               </svg>
             </div>
             <div className="grid gap-4">
-              <h1 className="text-3xl font-bold">
-                Productos ofrecidos por {usuario.nombre} {usuario.apellido}
-              </h1>
               <div className="grid h-full gap-4">
+                <h1 className="text-3xl font-bold">
+                  {offeredProducts.length !== 1
+                    ? `Productos ofrecidos por ${usuario2.nombre} ${usuario2.apellido}`
+                    : `Producto ofrecido por ${usuario2.nombre} ${usuario2.apellido}`}
+                </h1>
                 {offeredProducts.map((product, index) => (
                   <div
                     key={index}
                     onClick={() => navigate(`/ver_publicacion/${product.idPublicacion}`)}
                     className={
-                      'group relative flex h-full items-center gap-4 overflow-hidden rounded-lg shadow-lg transition-transform duration-300 '
+                      'group relative flex h-full items-center gap-4 overflow-hidden rounded-lg shadow-lg transition-transform duration-300 hover:scale-105 hover:cursor-pointer'
                     }
                   >
                     {offeredProductsFotos[index] ? (
@@ -190,12 +232,16 @@ export const SuggestDetail = () => {
                   </div>
                 ))}
               </div>
-              <button
-                onClick={handleAcceptExchange}
-                className="ring-offset-background focus-visible:ring-ring border-input bg-background inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border px-3 text-sm font-medium transition-colors hover:scale-105 hover:bg-green-500 hover:text-white focus-visible:outline-none focus-visible:ring-2  focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-              >
-                Aceptar Trueque
-              </button>
+              {tokenDNI == mainProduct.DNI ? (
+                <button
+                  onClick={handleAcceptExchange}
+                  className="ring-offset-background focus-visible:ring-ring border-input bg-background inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border px-3 text-sm font-medium transition-colors hover:scale-105 hover:bg-green-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+                >
+                  Aceptar Trueque
+                </button>
+              ) : (
+                <div className="inline-flex h-9 px-3"></div>
+              )}
             </div>
           </div>
         </div>
