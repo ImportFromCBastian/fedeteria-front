@@ -77,7 +77,8 @@ export const SuggestDetail = () => {
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
   const handleCancelExchange = async () => {
-    const result = updateExchangeStatus(id, 5)
+    const result = await updateExchangeStatus(id, 5)
+    console.log(result)
     if (!result.ok) return toast.error('Error al cancelar el trueque')
     toast.success('Cancelado con exito')
     await delay(2500)
@@ -206,7 +207,7 @@ export const SuggestDetail = () => {
               </button>
               <button
                 onClick={handleCancelExchange}
-                className="ring-offset-background focus-visible:ring-ring border-input bg-background inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border px-3 text-sm font-medium transition-colors hover:scale-105 hover:bg-green-500 hover:text-white focus-visible:outline-none focus-visible:ring-2  focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+                className="ring-offset-background focus-visible:ring-ring border-input bg-background inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border px-3 text-sm font-medium transition-colors hover:scale-105 hover:bg-red-500 hover:text-white focus-visible:outline-none focus-visible:ring-2  focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
               >
                 Cancelar Trueque
               </button>
