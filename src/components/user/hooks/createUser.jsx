@@ -25,6 +25,9 @@ export const createUser = async (credentials, type) => {
   }
   if (result.ok) {
     toast.success(`${type === 'worker' ? 'Empleado' : 'Cliente'} registrado correctamente`)
+    setTimeout(() => {
+      window.location.reload()
+    }, 1000)
   } else {
     toast.error(result.message)
   }

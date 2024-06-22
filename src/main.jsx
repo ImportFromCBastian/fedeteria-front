@@ -22,6 +22,7 @@ import { SuggestedExchangesList } from './components/MySuggestionsList/Suggested
 import { SuggestDetail } from './components/MySuggestionsList/SuggestDetatil.jsx'
 import { ActiveExchanges } from './components/ActiveExchanges/ActiveExchanges.jsx'
 import { RegisterDetails } from './components/MySuggestionsList/RegisterDetails.jsx'
+import { MisPublicaciones } from './components/publicaciones/MisPublicaciones.jsx'
 import { ListarTruequesDeMiSucursal } from './components/Trueques/ListarTruequesDeMiSucursal.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -56,6 +57,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/ver_sugerencia/:id" element={<SuggestDetail />} />
           <Route path="/mis_trueques_activos" element={<ActiveExchanges />} />
           <Route path="/registrar-detalles" element={<RegisterDetails />} />
+          <Route path="/ver_mis_publicaciones" element={<MisPublicaciones />} />
         </Route>
       </Routes>
     </BrowserRouter>

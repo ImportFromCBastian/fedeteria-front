@@ -4,8 +4,10 @@ import { fetchFotosUrls } from '../../utils/fotoUtils'
 import getCategory from '../../utils/useConversor'
 import { toast, Toaster } from 'sonner'
 
-export const Publication = ({ publication, onError }) => {
+export const MyPublication = ({ publication, onError }) => {
   const [fotoUrl, setFotoUrl] = useState('') // Estado para la URL de la foto
+  const [estado, setEstado] = useState('')
+  const [color, setColor] = useState('')
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -31,34 +33,53 @@ export const Publication = ({ publication, onError }) => {
       }
     } else navigate('/ver_publicacion/' + publication.idPublicacion)
   }
+  useEffect(() => {
+    if (publication.rechazado === 1) {
+      setColor('bg-fede-rojo')
+      setEstado('Rechazada')
+    } else if (publication.precio === 0) {
+      setColor('bg-fede-amarillo')
+      setEstado('Pendiente de revisión')
+    } else {
+      setEstado('')
+      setColor('bg-white')
+    }
+  }, [publication])
 
   return (
-    <div className="group relative overflow-hidden rounded-lg bg-gray-950 shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-2 hover:shadow-xl">
+    <div
+      className={`relative flex h-40 items-center rounded-lg ${color} p-4 shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-xl`}
+    >
       <span onClick={handleClick} className="absolute inset-0 z-10" href="#">
         <span className="sr-only">View</span>
       </span>
-      {fotoUrl ? ( // Si hay una URL de foto, muestra la imagen
+      {fotoUrl ? (
         <img
           src={fotoUrl}
           alt={publication.nombre}
-          width="300"
-          height="300"
-          className="aspect-square h-64 w-full bg-white object-contain"
+          width="24"
+          height="24"
+          className="mr-4 h-24 w-24 rounded-sm bg-white object-contain"
         />
       ) : (
         // Si no hay una URL de foto, muestra un texto de carga
-        <div className="mr-4 flex aspect-square  h-64 w-full items-center justify-center bg-gray-200 object-cover text-xl">
+        <div className="mr-4 flex aspect-square h-24 w-24 items-center justify-center bg-gray-200 object-cover text-xl">
           Cargando...
         </div>
       )}
-      <div className=" bg-gray-950 p-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-xl font-bold text-white">{publication.nombre}</h3>
-          <span className="text-base font-medium text-gray-500">
+
+      <div className="flex h-full flex-1 flex-col justify-between">
+        <div className="flex items-center">
+          <h3 className="text-lg font-medium">{publication.nombre}</h3>
+          <p className="ml-4 text-sm text-gray-500">{publication.estado}</p>
+          <span className="ml-auto font-medium text-gray-500">{estado}</span>
+        </div>
+        <p className="text-sm text-gray-500">{publication.descripcion}</p>
+        {publication.precio !== 0 ? (
+          <span className="self-end text-base font-medium text-gray-500">
             Categoría: {getCategory(publication.precio)}
           </span>
-        </div>
-        <p className="text-sm text-gray-500">{publication.estado}</p>
+        ) : null}
       </div>
     </div>
   )

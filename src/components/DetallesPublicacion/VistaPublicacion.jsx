@@ -6,6 +6,7 @@ import { toast, Toaster } from 'sonner'
 import { AceptarDenegar } from './Aceptar-Denegar'
 import { fetchFotosUrls } from '../../utils/fotoUtils'
 import { decodeToken } from '../../utils/tokenUtils'
+import enviarNotificacion from '../Notificaciones/enviarNotificacion'
 
 export const DetallesPublicacion = () => {
   const navigate = useNavigate()
@@ -104,6 +105,11 @@ export const DetallesPublicacion = () => {
     })
       .then(() => {
         toast.success('Publicación eliminada con éxito!')
+        enviarNotificacion(
+          'rechazada',
+          `Tu publicación ${publicacion.nombre} ha sido rechazada`,
+          publicacion.DNI
+        )
         // Redirige al empleado a el listado
         setTimeout(() => {
           navigate('/listado_publicaciones')
@@ -126,6 +132,11 @@ export const DetallesPublicacion = () => {
         throw new Error('Error al aceptar la publicación')
       }
       toast.success('Publicación aceptada con éxito!')
+      enviarNotificacion(
+        'aceptada',
+        `Tu publicación ${publicacion.nombre} ha sido aceptada`,
+        publicacion.DNI
+      )
       setTimeout(() => {
         navigate('/listado_publicaciones')
       }, 1000) // 1 segundo de espera
@@ -270,7 +281,7 @@ export const DetallesPublicacion = () => {
             </div>
           )}
           <h2 className="mb-4  ml-4 mt-4 text-2xl font-bold">
-            Esta publicación es del usuario: {usuario.nombre} {usuario.apellido}
+            Publicada por: {usuario.nombre} {usuario.apellido}
           </h2>
           <div className="grid items-start gap-4 md:gap-10">
             <div className="flex items-center justify-between">

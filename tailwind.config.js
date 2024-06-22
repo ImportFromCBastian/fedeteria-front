@@ -14,7 +14,11 @@ export default {
         'fede-fondo-texto': '#f0eded',
         'fede-texto-claro': ' #808080', //placeholder
         'fede-texto-input': '#000000',
-        'fede-texto-base': '#000000  '
+        'fede-texto-base': '#000000  ',
+        'fede-rojo': '#FF0000',
+        'fede-verde': '#00FF00',
+        'fede-amarillo': '#FFFF00',
+        'fede-azul': '#0000FF'
         //231C07 marron oscuro cute
       }
     }

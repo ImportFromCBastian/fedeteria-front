@@ -55,7 +55,7 @@ export const RecuperarContraseña = () => {
       const user = await userResponse.json()
 
       if (!user || user.message) {
-        toast.error('Correo de recuperación enviado')
+        toast.success('Correo de recuperación enviado')
         return
       }
       await sendMail(user[0].mail, user[0].nombre)

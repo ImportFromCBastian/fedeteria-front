@@ -118,7 +118,9 @@ export const RegisterDetails = () => {
     const today = new Date()
     const year = today.getFullYear()
     const month = (today.getMonth() + 1).toString().padStart(2, '0')
-    const day = today.getDate().toString().padStart(2, '0')
+    let day = today.getDate() + 1
+    day = day.toString().padStart(2, '0')
+
     return `${year}-${month}-${day}`
   }
 
@@ -135,7 +137,7 @@ export const RegisterDetails = () => {
     <section className="mx-auto w-full max-w-4xl px-4 pb-6 pt-8 md:px-6">
       <Toaster />
       <h2 className="pl-6 pt-4 text-3xl font-bold tracking-tighter md:text-4xl">
-        Listado de tus trueques aceptados
+        Registrar detalles de trueque
       </h2>
       <p className="pl-6 pt-2 text-gray-500 md:text-xl/relaxed">
         Acá podes asignarle a tus trueques en qué sucursal, horario y día realizar el intercambio.

@@ -9,6 +9,7 @@ import { deleteSuggestions } from './hooks/deleteSuggestions'
 import { sendContactEmail } from './hooks/sendContactEmail'
 import { fetchFotosUrls } from '../../utils/fotoUtils'
 import useConversor from '../../utils/useConversor'
+import enviarNotificacion from '../Notificaciones/enviarNotificacion'
 
 export const SuggestDetail = () => {
   const navigate = useNavigate()
@@ -23,12 +24,18 @@ export const SuggestDetail = () => {
   const [offeredProducts, setOfferedProducts] = useState([])
   const [mainProductFotoUrl, setMainProductFotoUrl] = useState('')
   const [offeredProductsFotos, setOfferedProductsFotos] = useState([])
+  const [usuario, setUsuario] = useState({})
 
   useEffect(() => {
     const init = async () => {
       await fetchMainProduct(id, setMainProduct)
       const fetchedProducts = await fetchProducts(id)
       setOfferedProducts(fetchedProducts)
+      const userResponse = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/user/${fetchedProducts[0].DNI}`
+      )
+      const userData = await userResponse.json()
+      setUsuario(userData[0])
     }
     init()
   }, [id])
@@ -77,10 +84,17 @@ export const SuggestDetail = () => {
     const resultDeletion = await deleteSuggestions(mainProduct.idPublicacion)
     if (!resultDeletion.ok) return toast.error('Error al eliminar las sugerencias')
 
+    offeredProducts.forEach(async (product) => {
+      const result = await deleteSuggestions(product.idPublicacion)
+      if (!result.ok) toast.error('Error al eliminar las sugerencias')
+    })
+
     const sendMail = await sendContactEmail(mainProduct.DNI, offeredProducts[0].DNI)
     if (!sendMail.ok) return toast.error('Error al enviar el correo')
 
     toast.success('Trueque aceptado')
+    enviarNotificacion('default', 'Revisa tu correo electronico asociado', mainProduct.DNI)
+    enviarNotificacion('default', 'Revisa tu correo electronico asociado', offeredProducts[0].DNI)
     await delay(2500)
     navigate('/')
   }
@@ -90,7 +104,7 @@ export const SuggestDetail = () => {
       <Toaster richColors={true} duration={1500} />
       <div className="flex items-center justify-center">
         <div className="mx-4 my-5 w-full max-w-6xl rounded-lg border-2 border-fede-main bg-fede-secundary p-8 shadow-md">
-          <div className="grid grid-cols-[2fr_1fr_2fr] gap-6 lg:gap-12">
+          <div className="grid grid-cols-[2fr_0fr_2fr] gap-2 lg:gap-6">
             <div className="grid items-start gap-4 md:gap-10">
               <div className="items-start md:flex">
                 <div className="grid gap-4">
@@ -140,7 +154,9 @@ export const SuggestDetail = () => {
               </svg>
             </div>
             <div className="grid gap-4">
-              <h1 className="text-3xl font-bold">Productos que te ofrecen</h1>
+              <h1 className="text-3xl font-bold">
+                Productos ofrecidos por {usuario.nombre} {usuario.apellido}
+              </h1>
               <div className="grid h-full gap-4">
                 {offeredProducts.map((product, index) => (
                   <div
