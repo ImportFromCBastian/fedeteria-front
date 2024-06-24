@@ -21,8 +21,10 @@ import { ListarSucursales } from './components/Layout/Listar-Sucursales/ListarSu
 import { SuggestedExchangesList } from './components/MySuggestionsList/SuggestedExchangesList.jsx'
 import { SuggestDetail } from './components/MySuggestionsList/SuggestDetatil.jsx'
 import { ActiveExchanges } from './components/ActiveExchanges/ActiveExchanges.jsx'
-import { RegisterDetails } from './components/MySuggestionsList/RegisterDetails.jsx'
+import { RegisterDetailsModal } from './components/MyExchangesList/RegisterDetailsModal.jsx'
 import { MisPublicaciones } from './components/publicaciones/MisPublicaciones.jsx'
+import { ExchangesList } from './components/MyExchangesList/ExchangesList.jsx'
+import { ExchangeDetails } from './components/MyExchangesList/ExchangeDetails.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -51,8 +53,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/unauthorized" element={<UnauthorizedAccessPage />} />
           <Route path="/ver_sugerencia/:id" element={<SuggestDetail />} />
           <Route path="/mis_trueques_activos" element={<ActiveExchanges />} />
-          <Route path="/registrar-detalles" element={<RegisterDetails />} />
+          <Route path="/registrar_detalles/:id" element={<RegisterDetailsModal />} />
           <Route path="/ver_mis_publicaciones" element={<MisPublicaciones />} />
+          <Route path="/intercambios" element={<ExchangesList />} />
+          <Route path="/ver_intercambio/:id" element={<ExchangeDetails />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -57,7 +57,7 @@ export const Publicacion = ({ publicationName, idPublicacion, onDelete, onAccept
       }}
     >
       <Toaster />
-      <div className="flex items-center rounded-lg bg-white p-4 shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+      <div className=" flex items-center rounded-lg bg-white p-4 shadow-md transition-transform duration-300 hover:scale-105 hover:cursor-pointer hover:shadow-xl">
         {fotoUrl ? ( // Si hay una URL de foto, muestra la imagen
           <img
             src={fotoUrl}

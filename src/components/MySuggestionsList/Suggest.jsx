@@ -46,7 +46,7 @@ export const Suggest = ({ mainPublicationID, publicationCount, exchangeID }) => 
   return (
     <div
       onClick={handleClick}
-      className="relative rounded-lg border bg-white p-4 shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-xl"
+      className=" relative rounded-lg border bg-white p-4 shadow-md transition-transform duration-300 hover:scale-105 hover:cursor-pointer hover:shadow-xl"
     >
       {/* Siempre se muestra la imagen y el nombre del producto principal */}
       <div className="flex items-center">

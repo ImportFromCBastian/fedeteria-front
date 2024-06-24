@@ -1,6 +1,6 @@
-export async function fetchProducts(id) {
+export async function fetchExchangeProduct(id) {
   try {
-    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/exchange/suggestion/${id}`)
+    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/exchange/product/${id}`)
     if (!response.ok) {
       throw new Error('Error fetching products')
     }
