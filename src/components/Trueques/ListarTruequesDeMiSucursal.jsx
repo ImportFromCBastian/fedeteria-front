@@ -41,31 +41,23 @@ export const ListarTruequesDeMiSucursal = () => {
     const obtenerTruequesDeUnaSucursal = async () => {
       try {
         const token = localStorage.getItem('token')
+        if (token === null) {
+          navigate('/')
+          return
+        }
         const decodedToken = await decodeToken(token)
         if (decodedToken.rol !== 'empleado' && decodedToken.rol !== 'administrador') {
           navigate('/unauthorized')
           return
         }
         const { data } = await transformFetch(decodedToken.rol, decodedToken.DNI)
-        if (data.ok) {
+        if (!data || data.ok) {
           throw new Error('Error al obtener los datos del usuario')
         }
-        setPerfil({
-          ['DNI']: data.DNI,
-          ['nombre']: data.nombre,
-          ['apellido']: data.apellido,
-          ['nombreSucursal']: data.nombreSucursal,
-          ['idLocal']: data.idLocal,
-          ['fechaNacimiento']: data.fechaNacimiento,
-          ['mail']: data.mail
-        })
-        const trueques = await fetch(
+        const response = await fetch(
           `${import.meta.env.VITE_BASE_URL}/trueques/truequeLocal/${data.idLocal}`
         )
-          .then((response) => response.json())
-          .catch((e) => {
-            console.log(e)
-          })
+        const trueques = await response.json()
         setTruequesINFO(trueques)
       } catch (error) {
         console.error('Error al obtener los trueques', error)
@@ -80,21 +72,24 @@ export const ListarTruequesDeMiSucursal = () => {
         Trueques en la sucursal {perfil.nombreSucursal}
       </h2>
       <p className="pl-6 pt-2 text-gray-500 md:text-xl/relaxed ">
-        Revisá las publicaciones llevadas a cabo en tu sucursal.
+        Revisá los trueques de tu sucursal.
       </p>
       <div className="space-y-4 py-1 pl-6">
         {truequesINFO.length === 0 ? (
           <p>No hay trueques en tu sucursal!</p>
         ) : (
-          truequesINFO.map((trueque, index) => (
-            <Exchange
-              key={index}
-              mainPublicationID={trueque.productoDeseado}
-              publicationCount={trueque.countPublication}
-              exchangeID={trueque.idTrueque}
-              state={trueque.realizado}
-            />
-          ))
+          truequesINFO
+            .slice()
+            .reverse()
+            .map((trueque, index) => (
+              <Exchange
+                key={index}
+                mainPublicationID={trueque.productoDeseado}
+                publicationCount={trueque.countPublication}
+                exchangeID={trueque.idTrueque}
+                state={trueque.realizado}
+              />
+            ))
         )}
       </div>
     </section>

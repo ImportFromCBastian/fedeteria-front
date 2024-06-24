@@ -3,11 +3,13 @@ export const getState = (state) => {
     case state == null:
       return 'En sugerencia'
     case state == 0:
-      return 'trueque no realizado'
+      return 'trueque rechazado'
     case state == 1:
-      return 'trueque realizado'
+      return 'trueque aceptado'
     case state == 3:
-      return 'trueque confirmado'
+      return 'trueque por realizar'
+    case state == 5:
+      return 'trueque cancelado'
     default:
       return 'no se que hiciste papi'
   }

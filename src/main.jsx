@@ -24,6 +24,7 @@ import { ActiveExchanges } from './components/ActiveExchanges/ActiveExchanges.js
 import { RegisterDetails } from './components/MySuggestionsList/RegisterDetails.jsx'
 import { MisPublicaciones } from './components/publicaciones/MisPublicaciones.jsx'
 import { ListarTruequesDeMiSucursal } from './components/Trueques/ListarTruequesDeMiSucursal.jsx'
+import { ExchangeDetail } from './components/Trueques/ExchangeDetail.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -58,6 +59,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/mis_trueques_activos" element={<ActiveExchanges />} />
           <Route path="/registrar-detalles" element={<RegisterDetails />} />
           <Route path="/ver_mis_publicaciones" element={<MisPublicaciones />} />
+          <Route path="/ver_trueque/:id" element={<ExchangeDetail />} />
         </Route>
       </Routes>
     </BrowserRouter>
