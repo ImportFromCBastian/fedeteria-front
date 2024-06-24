@@ -1,17 +1,12 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { Toaster, toast } from 'sonner'
-import { fetchMainProduct } from './hooks/fetchMainProduct'
-import { fetchProducts } from './hooks/fetchProducts'
-import { ProductSuggested } from './ProductSuggested'
-import { createPendingExchange } from './hooks/createPendingExchange'
-import { deleteSuggestions } from './hooks/deleteSuggestions'
-import { sendContactEmail } from './hooks/sendContactEmail'
+import { fetchMainProduct } from '../MySuggestionsList/hooks/fetchMainProduct'
+import { fetchProducts } from '../MySuggestionsList/hooks/fetchProducts'
 import { fetchFotosUrls } from '../../utils/fotoUtils'
 import { decodeToken } from '../../utils/tokenUtils'
 import useConversor from '../../utils/useConversor'
-import enviarNotificacion from '../Notificaciones/enviarNotificacion'
-export const SuggestDetail = () => {
+export const ExchangeDetails = () => {
   const navigate = useNavigate()
   const { id } = useParams('')
   const [mainProduct, setMainProduct] = useState({
@@ -102,37 +97,6 @@ export const SuggestDetail = () => {
     fetchOfferedProductsFotos()
   }, [offeredProducts])
 
-  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
-
-  const handleAcceptExchange = async (e) => {
-    e.preventDefault()
-    try {
-      const resultPending = await createPendingExchange(id)
-      if (!resultPending.ok) throw new Error('Error al aceptar el trueque')
-
-      const resultDeletion = await deleteSuggestions(mainProduct.idPublicacion)
-      if (!resultDeletion.ok) throw new Error('Error al eliminar las sugerencias')
-
-      await Promise.all(
-        offeredProducts.map(async (product) => {
-          const result = await deleteSuggestions(product.idPublicacion)
-          if (!result.ok) throw new Error('Error al eliminar las sugerencias')
-        })
-      )
-
-      const sendMail = await sendContactEmail(mainProduct.DNI, offeredProducts[0].DNI)
-      if (!sendMail.ok) throw new Error('Error al enviar el correo')
-
-      toast.success('Trueque aceptado')
-      enviarNotificacion('default', 'Revisa tu correo electrónico asociado', mainProduct.DNI)
-      enviarNotificacion('default', 'Revisa tu correo electrónico asociado', offeredProducts[0].DNI)
-      await delay(2500)
-      navigate('/')
-    } catch (error) {
-      console.error('Error handling exchange:', error)
-      toast.error(error.message || 'Hubo un error al procesar la solicitud')
-    }
-  }
   return (
     <>
       <Toaster richColors={true} duration={1500} />
@@ -232,16 +196,7 @@ export const SuggestDetail = () => {
                   </div>
                 ))}
               </div>
-              {tokenDNI == mainProduct.DNI ? (
-                <button
-                  onClick={handleAcceptExchange}
-                  className="ring-offset-background focus-visible:ring-ring border-input bg-background inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border px-3 text-sm font-medium transition-colors hover:scale-105 hover:bg-green-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-                >
-                  Aceptar Trueque
-                </button>
-              ) : (
-                <div className="inline-flex h-9 px-3"></div>
-              )}
+              <div className="inline-flex h-9 px-3"></div>
             </div>
           </div>
         </div>

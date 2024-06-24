@@ -15,10 +15,10 @@ export default {
         'fede-texto-claro': ' #808080', //placeholder
         'fede-texto-input': '#000000',
         'fede-texto-base': '#000000  ',
-        'fede-rojo': '#FF0000',
-        'fede-verde': '#00FF00',
-        'fede-amarillo': '#FFFF00',
-        'fede-azul': '#0000FF'
+        'fede-rojo': '#FF9380', // Rojo
+        'fede-verde': '#AFE0A8', // Verde
+        'fede-azul': '#AFD9FD', // Azul
+        'fede-amarillo': '#FFE88B' // Amarillo
         //231C07 marron oscuro cute
       }
     }

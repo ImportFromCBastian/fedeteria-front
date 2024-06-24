@@ -1,19 +1,20 @@
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { fetchFotosUrls } from '../../utils/fotoUtils'
 import { publicationInfo } from './hooks/publicationInfo'
-import { useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
 import { fetchProducts } from './hooks/fetchProducts'
-export const Suggest = ({ mainPublicationID, publicationCount, exchangeID }) => {
+
+export const SentSuggest = ({ mainPublicationID, publicationCount, exchangeID }) => {
   const navigate = useNavigate()
   const [fotoUrl, setFotoUrl] = useState('')
   const [publication, setPublication] = useState({})
-  const [offeredPublication, setOfferedPublication] = useState({})
-  const [offeredFotoUrl, setOfferedFotoUrl] = useState('')
+  const [myPublication, setMyPublication] = useState({})
+  const [myPubFotoUrl, setMyPubFotoUrl] = useState('')
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch the main publication data
+        // Fetch the main publication data (the one sent as offer)
         const urls = await fetchFotosUrls(mainPublicationID)
         if (urls.length > 0) {
           setFotoUrl(urls[0])
@@ -21,13 +22,14 @@ export const Suggest = ({ mainPublicationID, publicationCount, exchangeID }) => 
         const pubInfo = await publicationInfo(mainPublicationID)
         setPublication(pubInfo)
 
+        // Fetch the desired publication data (the one to which the suggestion was made)
         if (publicationCount === 1) {
           const offeredPubInfo = await fetchProducts(exchangeID)
           if (offeredPubInfo.length > 0) {
-            setOfferedPublication(offeredPubInfo[0])
+            setMyPublication(offeredPubInfo[0])
             const offeredUrls = await fetchFotosUrls(offeredPubInfo[0].idPublicacion)
             if (offeredUrls.length > 0) {
-              setOfferedFotoUrl(offeredUrls[0])
+              setMyPubFotoUrl(offeredUrls[0])
             }
           }
         }
@@ -37,7 +39,7 @@ export const Suggest = ({ mainPublicationID, publicationCount, exchangeID }) => 
     }
 
     fetchData()
-  }, [mainPublicationID, exchangeID, publicationCount])
+  }, [mainPublicationID, exchangeID])
 
   const handleClick = () => {
     navigate(`/ver_sugerencia/${exchangeID}`)
@@ -46,21 +48,30 @@ export const Suggest = ({ mainPublicationID, publicationCount, exchangeID }) => 
   return (
     <div
       onClick={handleClick}
-      className=" relative rounded-lg border bg-white p-4 shadow-md transition-transform duration-300 hover:scale-105 hover:cursor-pointer hover:shadow-xl"
+      className="relative rounded-lg border bg-white p-4 shadow-md transition-transform duration-300 hover:scale-105 hover:cursor-pointer hover:shadow-xl"
     >
-      {/* Siempre se muestra la imagen y el nombre del producto principal */}
-      <div className="flex items-center">
-        <img
-          src={fotoUrl || '/placeholder-image.jpg'}
-          alt={publication.nombre || 'Cargando...'}
-          className="h-24 w-24 rounded-xl bg-white object-fill"
-        />
-        <h3 className="mb-2 ml-4 text-lg font-medium">
-          {publication.nombre || 'Nombre del Producto'}
-        </h3>
+      <div className=" flex h-24 items-center">
+        {publicationCount === 1 ? (
+          <div className="flex items-center">
+            <div className="flex items-center justify-center">
+              <img
+                src={myPubFotoUrl || '/placeholder-image.jpg'}
+                alt={myPublication.nombre || 'Cargando...'}
+                className="h-24 w-24 rounded-xl bg-white object-fill"
+              />
+              <h3 className="mb-2 ml-4 text-lg font-medium">
+                {myPublication.nombre || 'Nombre del Producto'}
+              </h3>
+            </div>
+          </div>
+        ) : (
+          <h3 className="mb-2 ml-4 text-lg font-medium">
+            {publicationCount} productos a cambio...
+          </h3>
+        )}
       </div>
 
-      {/* Ícono de intercambio y cantidad de productos ofrecidos */}
+      {/* Ícono de intercambio y producto deseado (sugerencia enviada) */}
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="relative">
           <svg
@@ -83,23 +94,14 @@ export const Suggest = ({ mainPublicationID, publicationCount, exchangeID }) => 
         </div>
 
         <div className="absolute right-4 flex items-center">
-          {/* Se muestra la imagen del producto ofrecido solo si hay uno */}
-          {publicationCount === 1 ? (
-            <div className="flex items-center justify-center">
-              <h3 className="mb-2 ml-4 text-lg font-medium">
-                {offeredPublication.nombre || 'Nombre del Producto'}
-              </h3>
-              <img
-                src={offeredFotoUrl || '/placeholder-image.jpg'}
-                alt={offeredPublication.nombre || 'Cargando...'}
-                className="ml-2 h-24 w-24 rounded-xl bg-white object-fill"
-              />
-            </div>
-          ) : (
-            <h3 className="mb-2 ml-4 text-lg font-medium">
-              {publicationCount} productos a cambio...
-            </h3>
-          )}
+          <h3 className="mb-2 mr-4 text-lg font-medium">
+            {publication.nombre || 'Nombre del Producto'}
+          </h3>
+          <img
+            src={fotoUrl || '/placeholder-image.jpg'}
+            alt={publication.nombre || 'Cargando...'}
+            className="h-24 w-24 rounded-xl bg-white object-fill"
+          />
         </div>
       </div>
     </div>
