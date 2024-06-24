@@ -25,6 +25,9 @@ import { RegisterDetailsModal } from './components/MyExchangesList/RegisterDetai
 import { MisPublicaciones } from './components/publicaciones/MisPublicaciones.jsx'
 import { ExchangesList } from './components/MyExchangesList/ExchangesList.jsx'
 import { ExchangeDetails } from './components/MyExchangesList/ExchangeDetails.jsx'
+import { ListarTruequesDeMiSucursal } from './components/Trueques/ListarTruequesDeMiSucursal.jsx'
+import { ExchangeDetail } from './components/Trueques/ExchangeDetail.jsx' //este y el de exchange details creo que hacen exactamente lo mismo solo que uno lo hizo fabri y uno yo xp
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -49,6 +52,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             element={<ModificarPublicacion />}
           />
           <Route path="/listado_sucursales" element={<ListarSucursales />} />
+          <Route
+            path="/listado_de_trueques_de_mi_sucursal"
+            element={<ListarTruequesDeMiSucursal />}
+          />
           <Route path="/ver_mis_sugerencias" element={<SuggestedExchangesList />} />
           <Route path="/unauthorized" element={<UnauthorizedAccessPage />} />
           <Route path="/ver_sugerencia/:id" element={<SuggestDetail />} />
@@ -57,6 +64,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/ver_mis_publicaciones" element={<MisPublicaciones />} />
           <Route path="/intercambios" element={<ExchangesList />} />
           <Route path="/ver_intercambio/:id" element={<ExchangeDetails />} />
+          <Route path="/ver_trueque/:id" element={<ExchangeDetail />} /> //este y el de arriba 
+
         </Route>
       </Routes>
     </BrowserRouter>
