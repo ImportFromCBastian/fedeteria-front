@@ -23,7 +23,7 @@ import { SuggestDetail } from './components/MySuggestionsList/SuggestDetatil.jsx
 import { ActiveExchanges } from './components/ActiveExchanges/ActiveExchanges.jsx'
 import { RegisterDetails } from './components/MySuggestionsList/RegisterDetails.jsx'
 import { MisPublicaciones } from './components/publicaciones/MisPublicaciones.jsx'
-
+import { DashBoards } from './components/DashBoards/DashBoards.jsx'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
@@ -53,6 +53,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/mis_trueques_activos" element={<ActiveExchanges />} />
           <Route path="/registrar-detalles" element={<RegisterDetails />} />
           <Route path="/ver_mis_publicaciones" element={<MisPublicaciones />} />
+          <Route path="/dashboards" element={<DashBoards />} />
         </Route>
       </Routes>
     </BrowserRouter>

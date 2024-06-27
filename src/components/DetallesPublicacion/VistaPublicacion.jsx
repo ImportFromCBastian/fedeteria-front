@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { CommentForm } from './DejarConsulta'
+import { ConsultaForm } from './DejarConsulta'
 import { useParams, useNavigate } from 'react-router-dom'
 import getCategory from '/src/utils/useConversor.jsx'
 import { toast, Toaster } from 'sonner'
@@ -7,7 +7,7 @@ import { AceptarDenegar } from './Aceptar-Denegar'
 import { fetchFotosUrls } from '../../utils/fotoUtils'
 import { decodeToken } from '../../utils/tokenUtils'
 import enviarNotificacion from '../Notificaciones/enviarNotificacion'
-
+import { Consultas } from './Consultas'
 export const DetallesPublicacion = () => {
   const navigate = useNavigate()
   const { id } = useParams()
@@ -16,7 +16,8 @@ export const DetallesPublicacion = () => {
   const [suggestPublications, setSuggestPublications] = useState([])
   const [isSuggested, setIsSuggested] = useState(false)
   const [decodedToken, setDecodedToken] = useState({})
-  const [comment, setComment] = useState('')
+  const [consulta, setConsulta] = useState('')
+  const [consultas, setConsultas] = useState([])
   const [publicacion, setPublicacion] = useState({
     idPublicacion: null,
     nombre: '',
@@ -52,6 +53,15 @@ export const DetallesPublicacion = () => {
           break
         }
       }
+    }
+    const fetchConsultas = async () => {
+      return await fetch(`${import.meta.env.VITE_BASE_URL}/publication/consulta/${idPublicacion}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setConsultas(data)
+          return data
+        })
+        .catch((err) => new Error(err))
     }
     const fetchPublicacion = async () => {
       const token = localStorage.getItem('token')
@@ -94,6 +104,7 @@ export const DetallesPublicacion = () => {
         console.error('Error al obtener las fotos:', error)
       }
     }
+    fetchConsultas()
     exchangable()
     fetchPublicacion()
     fetchFotos()
@@ -333,187 +344,24 @@ export const DetallesPublicacion = () => {
           <div className="grid items-start gap-4 rounded-md border border-fede-main bg-fede-secundary p-4 md:gap-10">
             <div className="grid gap-4">
               <h2 className="text-2xl font-bold">Consultas</h2>
-              <div className="grid gap-6">
-                <div className="flex gap-4">
-                  <span className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full border">
-                    <img
-                      className="aspect-square h-full w-full"
-                      alt="@shadcn"
-                      src="/placeholder-user.jpg"
-                    />
-                  </span>
-                  <div className="grid gap-2">
-                    <div className="flex items-center gap-4">
-                      <h3 className="text-base font-semibold">Usuario 1</h3>
-                      <div className="flex items-center gap-0.5">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="fill-primary h-5 w-5"
-                        >
-                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="fill-primary h-5 w-5"
-                        >
-                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="fill-primary h-5 w-5"
-                        >
-                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="fill-muted stroke-muted-foreground h-5 w-5"
-                        >
-                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="fill-muted stroke-muted-foreground h-5 w-5"
-                        >
-                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                        </svg>
-                      </div>
-                    </div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      Consulta del usuario 1 sobre el artículo.
-                    </p>
-                  </div>
-                </div>
-                <div className="flex gap-4">
-                  <span className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full border">
-                    <img
-                      className="aspect-square h-full w-full"
-                      alt="@shadcn"
-                      src="/placeholder-user.jpg"
-                    />
-                  </span>
-                  <div className="grid gap-2">
-                    <div className="flex items-center gap-4">
-                      <h3 className="text-base font-semibold">Usuario 2</h3>
-                      <div className="flex items-center gap-0.5">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="fill-primary h-5 w-5"
-                        >
-                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="fill-primary h-5 w-5"
-                        >
-                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="fill-primary h-5 w-5"
-                        >
-                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="fill-muted stroke-muted-foreground h-5 w-5"
-                        >
-                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="fill-muted stroke-muted-foreground h-5 w-5"
-                        >
-                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                        </svg>
-                      </div>
-                    </div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      Consulta del usuario 2 sobre el artículo.
-                    </p>
-                  </div>
-                </div>
+              <div className="grid gap-4">
+                {consultas.length === 0 ? (
+                  <p>Se el primero en consultar!</p>
+                ) : (
+                  consultas.map((consulta, index) => <Consultas consulta={consulta} key={index} />)
+                )}
               </div>
-              <CommentForm comment={comment} setComment={setComment} maxLength={maxLength} />
+              {parseInt(decodedToken.DNI) !== publicacion.DNI && (
+                <ConsultaForm
+                  consulta={consulta}
+                  setConsulta={setConsulta}
+                  maxLength={maxLength}
+                  idPublicacion={idPublicacion}
+                  dni={decodedToken.DNI}
+                  dniPublicacion={publicacion.DNI}
+                  nombrePublicacion={publicacion.nombre}
+                />
+              )}
             </div>
           </div>
         </div>
