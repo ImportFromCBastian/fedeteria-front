@@ -14,7 +14,6 @@ export const PaymentModal = ({ price, close }) => {
     const token = localStorage.getItem('token')
     const worker = await decodeToken(token)
     paymentData.dniEmpleado = worker.DNI
-    console.log(paymentData.pago)
     if (paymentData.dniCliente === '' || paymentData.pago === 0) return alert('Completa los campos')
 
     //me da paja validar el dni 🌽
