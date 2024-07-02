@@ -346,9 +346,21 @@ export const DetallesPublicacion = () => {
               <h2 className="text-2xl font-bold">Consultas</h2>
               <div className="grid gap-4">
                 {consultas.length === 0 ? (
-                  <p>Se el primero en consultar!</p>
+                  parseInt(decodedToken.DNI) === publicacion.DNI ? (
+                    <p>Aún no hay consultas sobre tu publicacion!</p>
+                  ) : (
+                    <p>Se el primero en consultar!</p>
+                  )
                 ) : (
-                  consultas.map((consulta, index) => <Consultas consulta={consulta} key={index} />)
+                  consultas.map((consulta, index) => (
+                    <Consultas
+                      consulta={consulta}
+                      key={index}
+                      decodedDNI={decodedToken.DNI}
+                      publicacionDNI={publicacion.DNI}
+                      nombrePublicacion={publicacion.nombre}
+                    />
+                  ))
                 )}
               </div>
               {parseInt(decodedToken.DNI) !== publicacion.DNI && (

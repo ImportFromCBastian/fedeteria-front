@@ -12,7 +12,6 @@ export const useHandlerConsulta = (
   const handleSubmit = (e) => {
     e.preventDefault()
     createConsulta(consulta, idPublicacion, dni)
-    console.log(dniPublicacion)
     enviarNotificacion(
       'consulta',
       `Tienes una nueva consulta en tu publicación: ${nombrePublicacion}`,
