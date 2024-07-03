@@ -6,7 +6,7 @@ import { SuggestAccept } from './SuggestAccept'
 import { fetchAvailableTimes } from './hooks/fetchAvailableTimes.jsx'
 import { useRegisterDetails } from './hooks/useRegisterDetails.jsx'
 import { toast, Toaster } from 'sonner'
-
+import dateSchema from './hooks/validator/dateSchema.jsx'
 export const RegisterDetails = () => {
   const navigate = useNavigate()
   const [suggestions, setSuggestions] = useState([])
@@ -129,6 +129,15 @@ export const RegisterDetails = () => {
       selectedSucursal,
       selectedDay,
       selectedTime
+    }
+    try {
+      dateSchema.validateSync(selectedDay, { abortEarly: false }) //valido que la fecha sea mayor a el dia actual.
+    } catch (error) {
+      const { errors } = error
+      for (let i = 0; i < errors.length; i++) {
+        toast.error(errors[i])
+      }
+      return
     }
     useRegisterDetails(data, id)
   }

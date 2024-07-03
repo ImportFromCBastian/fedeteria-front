@@ -2,6 +2,8 @@ import { BarChart, DonutChart } from '@tremor/react'
 import { Card, Metric, Text } from '@tremor/react'
 import { DatePicker, DateRangePicker } from '@tremor/react'
 import { getSucursalesConTrueques } from './hooks/getSucursalesConTrueques'
+import { getUsuarios } from './hooks/getUsuarios.jsx'
+import { getClientesPorSucursal } from './hooks/getClientesPorSucursal.jsx'
 import { useEffect, useState } from 'react'
 import { decodeToken } from '../../utils/tokenUtils'
 import { useNavigate } from 'react-router-dom'
@@ -9,12 +11,15 @@ import { useNavigate } from 'react-router-dom'
 export const DashBoards = () => {
   const navigate = useNavigate()
   const [data, setData] = useState([])
+  const [users, setUsers] = useState([])
+  const [clients, setClients] = useState([])
   const [display, setDisplay] = useState()
   const [display2, setDisplay2] = useState()
 
   const dataFormatter = (number) => Intl.NumberFormat('us').format(number).toString()
   const { fetchSucursalesConTrueques } = getSucursalesConTrueques(setData, setDisplay, setDisplay2)
-
+  const { fetchUsers } = getUsuarios(setUsers)
+  const { fetchClients } = getClientesPorSucursal(setClients)
   useEffect(() => {
     const token = localStorage.getItem('token')
     if (token === null) {
@@ -28,21 +33,20 @@ export const DashBoards = () => {
         return
       }
       fetchSucursalesConTrueques()
+      fetchUsers()
+      // fetchClients() no nada me dice que la ruta no existe! /user/client quiero hacer el get
     }
     fetchData()
   }, [])
   return (
-    <div className=" grid-cols-2 ">
-      <Card
-        className="float-left mx-auto max-w-xl text-slate-50"
-        decoration="top"
-        decorationColor="indigo"
-      >
-        Cantidad de Trueques por Sucursal
+    // <div className="flex min-h-screen items-center justify-center bg-blue-500 bg-opacity-50">
+    <div className="mx-auto grid max-w-6xl grid-cols-1 gap-4 md:grid-cols-2">
+      <Card className="mx-auto max-w-xl p-4" decoration="top" decorationColor="indigo">
+        <Text className="mb-4 text-center font-bold">Cantidad de Trueques por Sucursal</Text>
         <BarChart
           data={data}
           index="nombre"
-          categories={['CantidadDeTrueques']} //PONER BIEN EL NOMBRE DE LO QUE EL ARRAY TIENE Y QUE VA A USAR COMO Y EN LA GRAFICA.
+          categories={['CantidadDeTrueques']}
           colors={['yellow']}
           valueFormatter={dataFormatter}
           yAxisWidth={48}
@@ -50,12 +54,8 @@ export const DashBoards = () => {
           onValueChange={(v) => console.log(v)}
         />
       </Card>
-      <Card
-        className="float-left mx-auto my-auto max-w-xs text-slate-50"
-        decoration="top"
-        decorationColor="indigo"
-      >
-        Cantidad de Trueques por Sucursal
+      <Card className="mx-auto max-w-xs p-4" decoration="top" decorationColor="indigo">
+        <Text className="mb-4 text-center font-bold">Cantidad de Trueques por Sucursal</Text>
         <DonutChart
           data={data}
           category="CantidadDeTrueques"
@@ -73,6 +73,18 @@ export const DashBoards = () => {
           }}
         />
       </Card>
+      <Card className="mx-auto max-w-xl p-4" decoration="top" decorationColor="indigo">
+        <Text className="mb-4 text-center font-bold">Cantidad de Usuarios en la Plataforma</Text>
+        <DonutChart
+          data={users}
+          index="DNI"
+          category="count"
+          valueFormatter={dataFormatter}
+          colors={['blue', 'cyan', 'indigo', 'violet', 'fuchsia']}
+          showAnimation={true}
+        />
+      </Card>
     </div>
+    // </div>
   )
 }
