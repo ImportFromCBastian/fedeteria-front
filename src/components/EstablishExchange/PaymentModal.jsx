@@ -1,12 +1,16 @@
 import { useState } from 'react'
 import { decodeToken } from '../../utils/tokenUtils'
+import { toast } from 'sonner'
 
-export const PaymentModal = ({ price, close }) => {
+export const PaymentModal = ({ price, close, clients }) => {
+  const [mainClient] = clients[0]
+  const [offeredClient] = clients[1]
   const [paymentData, setPaymentData] = useState({
     dniCliente: '',
     pago: '',
     dniEmpleado: '',
-    precio: price
+    precio: price,
+    idLocal: 0
   })
 
   const handleConfirm = async (e) => {
@@ -14,9 +18,16 @@ export const PaymentModal = ({ price, close }) => {
     const token = localStorage.getItem('token')
     const worker = await decodeToken(token)
     paymentData.dniEmpleado = worker.DNI
-    if (paymentData.dniCliente === '' || paymentData.pago === 0) return alert('Completa los campos')
+    if (paymentData.dniCliente === '' || paymentData.pago === 0)
+      return toast.warning('Completa los campos')
 
-    //me da paja validar el dni 🌽
+    const local = await fetch(`${import.meta.env.VITE_BASE_URL}/user/worker/${worker.DNI}`)
+      .then((res) => res.json())
+      .then((data) => data.data.idLocal)
+      .catch((err) => console.log(err))
+
+    if (local === undefined || local === null) return toast.warning('No tienes un local asignado')
+    paymentData.idLocal = local
 
     const result = await fetch(`${import.meta.env.VITE_BASE_URL}/sale`, {
       method: 'POST',
@@ -25,8 +36,9 @@ export const PaymentModal = ({ price, close }) => {
       },
       body: JSON.stringify({ paymentData })
     }).then((res) => res.json())
-    if (result.ok === false) return alert(`${result.error}`)
-    alert('Pago confirmado')
+
+    if (result.ok === false) return toast.warning(`${result.error}`)
+    toast.success('Pago confirmado')
     close()
   }
   const handleChange = (e) => {
@@ -41,7 +53,11 @@ export const PaymentModal = ({ price, close }) => {
         <h1 className="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">
           Confirmar pago
         </h1>
-        <input onChange={handleChange} name="dniCliente" placeholder="DNI del cliente"></input>
+        <select name="dniCliente" onChange={handleChange}>
+          <option value="0">Selecciona un cliente</option>
+          <option value={mainClient.DNI}>{mainClient.DNI}</option>
+          <option value={offeredClient.DNI}>{offeredClient.DNI}</option>
+        </select>
         <select name="pago" onChange={handleChange}>
           <option value="0">Selecciona un metodo</option>
           <option value="Efectivo">Efectivo</option>

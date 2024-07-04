@@ -6,17 +6,26 @@ import { PaymentModal } from './PaymentModal'
 import { AddProductModal } from './AddProductModal'
 import { modalHandler } from './hooks/modalHandler'
 
-export const ExchangeSales = () => {
+export const ExchangeSales = ({ exchangeData }) => {
   const [productList, setProductList] = useState([{ idProducto: 0, nombre: '', precio: 0 }])
   const [products, setProducts] = useState([])
+  const [clients, setClients] = useState([])
   const [total, setTotal] = useState(0)
   const [modal, setModal] = useState('')
   const { fetchProducts } = fetchExchangeUtils(setProductList)
   const { openPaymentModal, openAddProductModal, closeModal } = modalHandler(setModal)
   const navigate = useNavigate()
 
+  const fetchClients = async () => {
+    await fetch(`${import.meta.env.VITE_BASE_URL}/exchange/clients/${exchangeData.idTrueque}`)
+      .then((res) => res.json())
+      .then((data) => setClients(data))
+      .catch((err) => new Error(err))
+  }
+
   useEffect(() => {
     fetchProducts()
+    fetchClients()
   }, [])
 
   const changeProductList = (index, action) => {
@@ -38,7 +47,7 @@ export const ExchangeSales = () => {
 
   return (
     <>
-      {modal === 'payment' && <PaymentModal price={total} close={closeModal} />}
+      {modal === 'payment' && <PaymentModal price={total} close={closeModal} clients={clients} />}
       {modal === 'addProduct' && <AddProductModal update={updateList} close={closeModal} />}
       <button
         onClick={() => navigate('/')}

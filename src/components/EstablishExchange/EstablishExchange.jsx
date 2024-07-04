@@ -33,7 +33,7 @@ export const EstablishExchange = () => {
             childCancel={handleCancelExchange}
           />
         )}
-        {state === 'rs' && <ExchangeSales />}
+        {state === 'rs' && <ExchangeSales exchangeData={exchangeData} />}
       </div>
     </div>
   )
