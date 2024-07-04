@@ -146,7 +146,7 @@ export const Exchange = ({
       </div>
       <div
         className={`relative -ml-3 rounded-lg ${color} flex h-32 w-36 items-center justify-center`}
-        onClick={(e) => e.stopPropagation()}
+        onClick={handleClick}
       >
         {(() => {
           switch (realizado) {
