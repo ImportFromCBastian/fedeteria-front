@@ -3,16 +3,7 @@ import { publicationInfo } from '../MySuggestionsList/hooks/publicationInfo'
 import { useEffect, useState } from 'react'
 import { fetchExchangeProduct } from '../MyExchangesList/hooks/fetchExchangeProduct'
 
-export const ExchangeChikito = ({
-  mainPublicationID,
-  publicationCount,
-  exchangeID,
-  realizado,
-  fecha,
-  hora,
-  rol,
-  openModal
-}) => {
+export const ExchangeChikito = ({ mainPublicationID, publicationCount, exchangeID }) => {
   const [fotoUrl, setFotoUrl] = useState('')
   const [publication, setPublication] = useState(null)
   const [offeredPublication, setOfferedPublication] = useState(null)
@@ -52,11 +43,8 @@ export const ExchangeChikito = ({
           <img
             src={fotoUrl || '/placeholder-image.jpg'}
             alt={publication?.nombre || 'Cargando...'}
-            className="h-14 w-14 rounded-xl bg-white object-fill"
+            className="h-12 w-12 rounded-xl bg-white object-fill"
           />
-          <h3 className="ml-4 overflow-hidden text-ellipsis whitespace-normal break-words text-base font-medium">
-            {publication?.nombre || 'Nombre del Producto'}
-          </h3>
         </div>
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="relative">
@@ -70,7 +58,7 @@ export const ExchangeChikito = ({
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="h-8 w-8 text-gray-500"
+              className="h-4 w-4 text-gray-500"
             >
               <path d="M8 3L4 7l4 4"></path>
               <path d="M4 7h16"></path>
@@ -81,18 +69,15 @@ export const ExchangeChikito = ({
           <div className="absolute right-4 flex items-center">
             {publicationCount === 1 && offeredPublication ? (
               <div className="flex items-center justify-center">
-                <h3 className="mb-2 ml-4 overflow-hidden text-ellipsis whitespace-normal break-words text-base font-medium">
-                  {offeredPublication?.nombre || 'Nombre del Producto'}
-                </h3>
                 <img
                   src={offeredFotoUrl || '/placeholder-image.jpg'}
                   alt={offeredPublication?.nombre || 'Cargando...'}
-                  className="ml-2 h-14 w-14 rounded-xl bg-white object-fill"
+                  className="ml-2 h-12 w-12 rounded-xl bg-white object-fill"
                 />
               </div>
             ) : (
-              <h3 className="mb-2 ml-4 overflow-hidden text-ellipsis whitespace-normal break-words text-lg font-medium">
-                {publicationCount} productos a cambio...
+              <h3 className="mb-2 ml-4 overflow-hidden text-ellipsis whitespace-normal break-words text-xs font-medium">
+                {publicationCount} productos <br /> a cambio...
               </h3>
             )}
           </div>

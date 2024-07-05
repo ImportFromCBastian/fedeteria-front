@@ -5,16 +5,11 @@ import 'react-multi-carousel/lib/styles.css'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ExchangeChikito } from './ExchangeChikito'
-import { fetchExchanges } from '../MyExchangesList/hooks/fetchExchanges'
+import { fetchExchanges } from './hooks/fetchExchanges'
 
 export const PublicationList = ({ publications }) => {
   const navigate = useNavigate()
   const [exchanges, setExchanges] = useState([])
-  const [selectedExchangeID, setSelectedExchangeID] = useState(null) // Estado para el intercambio seleccionado
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [nombrePublicacion, setNombrePublicacion] = useState('')
-  const [publicationCount, setPublicationCount] = useState(0)
-  const [nombreOfrecida, setNombreOfrecida] = useState('')
 
   useEffect(() => {
     fetchExchanges(setExchanges, navigate)
@@ -22,16 +17,12 @@ export const PublicationList = ({ publications }) => {
 
   const openModal = (exchangeID, nombrePublicacion, publicationCount, nombreOfrecida) => {
     setSelectedExchangeID(exchangeID)
-    setIsModalOpen(true)
-    setNombrePublicacion(nombrePublicacion)
-    setPublicationCount(publicationCount)
-    setNombreOfrecida(nombreOfrecida)
   }
 
   const responsive = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
-      items: 3,
+      items: 5,
       slidesToSlide: 1 // optional, default to 1.
     },
     tablet: {
@@ -53,12 +44,13 @@ export const PublicationList = ({ publications }) => {
   return (
     <div className="flex min-h-screen flex-col">
       <Toaster position="bottom-right" />
-      <section className="grid flex-grow grid-cols-1 gap-6 p-4 sm:grid-cols-2 md:grid-cols-3 md:p-6 lg:grid-cols-4">
+      <section className="grid flex-grow grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 md:p-6 lg:grid-cols-4">
         {publications.map((publication, index) => (
           <Publication key={index} publication={publication} onError={handleError} />
         ))}
       </section>
-      <div className="sticky bottom-0 w-full bg-white">
+
+      <div className="sticky -bottom-2 w-full bg-white">
         <Carousel
           swipeable={false}
           draggable={false}
@@ -67,15 +59,15 @@ export const PublicationList = ({ publications }) => {
           ssr={true}
           infinite={true}
           autoPlay={true}
-          autoPlaySpeed={0}
-          keyBoardControl={true}
-          customTransition="transform 10s linear"
-          transitionDuration={10000}
+          autoPlaySpeed={3000} // 3 segundos entre movimientos
+          keyBoardControl={false}
+          customTransition="transform 4s linear" // 3 segundos de duración de la transición
+          transitionDuration={4000} // 3 segundos de duración de la transición
           containerClass="carousel-container h-24"
           removeArrowOnDeviceType={['desktop']}
           deviceType={'desktop'}
-          dotListClass="custom-dot-list-style"
-          itemClass="carousel-item-padding-40-px h-24"
+          itemClass="carousel-item-padding-0-px h-24"
+          rewind={false}
         >
           {exchanges.length === 0 ? (
             <p>No tenés trueques activos!</p>
