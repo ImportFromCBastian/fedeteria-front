@@ -1,14 +1,14 @@
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { fetchFotosUrls } from '../../utils/fotoUtils'
 import { publicationInfo } from '../MySuggestionsList/hooks/publicationInfo'
-import { useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
 import { fetchExchangeProductsByID } from './fetchExchangeProductsByID'
 import { getExchangeInfoById } from './fetchExchangeInfo'
 import { getState } from '../../utils/useConversorState'
-import { format } from 'date-fns' // Importa la función format de date-fns
-import { es } from 'date-fns/locale' // Importa el locale español
+import { format } from 'date-fns'
+import { es } from 'date-fns/locale'
 
-export const Exchange = ({ mainPublicationID, publicationCount, exchangeID, state }) => {
+const Exchange = ({ mainPublicationID, publicationCount, exchangeID, state }) => {
   const navigate = useNavigate()
   const [fotoUrl, setFotoUrl] = useState('')
   const [publication, setPublication] = useState({})
@@ -80,13 +80,30 @@ export const Exchange = ({ mainPublicationID, publicationCount, exchangeID, stat
   }, [mainPublicationID, exchangeID, publicationCount])
 
   const handleClick = () => {
-    navigate(`/ver_trueque/${exchangeID}`)
+    navigate(`/ver_intercambio/${exchangeID}`)
   }
+
+  const getColorClass = (realizado) => {
+    switch (realizado) {
+      case 0:
+        return 'bg-fede-rojo'
+      case 1:
+        return 'bg-fede-verde'
+      case 2:
+        return 'bg-fede-azul'
+      case 3:
+        return 'bg-fede-amarillo'
+      default:
+        return 'bg-white'
+    }
+  }
+
+  const colorClass = getColorClass(trueque.realizado)
 
   return (
     <div
       onClick={handleClick}
-      className="relative rounded-lg border bg-white p-4 shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-xl"
+      className={`relative rounded-lg border p-4 shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-xl ${colorClass}`}
       style={{ minWidth: '320px' }} // Ajusta el ancho mínimo según tus necesidades
     >
       <div className="flex items-center">
@@ -156,8 +173,12 @@ export const Exchange = ({ mainPublicationID, publicationCount, exchangeID, stat
               <br />a las {String(trueque.hora).slice(0, 5)}{' '}
             </p>
           )}
+          {state !== 3 && (
+            <p className="ml-2 text-xs font-semibold text-black">&nbsp;&nbsp;&nbsp;&nbsp;</p>
+          )}
         </div>
       </div>
     </div>
   )
 }
+export { Exchange }

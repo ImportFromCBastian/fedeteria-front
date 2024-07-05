@@ -49,6 +49,7 @@ export const ExchangeDetail = () => {
     // Primero, obtienes y estableces el mainProduct
     const mainProduct = await fetchExchangeMainProductByID(id)
     setMainProduct(mainProduct)
+    console.log(mainProduct)
 
     // Luego, obtienes los productos ofrecidos
     const fetchedProducts = await fetchExchangeProductsByID(id)
