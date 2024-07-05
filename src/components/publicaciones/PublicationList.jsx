@@ -15,10 +15,6 @@ export const PublicationList = ({ publications }) => {
     fetchExchanges(setExchanges, navigate)
   }, [navigate])
 
-  const openModal = (exchangeID, nombrePublicacion, publicationCount, nombreOfrecida) => {
-    setSelectedExchangeID(exchangeID)
-  }
-
   const responsive = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
@@ -51,42 +47,37 @@ export const PublicationList = ({ publications }) => {
       </section>
 
       <div className="sticky -bottom-2 w-full bg-white">
-        <Carousel
-          swipeable={false}
-          draggable={false}
-          showDots={false}
-          responsive={responsive}
-          ssr={true}
-          infinite={true}
-          autoPlay={true}
-          autoPlaySpeed={3000} // 3 segundos entre movimientos
-          keyBoardControl={false}
-          customTransition="transform 4s linear" // 3 segundos de duración de la transición
-          transitionDuration={4000} // 3 segundos de duración de la transición
-          containerClass="carousel-container h-24"
-          removeArrowOnDeviceType={['desktop']}
-          deviceType={'desktop'}
-          itemClass="carousel-item-padding-0-px h-24"
-          rewind={false}
-        >
-          {exchanges.length === 0 ? (
-            <p>No tenés trueques activos!</p>
-          ) : (
-            exchanges.map((exchange, index) => (
-              <ExchangeChikito
-                key={index}
-                mainPublicationID={exchange.productoDeseado}
-                publicationCount={exchange.countPublication}
-                exchangeID={exchange.idTrueque}
-                realizado={exchange.realizado}
-                fecha={exchange.fecha}
-                hora={exchange.hora}
-                rol={exchange.role}
-                openModal={openModal}
-              />
-            ))
-          )}
-        </Carousel>
+        {exchanges.length >= 5 && (
+          <div className="sticky -bottom-2 w-full bg-white">
+            <Carousel
+              swipeable={false}
+              draggable={false}
+              showDots={false}
+              responsive={responsive}
+              ssr={true}
+              infinite={true}
+              autoPlay={true}
+              autoPlaySpeed={3000} // 3 segundos entre movimientos
+              keyBoardControl={false}
+              customTransition="transform 4s linear" // 3 segundos de duración de la transición
+              transitionDuration={4000} // 3 segundos de duración de la transición
+              containerClass="carousel-container h-24"
+              removeArrowOnDeviceType={['desktop']}
+              deviceType={'desktop'}
+              itemClass="carousel-item-padding-0-px h-24"
+              rewind={false}
+            >
+              {exchanges.map((exchange, index) => (
+                <ExchangeChikito
+                  key={index}
+                  mainPublicationID={exchange.productoDeseado}
+                  publicationCount={exchange.countPublication}
+                  exchangeID={exchange.idTrueque}
+                />
+              ))}
+            </Carousel>
+          </div>
+        )}
       </div>
     </div>
   )

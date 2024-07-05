@@ -11,3 +11,5 @@ content-type: application/json
   "birthdate": "2005-01-01",
   "notification": false
 }
+###test
+GET http://localhost:3000/publication/get/byQuery

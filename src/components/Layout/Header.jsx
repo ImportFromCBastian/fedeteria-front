@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import Notificaciones from '../Notificaciones/Notificaciones'
+import { Link, useNavigate } from 'react-router-dom'
 
 export const Header = () => {
   const [user, setUser] = useState(null)
   const [nombre, setNombre] = useState({})
+  const [searchQuery, setSearchQuery] = useState('')
+  const navigate = useNavigate()
 
   const decodeToken = async (token) => {
     return await fetch(`${import.meta.env.VITE_BASE_URL}/user/decode_token`, {
@@ -16,6 +18,16 @@ export const Header = () => {
       .then((response) => response.json())
       .then((data) => data.data)
       .catch((e) => new Error(e))
+  }
+
+  const handleSearchKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      // Redirect to a new route with search query as a parameter
+      if (searchQuery) navigate(`/buscar/${searchQuery}`)
+      else if (location.pathname.startsWith('/buscar/')) {
+        navigate('/')
+      }
+    }
   }
 
   useEffect(() => {
@@ -62,6 +74,9 @@ export const Header = () => {
             style={{
               boxShadow: '0 0 0 0px #2563EB'
             }}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={handleSearchKeyPress} // Listen for Enter key press
           />
         </div>
       </div>
