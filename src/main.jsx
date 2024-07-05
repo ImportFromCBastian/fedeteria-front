@@ -27,7 +27,7 @@ import { ExchangesList } from './components/MyExchangesList/ExchangesList.jsx'
 import { ExchangeDetails } from './components/MyExchangesList/ExchangeDetails.jsx'
 import { ListarTruequesDeMiSucursal } from './components/Trueques/ListarTruequesDeMiSucursal.jsx'
 import { ExchangeDetail } from './components/Trueques/ExchangeDetail.jsx' //este y el de exchange details creo que hacen exactamente lo mismo solo que uno lo hizo fabri y uno yo xp
-
+import { PublicacionesFiltradas } from './components/Busqueda/PublicacionesFiltradas.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -64,8 +64,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/ver_mis_publicaciones" element={<MisPublicaciones />} />
           <Route path="/intercambios" element={<ExchangesList />} />
           <Route path="/ver_intercambio/:id" element={<ExchangeDetails />} />
-          <Route path="/ver_trueque/:id" element={<ExchangeDetail />} /> //este y el de arriba 
-
+          <Route path="/ver_trueque/:id" element={<ExchangeDetail />} /> //este y el de arriba
+          <Route path="/buscar/:query" element={<PublicacionesFiltradas />} />
         </Route>
       </Routes>
     </BrowserRouter>
