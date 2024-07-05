@@ -5,7 +5,7 @@ export const getUsuarios = (setUsers) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setUsers(data)
+        setUsers(data[0].count)
       })
       .catch((error) => console.error(error))
     return response

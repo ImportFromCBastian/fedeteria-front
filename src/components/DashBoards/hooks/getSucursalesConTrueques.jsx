@@ -1,10 +1,11 @@
-export const getSucursalesConTrueques = (setData, setDisplay, setDisplay2) => {
+export const getSucursalesConTrueques = (setData, setDisplay, setDisplay2, setDataSave) => {
   const fetchSucursalesConTrueques = async () => {
     const response = await fetch(`${import.meta.env.VITE_BASE_URL}/exchange`, {
       method: 'GET'
     })
       .then((res) => res.json())
       .then((data) => {
+        setDataSave(data)
         setData(data)
         const sum = data.reduce((accumulator, currentValue) => {
           return accumulator + currentValue.CantidadDeTrueques

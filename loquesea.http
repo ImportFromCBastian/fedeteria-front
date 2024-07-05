@@ -12,4 +12,4 @@ content-type: application/json
   "notification": false
 }
 ###create trueque
-GET http://localhost:3000/exchange
+GET http://localhost:3000/user/client/sucursales/get

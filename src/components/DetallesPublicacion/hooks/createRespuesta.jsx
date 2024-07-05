@@ -10,7 +10,6 @@ export const createRespuesta = async (respuesta, idConsulta, dniDueno) => {
       body: JSON.stringify({ respuesta, idConsulta, dniDueno })
     })
     const data = await response.json()
-    console.log(data)
     if (!response.ok) {
       // Si la respuesta no es exitosa, lanzamos un error con el código de estado
       throw new Error(`Error: ${response.status}`)

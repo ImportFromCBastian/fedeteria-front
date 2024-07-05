@@ -5,13 +5,13 @@ export const Consultas = ({ consulta, decodedDNI, publicacionDNI, nombrePublicac
   const [user, setUser] = useState({})
   const [mostrarFormulario, setMostrarFormulario] = useState(false)
   const maxLength = 100 // Máximo de caracteres permitidos
-  const [respuesta, setRespuesta] = useState('') // Inicializa respuesta como string vacío
+  const [respuesta, setRespuesta] = useState(null)
 
   const toggleMostrarFormulario = () => {
     setMostrarFormulario(!mostrarFormulario)
   }
 
-  const fetchRespuesta = async () => {
+  const fecthRespuesta = async () => {
     try {
       const result = await fetch(
         `${import.meta.env.VITE_BASE_URL}/publication/respuesta/${consulta.idRespuesta}`,
@@ -20,10 +20,7 @@ export const Consultas = ({ consulta, decodedDNI, publicacionDNI, nombrePublicac
         }
       )
       const res = await result.json()
-      // Asegúrate de que res[0] existe y tiene la propiedad textoRespuesta
-      if (res && res.length > 0 && res[0].textoRespuesta) {
-        setRespuesta(res[0].textoRespuesta)
-      }
+      setRespuesta(res[0].textoRespuesta)
     } catch (error) {
       console.error('Error al conseguir la respuesta:', error)
     }
@@ -42,11 +39,11 @@ export const Consultas = ({ consulta, decodedDNI, publicacionDNI, nombrePublicac
   }
 
   useEffect(() => {
-    if (consulta.idRespuesta !== null) {
-      fetchRespuesta()
+    if (consulta.idRespuesta != null) {
+      fecthRespuesta()
     }
     fetchUser()
-  }, [consulta.idRespuesta, consulta.dniUsuario]) // Agrega consulta.dniUsuario a las dependencias de useEffect
+  }, [consulta.dniUsuario])
 
   return (
     <div className="grid gap-4">
@@ -66,18 +63,24 @@ export const Consultas = ({ consulta, decodedDNI, publicacionDNI, nombrePublicac
               {consulta.textoConsulta}
             </p>
             <div>
-              {parseInt(decodedDNI) === publicacionDNI && consulta.idRespuesta === null ? (
-                <button
-                  className="rounded-md bg-blue-500 px-2 py-1 text-xs font-semibold text-white shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                  onClick={toggleMostrarFormulario}
-                >
-                  Responder
-                </button>
-              ) : (
+              {parseInt(decodedDNI) === publicacionDNI ? (
+                consulta.idRespuesta === null ? (
+                  <button
+                    className="rounded-md bg-blue-500 px-2 py-1 text-xs font-semibold text-white shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    onClick={toggleMostrarFormulario}
+                  >
+                    Responder
+                  </button>
+                ) : (
+                  <p className="text-sm text-gray-500 dark:text-gray-600">
+                    <span style={{ fontWeight: 'bold' }}>Respuesta:</span> {respuesta}
+                  </p>
+                )
+              ) : consulta.idRespuesta !== null ? (
                 <p className="text-sm text-gray-500 dark:text-gray-600">
                   <span style={{ fontWeight: 'bold' }}>Respuesta:</span> {respuesta}
                 </p>
-              )}
+              ) : null}
             </div>
             <div className="flex gap-4"></div>
           </div>
@@ -87,8 +90,8 @@ export const Consultas = ({ consulta, decodedDNI, publicacionDNI, nombrePublicac
         <RespuestaForm
           idConsulta={consulta.idConsulta}
           maxLength={maxLength}
-          dniDueno={decodedDNI}
-          dniConsultador={consulta.dniUsuario}
+          dniDueno={decodedDNI} // el que está respondiendo (dueño de la pub)
+          dniConsultador={consulta.dniUsuario} // el que hizo la consulta
           nombrePublicacion={nombrePublicacion}
         />
       )}
