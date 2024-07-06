@@ -1,28 +1,24 @@
-//TODO : Refactor this in multiple archives
 import { Payment } from '@mercadopago/sdk-react'
-import { useState } from 'react'
 import { initMercadoPago } from '@mercadopago/sdk-react'
+import { useParams, useNavigate } from 'react-router-dom'
 
 initMercadoPago(`${import.meta.env.VITE_PUBLIC_KEY}`, {
   locale: 'es-AR'
 })
 
 export const PaymentBrick = () => {
-  const [preferenceId, setPreferenceId] = useState(null)
+  const navigate = useNavigate()
+  const { id } = useParams('')
+  const { pubId } = useParams('')
 
-  //creating preference id
-  const handleOnClick = async () => {
-    await fetch(`${import.meta.env.VITE_BASE_URL}/create_preference`, {
-      method: 'POST'
-    })
-      .then((response) => response.json())
-      .then((data) => setPreferenceId(data))
-      .catch((error) => console.error('Error:', error))
-  }
+  const amount = parseInt(import.meta.env.VITE_AMOUNT)
+
   const initialization = {
-    amount: 2500,
-    preferenceId: preferenceId
+    amount,
+    preferenceId: id
   }
+  //creating preference id
+
   const customization = {
     paymentMethods: {
       creditCard: 'all',
@@ -33,7 +29,8 @@ export const PaymentBrick = () => {
   const onSubmit = async ({ selectedPaymentMethod, formData }) => {
     // callback llamado al hacer clic en el botón enviar datos
     return new Promise((resolve, reject) => {
-      fetch('/process_payment', {
+      formData.pubId = pubId
+      fetch(`${import.meta.env.VITE_BASE_URL}/process_payment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -42,7 +39,18 @@ export const PaymentBrick = () => {
       })
         .then((response) => response.json())
         .then((response) => {
-          // recibir el resultado del pago
+          const featured = async () => {
+            return await fetch(`${import.meta.env.VITE_BASE_URL}/publication/featured/${pubId}`, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            })
+              .then((response) => response.json())
+              .catch((error) => console.error('Error:', error))
+          }
+          featured()
+          navigate(`/ver_publicacion/${pubId}`)
           resolve()
         })
         .catch((error) => {
@@ -53,7 +61,6 @@ export const PaymentBrick = () => {
   }
   const onError = async (error) => {
     // callback llamado para todos los casos de error de Brick
-    console.log(error)
   }
   const onReady = async () => {
     /*
@@ -63,18 +70,14 @@ export const PaymentBrick = () => {
   }
 
   return (
-    <div>
-      {preferenceId ? (
-        <Payment
-          initialization={initialization}
-          customization={customization}
-          onSubmit={onSubmit}
-          onReady={onReady}
-          onError={onError}
-        />
-      ) : (
-        <button onClick={handleOnClick}>Checkout</button>
-      )}
-    </div>
+    <>
+      <Payment
+        initialization={initialization}
+        customization={customization}
+        onSubmit={onSubmit}
+        onReady={onReady}
+        onError={onError}
+      />
+    </>
   )
 }

@@ -6,7 +6,9 @@ import { toast, Toaster } from 'sonner'
 import { AceptarDenegar } from './Aceptar-Denegar'
 import { fetchFotosUrls } from '../../utils/fotoUtils'
 import { decodeToken } from '../../utils/tokenUtils'
+import { fetchReadyPayment } from './hooks/fetchReadyPayment'
 import enviarNotificacion from '../Notificaciones/enviarNotificacion'
+import { handlePayment } from './hooks/handlePayment'
 
 export const DetallesPublicacion = () => {
   const navigate = useNavigate()
@@ -17,6 +19,9 @@ export const DetallesPublicacion = () => {
   const [isSuggested, setIsSuggested] = useState(false)
   const [decodedToken, setDecodedToken] = useState({})
   const [comment, setComment] = useState('')
+  const [isReady, setIsReady] = useState(false)
+  const { getReadyPayment } = fetchReadyPayment(id, setIsReady)
+  const { createPreference } = handlePayment()
   const [publicacion, setPublicacion] = useState({
     idPublicacion: null,
     nombre: '',
@@ -41,6 +46,7 @@ export const DetallesPublicacion = () => {
   }
 
   useEffect(() => {
+    getReadyPayment()
     const exchangable = async () => {
       const pending = await fetch(`${import.meta.env.VITE_BASE_URL}/exchange/state/pending`)
         .then((res) => res.json())
@@ -166,6 +172,15 @@ export const DetallesPublicacion = () => {
     } else toast.error('No tienes productos para intercambiar!')
   }
 
+  const handleClickPayment = async () => {
+    const preference = await createPreference()
+    if (preference) {
+      navigate(`/payment/${preference.id}/publicacion/${publicacion.idPublicacion}`)
+    } else {
+      toast.error('Error al crear la preferencia de pago')
+    }
+  }
+
   return (
     <div>
       <Toaster />
@@ -268,6 +283,15 @@ export const DetallesPublicacion = () => {
                     className="mt-2 w-full rounded-md bg-fede-main px-4 py-2 font-medium text-white hover:scale-105 hover:bg-fede-hover-button focus:outline-none focus:ring-2 focus:ring-fede-main focus:ring-offset-2"
                   >
                     Sugerir Trueque
+                  </button>
+                ) : null}
+                {isReady.ok ? (
+                  <button
+                    onClick={handleClickPayment}
+                    className=" mt-2 w-full rounded-md bg-fede-main px-4 py-2 font-medium text-white hover:scale-105 hover:bg-fede-hover-button focus:outline-none focus:ring-2 focus:ring-fede-main focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+                    disabled={isReady.publications[0].destacada === 'si' ? true : false}
+                  >
+                    Promocionar Publicaion
                   </button>
                 ) : null}
               </div>
