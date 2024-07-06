@@ -120,7 +120,7 @@ export const MisPublicaciones = () => {
               <MyPublication key={index} publication={publication} onError={handleError} />
             ))
           ) : (
-            <p className="text-center text-gray-600">Aún no has publicado nada.</p>
+            <p className="text-center text-gray-600">Nada para mostrar</p>
           )}
         </section>
       </div>
