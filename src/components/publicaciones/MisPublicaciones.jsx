@@ -79,8 +79,8 @@ export const MisPublicaciones = () => {
       </h2>
       <div>
         <Toaster position="bottom-right" />
-        <div className="pl-6 pt-4">
-          <p>Filtrar por estado:</p>
+        <div>
+          <h2 className="md:text-l mb-2 pt-2 text-gray-500">Filtrar por estado:</h2>
           <button
             className={`mb-2 mr-2 rounded-md px-3 py-1 ${
               filter === null ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-700'
@@ -114,7 +114,7 @@ export const MisPublicaciones = () => {
             Rechazadas
           </button>
         </div>
-        <section className="space-y-4 py-1 pl-6">
+        <section className="space-y-4 py-1 ">
           {filteredPublicaciones.length > 0 ? (
             filteredPublicaciones.map((publication, index) => (
               <MyPublication key={index} publication={publication} onError={handleError} />

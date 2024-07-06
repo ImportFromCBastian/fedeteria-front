@@ -43,11 +43,11 @@ export const ExchangesList = () => {
         </h2>
         <div className="relative"></div>
       </div>
-      <p className="pl-6 pt-2 text-gray-500 md:text-xl">
+      <p className=" pt-2 text-gray-500 md:text-xl">
         Estos son todos los trueques en los que formaste parte
       </p>
-      <div className="pl-6 pt-4">
-        <p>Filtrar por estado:</p>
+      <div>
+        <h2 className="md:text-l mb-2 pt-2 text-gray-500">Filtrar por estado:</h2>
         <button
           className={`mb-2 mr-2 rounded-md px-3 py-1 ${
             filter === null ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-700'
@@ -90,7 +90,7 @@ export const ExchangesList = () => {
           No realizado
         </button>
       </div>
-      <div className="space-y-4 py-1 pl-6">
+      <div className="space-y-4 py-1">
         {filteredExchanges.length === 0 ? (
           <p>No hay nada que mostrar</p>
         ) : (
