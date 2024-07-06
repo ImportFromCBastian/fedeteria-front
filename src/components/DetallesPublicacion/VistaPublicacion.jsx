@@ -284,8 +284,7 @@ export const DetallesPublicacion = () => {
                   >
                     Sugerir Trueque
                   </button>
-                ) : null}
-                {isReady.ok ? (
+                ) : isReady.ok ? (
                   <button
                     onClick={handleClickPayment}
                     className=" mt-2 w-full rounded-md bg-fede-main px-4 py-2 font-medium text-white hover:scale-105 hover:bg-fede-hover-button focus:outline-none focus:ring-2 focus:ring-fede-main focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"

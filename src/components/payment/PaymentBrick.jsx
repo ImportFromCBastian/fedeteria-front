@@ -1,6 +1,7 @@
 import { Payment } from '@mercadopago/sdk-react'
 import { initMercadoPago } from '@mercadopago/sdk-react'
 import { useParams, useNavigate } from 'react-router-dom'
+import enviarNotificacion from '../Notificaciones/enviarNotificacion'
 
 initMercadoPago(`${import.meta.env.VITE_PUBLIC_KEY}`, {
   locale: 'es-AR'
@@ -22,8 +23,7 @@ export const PaymentBrick = () => {
   const customization = {
     paymentMethods: {
       creditCard: 'all',
-      debitCard: 'all',
-      mercadoPago: 'all'
+      debitCard: 'all'
     }
   }
   const onSubmit = async ({ selectedPaymentMethod, formData }) => {
@@ -50,6 +50,7 @@ export const PaymentBrick = () => {
               .catch((error) => console.error('Error:', error))
           }
           featured()
+          enviarNotificacion('default', 'Tu publicacion ha sido destacada')
           navigate(`/ver_publicacion/${pubId}`)
           resolve()
         })
