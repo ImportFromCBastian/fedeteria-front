@@ -1,9 +1,8 @@
 import { BarChart, DonutChart } from '@tremor/react'
-import { RiRecordCircleFill, RiAccountCircleLine } from '@remixicon/react'
-// import { DatePicker, DateRangePicker } from '@tremor/react'
-import { Badge, BadgeDelta } from '@tremor/react'
-import { Card, Metric, Text } from '@tremor/react'
-import { DatePicker, DateRangePicker } from '@tremor/react'
+import { RiAccountCircleLine } from '@remixicon/react'
+import { Badge } from '@tremor/react'
+import { Card, Text } from '@tremor/react'
+import { DateRangePicker } from '@tremor/react'
 import { getSucursalesConTrueques } from './hooks/getSucursalesConTrueques'
 import { getUsuarios } from './hooks/getUsuarios.jsx'
 import { getClientesPorSucursal } from './hooks/getClientesPorSucursal.jsx'
@@ -11,6 +10,7 @@ import { getGanancias } from './hooks/getGanancias.jsx'
 import { useEffect, useState } from 'react'
 import { decodeToken } from '../../utils/tokenUtils'
 import { useNavigate } from 'react-router-dom'
+import { Toaster, toast } from 'sonner'
 
 export const DashBoards = () => {
   const navigate = useNavigate()
@@ -54,8 +54,8 @@ export const DashBoards = () => {
     fetchData()
   }, [])
   return (
-    // <div className="flex min-h-screen items-center justify-center bg-blue-500 bg-opacity-50">
-    <div className="mx-auto grid max-w-6xl gap-4 bg-white">
+    <div className="mx-auto grid max-w-6xl gap-4">
+      <Toaster expand="true" richColors="true" />
       {/* Fila de Trueques */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Card className="p-4 md:col-span-2" decoration="top" decorationColor="indigo">
@@ -68,7 +68,7 @@ export const DashBoards = () => {
             valueFormatter={dataFormatter}
             yAxisWidth={48}
             showAnimation={true}
-            onValueChange={(v) => console.log(v)}
+            onValueChange={(v) => console.log()}
           />
         </Card>
         <Card className="p-4 md:h-64 md:w-64" decoration="top" decorationColor="indigo">
@@ -79,7 +79,18 @@ export const DashBoards = () => {
             index="nombre"
             variant="donut"
             valueFormatter={dataFormatter}
-            colors={['blue', 'cyan', 'indigo', 'violet', 'fuchsia']}
+            colors={[
+              'blue',
+              'cyan',
+              'indigo',
+              'violet',
+              'fuchsia',
+              'blue',
+              'cyan',
+              'indigo',
+              'violet',
+              'fuchsia'
+            ]}
             showAnimation={true}
             label={`${display}`}
             onValueChange={(v) => {
@@ -107,75 +118,72 @@ export const DashBoards = () => {
             valueFormatter={dataFormatter}
             yAxisWidth={42}
             showAnimation={true}
-            onValueChange={(v) => console.log(v)}
+            onValueChange={(v) => console.log()}
           />
         </Card>
         <div className="mx-auto max-w-md space-y-3">
-          <p className="pt-6 text-center font-mono text-sm text-slate-500">Date Range Picker</p>
+          <p className="pt-6 text-center font-mono text-sm text-slate-500">
+            Seleccione rango de fechas
+          </p>
           <DateRangePicker
             className="mx-auto max-w-md"
+            selectPlaceholder="Seleccionar"
+            placeholder="Seleccionar rango de fechas"
             onValueChange={(value) => {
               const { from, to } = value
               if (from === undefined || to === undefined) return
               const filterData = dataSave.filter((item) => {
-                const fecha = item.fecha.split('T')[0].split('-')
-                console.log(fecha)
-                return (
-                  from.getDate() <= fecha[2] &&
-                  from.getMonth() + 1 <= fecha[1] &&
-                  from.getFullYear() <= fecha[0] &&
-                  to.getDate() >= fecha[2] &&
-                  to.getMonth() + 1 >= fecha[1] &&
-                  to.getFullYear() >= fecha[0]
-                )
+                const fecha = item.fechaDate
+                return from <= fecha && fecha <= to
               })
+              if (filterData.length === 0) {
+                toast.error('No hay datos de trueques en el rango de fechas')
+              }
               setData(filterData)
               const filterGanancias = gananciasSave.filter((item) => {
-                const fecha = item.fecha
-                return (
-                  from.getDate() <= fecha[2] &&
-                  from.getMonth() + 1 <= fecha[1] &&
-                  from.getFullYear() <= fecha[0] &&
-                  to.getDate() >= fecha[2] &&
-                  to.getMonth() + 1 >= fecha[1] &&
-                  to.getFullYear() >= fecha[0]
-                )
+                const fecha = item.fechaDate
+                return from <= fecha && fecha <= to
               })
+              if (filterGanancias.length === 0) {
+                toast.error('No hay datos de ganancias en el rango de fechas')
+              }
               setGanancias(filterGanancias)
             }}
           />
-          <button
-            className="rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-            onClick={() => {
-              setData(dataSave)
-              setGanancias(gananciasSave)
-            }}
-          >
-            Eliminar filtros
-          </button>
+          <div className="flex justify-end">
+            <button
+              className="mt-4 rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+              onClick={() => {
+                setData(dataSave)
+                setGanancias(gananciasSave)
+              }}
+            >
+              Eliminar filtros
+            </button>
+          </div>
         </div>
       </div>
       {/* Fila de Ganancias Totales por Sucursales */}
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Card className="p-4 md:col-span-2" decoration="top" decorationColor="indigo">
-          <Text className="mb-4 text-center font-bold">Total Recaudado por Dia por Sucursal</Text>
+          <Text className="mb-4 text-center font-bold">Total Recaudado por Dia </Text>
           <BarChart
             data={ganancias}
-            index="nombreLocal"
+            index="fecha"
             categories={['gananciasTotales']}
             colors={['yellow']}
             valueFormatter={dataFormatter}
             yAxisWidth={55}
             showAnimation={true}
-            onValueChange={(v) => console.log(v)}
+            onValueChange={(v) => console.log()}
           />
         </Card>
         <Card className="p-4 md:h-64 md:w-64" decoration="top" decorationColor="indigo">
-          <Text className="mb-4 text-center font-bold">Ganancia Recaudada por Sucursal</Text>
+          <Text className="mb-4 text-center font-bold">Total Recaudado por Dia</Text>
           <DonutChart
             data={ganancias}
-            index="nombreLocal"
+            index="fecha"
             variant="donut"
             category="gananciasTotales"
             valueFormatter={dataFormatter}
@@ -211,7 +219,5 @@ export const DashBoards = () => {
         </Card>
       </div>
     </div>
-
-    // </div>
   )
 }

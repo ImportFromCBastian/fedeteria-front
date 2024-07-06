@@ -6,9 +6,14 @@ export const getGanancias = (setGanancias, setGananciasSave) => {
       .then((res) => res.json())
       .then((data) => {
         const aux = data.map((item) => {
+          const fechaParts = item.fecha.split('T')[0].split('-') // Obtener partes de la fecha
+          const fecha = new Date(fechaParts[0], fechaParts[1] - 1, fechaParts[2]) // Crear el objeto Date
+
           return {
             ...item,
-            ['fecha']: item.fecha.split('T')[0]
+            ['fechaDate']: fecha, // Asignar el objeto Date a 'fecha'
+            ['fecha']: item.fecha.split('T')[0], //esta la utilizo para mostarla en la tabla(se ve: YYYY-MM-DD)
+            ['fechaAux']: item.fecha // esta la utilizo para luego splitearla y hacer el filtro.
           }
         })
         setGanancias(aux)

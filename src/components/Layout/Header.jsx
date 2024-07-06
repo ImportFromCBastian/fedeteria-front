@@ -160,6 +160,9 @@ export const Header = () => {
                 >
                   Listar Sucursales
                 </Link>
+                <Link className="font-medium underline-offset-4 hover:underline" to="/dashboards">
+                  Datos Administrativos
+                </Link>
               </>
             )}
             <Link

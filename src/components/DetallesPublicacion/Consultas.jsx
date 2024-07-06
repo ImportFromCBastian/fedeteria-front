@@ -1,7 +1,14 @@
 import { useEffect, useState } from 'react'
 import { RespuestaForm } from './DejarRespuesta'
+import { toast, Toaster } from 'sonner'
 
-export const Consultas = ({ consulta, decodedDNI, publicacionDNI, nombrePublicacion }) => {
+export const Consultas = ({
+  consulta,
+  decodedDNI,
+  decodedRol,
+  publicacionDNI,
+  nombrePublicacion
+}) => {
   const [user, setUser] = useState({})
   const [mostrarFormulario, setMostrarFormulario] = useState(false)
   const maxLength = 100 // Máximo de caracteres permitidos
@@ -10,7 +17,21 @@ export const Consultas = ({ consulta, decodedDNI, publicacionDNI, nombrePublicac
   const toggleMostrarFormulario = () => {
     setMostrarFormulario(!mostrarFormulario)
   }
-
+  const borrarConsulta = async (idConsulta) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/publication/consulta/${idConsulta}`,
+        {
+          method: 'DELETE'
+        }
+      )
+      if (response.status === 200) {
+        toast.success('Consulta eliminada correctamente')
+      }
+    } catch (error) {
+      console.error('Error al borrar la consulta:', error)
+    }
+  }
   const fecthRespuesta = async () => {
     try {
       const result = await fetch(
@@ -46,7 +67,18 @@ export const Consultas = ({ consulta, decodedDNI, publicacionDNI, nombrePublicac
   }, [consulta.dniUsuario])
 
   return (
-    <div className="grid gap-4">
+    <div className="relative grid gap-4">
+      {consulta.idRespuesta === null &&
+        (decodedDNI === consulta.dniUsuario || decodedRol === 'administrador') && (
+          <div className="absolute right-0 top-0">
+            <button
+              className="text-lg font-bold text-red-500 hover:text-red-700 focus:outline-none"
+              onClick={() => borrarConsulta(consulta.idConsulta)}
+            >
+              X
+            </button>
+          </div>
+        )}
       <div className="grid gap-6">
         <div className="flex gap-4">
           <div className="grid gap-2">

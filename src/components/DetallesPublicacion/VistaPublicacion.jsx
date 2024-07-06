@@ -357,6 +357,7 @@ export const DetallesPublicacion = () => {
                       consulta={consulta}
                       key={index}
                       decodedDNI={decodedToken.DNI}
+                      decodedRol={decodedToken.rol}
                       publicacionDNI={publicacion.DNI}
                       nombrePublicacion={publicacion.nombre}
                     />
