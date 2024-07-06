@@ -48,7 +48,7 @@ export const MyPublication = ({ publication, onError }) => {
 
   return (
     <div
-      className={`relative flex h-40 items-center rounded-lg ${color} p-4 shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-xl`}
+      className={`h-30 relative flex items-center rounded-lg ${color} p-4 shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-xl`}
     >
       <span onClick={handleClick} className="absolute inset-0 z-10" href="#">
         <span className="sr-only">View</span>
@@ -63,15 +63,15 @@ export const MyPublication = ({ publication, onError }) => {
         />
       ) : (
         // Si no hay una URL de foto, muestra un texto de carga
-        <div className="mr-4 flex aspect-square h-24 w-24 items-center justify-center bg-gray-200 object-cover text-xl">
+        <div className="mr-4 flex aspect-square h-24 w-24 items-center justify-center bg-gray-200 object-cover text-lg">
           Cargando...
         </div>
       )}
 
       <div className="flex h-full flex-1 flex-col justify-between">
         <div className="flex items-center">
-          <h3 className="text-lg font-medium">{publication.nombre}</h3>
-          <p className="ml-4 text-sm text-gray-500">{publication.estado}</p>
+          <h3 className="text-xl font-semibold">{publication.nombre}</h3>
+          <p className="ml-4 mt-1 text-xs text-gray-500">{publication.estado}</p>
           <span className="ml-auto font-medium text-gray-500">{estado}</span>
         </div>
         <p className="text-sm text-gray-500">{publication.descripcion}</p>
