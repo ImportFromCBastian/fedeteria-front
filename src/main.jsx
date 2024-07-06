@@ -23,6 +23,7 @@ import { SuggestDetail } from './components/MySuggestionsList/SuggestDetatil.jsx
 import { ActiveExchanges } from './components/ActiveExchanges/ActiveExchanges.jsx'
 import { RegisterDetailsModal } from './components/MyExchangesList/RegisterDetailsModal.jsx'
 import { MisPublicaciones } from './components/publicaciones/MisPublicaciones.jsx'
+import { EstablishExchange } from './components/EstablishExchange/EstablishExchange'
 import { ExchangesList } from './components/MyExchangesList/ExchangesList.jsx'
 import { ExchangeDetails } from './components/MyExchangesList/ExchangeDetails.jsx'
 import { ListarTruequesDeMiSucursal } from './components/Trueques/ListarTruequesDeMiSucursal.jsx'
@@ -62,6 +63,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/mis_trueques_activos" element={<ActiveExchanges />} />
           <Route path="/registrar_detalles/:id" element={<RegisterDetailsModal />} />
           <Route path="/ver_mis_publicaciones" element={<MisPublicaciones />} />
+          <Route path="/determinar_trueque" element={<EstablishExchange />} />
           <Route path="/intercambios" element={<ExchangesList />} />
           <Route path="/ver_intercambio/:id" element={<ExchangeDetails />} />
           <Route path="/ver_trueque/:id" element={<ExchangeDetail />} /> //este y el de arriba

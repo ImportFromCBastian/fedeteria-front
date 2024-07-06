@@ -157,12 +157,20 @@ export const Header = () => {
             </Link>
 
             {(user.rol === 'empleado' || user.rol === 'administrador') && (
-              <Link
-                className="font-medium underline-offset-4 hover:underline"
-                to="/listado_publicaciones"
-              >
-                Evaluar publicaciones
-              </Link>
+              <>
+                <Link
+                  className="font-medium underline-offset-4 hover:underline"
+                  to="/listado_publicaciones"
+                >
+                  Evaluar publicaciones
+                </Link>
+                <Link
+                  className="font-medium underline-offset-4 hover:underline"
+                  to="/determinar_trueque"
+                >
+                  Determinar trueque
+                </Link>
+              </>
             )}
             {(user.rol === 'empleado' || user.rol === 'administrador') && (
               <Link

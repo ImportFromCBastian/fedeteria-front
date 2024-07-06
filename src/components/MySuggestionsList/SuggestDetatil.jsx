@@ -8,9 +8,11 @@ import { createPendingExchange } from './hooks/createPendingExchange'
 import { deleteSuggestions } from './hooks/deleteSuggestions'
 import { sendContactEmail } from './hooks/sendContactEmail'
 import { fetchFotosUrls } from '../../utils/fotoUtils'
+import { updateExchangeStatus } from './hooks/updateExchangeStatus'
 import { decodeToken } from '../../utils/tokenUtils'
 import useConversor from '../../utils/useConversor'
 import enviarNotificacion from '../Notificaciones/enviarNotificacion'
+
 export const SuggestDetail = () => {
   const navigate = useNavigate()
   const { id } = useParams('')
@@ -103,6 +105,14 @@ export const SuggestDetail = () => {
   }, [offeredProducts])
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+  const handleCancelExchange = async () => {
+    const result = await updateExchangeStatus(id, 5)
+    console.log(result)
+    if (!result.ok) return toast.error('Error al cancelar el trueque')
+    toast.success('Cancelado con exito')
+    await delay(2500)
+    navigate('/')
+  }
 
   const handleAcceptExchange = async (e) => {
     e.preventDefault()
@@ -232,16 +242,18 @@ export const SuggestDetail = () => {
                   </div>
                 ))}
               </div>
-              {tokenDNI == mainProduct.DNI ? (
-                <button
-                  onClick={handleAcceptExchange}
-                  className="ring-offset-background focus-visible:ring-ring border-input bg-background inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border px-3 text-sm font-medium transition-colors hover:scale-105 hover:bg-green-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-                >
-                  Aceptar Trueque
-                </button>
-              ) : (
-                <div className="inline-flex h-9 px-3"></div>
-              )}
+              <button
+                onClick={handleAcceptExchange}
+                className="ring-offset-background focus-visible:ring-ring border-input bg-background inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border px-3 text-sm font-medium transition-colors hover:scale-105 hover:bg-green-500 hover:text-white focus-visible:outline-none focus-visible:ring-2  focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+              >
+                Aceptar Trueque
+              </button>
+              <button
+                onClick={handleCancelExchange}
+                className="ring-offset-background focus-visible:ring-ring border-input bg-background inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border px-3 text-sm font-medium transition-colors hover:scale-105 hover:bg-red-500 hover:text-white focus-visible:outline-none focus-visible:ring-2  focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+              >
+                Cancelar Trueque
+              </button>
             </div>
           </div>
         </div>
