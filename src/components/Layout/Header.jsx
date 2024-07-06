@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import Notificaciones from '../Notificaciones/Notificaciones'
+import { Link, useNavigate } from 'react-router-dom'
 
 export const Header = () => {
   const [user, setUser] = useState(null)
+  const [nombre, setNombre] = useState({})
+  const [searchQuery, setSearchQuery] = useState('')
+  const navigate = useNavigate()
 
   const decodeToken = async (token) => {
     return await fetch(`${import.meta.env.VITE_BASE_URL}/user/decode_token`, {
@@ -17,15 +20,29 @@ export const Header = () => {
       .catch((e) => new Error(e))
   }
 
-  useEffect(() => {
-    let token = localStorage.getItem('token')
-    if (token == 'undefined') {
-      token = null
+  const handleSearchKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      // Redirect to a new route with search query as a parameter
+      if (searchQuery) navigate(`/buscar/${searchQuery}`)
+      else if (location.pathname.startsWith('/buscar/')) {
+        navigate('/')
+      }
     }
-    if (token) {
+  }
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (token && token !== 'undefined') {
       const fetchData = async () => {
         const decodedToken = await decodeToken(token)
         setUser(decodedToken)
+        if (decodedToken && decodedToken.DNI) {
+          const userResponse = await fetch(
+            `${import.meta.env.VITE_BASE_URL}/user/${decodedToken.DNI}`
+          )
+          const userData = await userResponse.json()
+          setNombre(userData[0])
+        }
       }
       fetchData()
     }
@@ -57,6 +74,9 @@ export const Header = () => {
             style={{
               boxShadow: '0 0 0 0px #2563EB'
             }}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={handleSearchKeyPress} // Listen for Enter key press
           />
         </div>
       </div>
@@ -74,7 +94,7 @@ export const Header = () => {
               <Notificaciones />
               <Link
                 to="/mi_perfil"
-                className="ring-offset-background focus-visible:ring-ring hover:bg-accent hover:text-accent-foreground inline-flex h-10 w-10 items-center justify-center whitespace-nowrap rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+                className="ring-offset-background focus-visible:ring-ring hover:bg-accent hover:text-accent-foreground inline-flex h-10 items-center justify-center whitespace-nowrap rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -91,8 +111,11 @@ export const Header = () => {
                   <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
                   <circle cx="12" cy="7" r="4"></circle>
                 </svg>
-
                 <span className="sr-only">Perfil</span>
+                <div className="ml-2">
+                  <h1 className="font-semibold">{nombre.nombre}</h1>
+                  {user.rol !== 'cliente' && <h2 className="text-xs">{user.rol}</h2>}
+                </div>
               </Link>
             </div>
           ) : (
@@ -129,18 +152,32 @@ export const Header = () => {
             >
               Sugerencias de trueque
             </Link>
-            <Link
-              className="font-medium underline-offset-4 hover:underline"
-              to="/registrar-detalles"
-            >
-              Registrar detalles de trueque
+            <Link className="font-medium underline-offset-4 hover:underline" to="/intercambios">
+              Mis trueques
             </Link>
+
+            {(user.rol === 'empleado' || user.rol === 'administrador') && (
+              <>
+                <Link
+                  className="font-medium underline-offset-4 hover:underline"
+                  to="/listado_publicaciones"
+                >
+                  Evaluar publicaciones
+                </Link>
+                <Link
+                  className="font-medium underline-offset-4 hover:underline"
+                  to="/determinar_trueque"
+                >
+                  Determinar trueque
+                </Link>
+              </>
+            )}
             {(user.rol === 'empleado' || user.rol === 'administrador') && (
               <Link
                 className="font-medium underline-offset-4 hover:underline"
-                to="/listado_publicaciones"
+                to="/listado_de_trueques_de_mi_sucursal"
               >
-                Evaluar publicaciones
+                Listar trueques de mi sucursal
               </Link>
             )}
             {user.rol === 'administrador' && (

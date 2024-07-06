@@ -124,7 +124,6 @@ export const Login = () => {
             ...attempts,
             [credential.dni]: (attempts[credential.dni] || 0) + 1
           }
-          console.log(updatedAttempts)
           setAttempts(updatedAttempts)
         }
         toast.error('Inicio de sesión fallido')

@@ -1,4 +1,5 @@
-###create empleado
+
+###test###create empleado
 POST http://localhost:3000/user/worker
 content-type: application/json
 
@@ -11,5 +12,16 @@ content-type: application/json
   "birthdate": "2005-01-01",
   "notification": false
 }
-###create trueque
-GET http://localhost:3000/user/client/sucursales/get
+###create admin
+POST http://localhost:3000/user/admin
+content-type: application/json
+
+{
+  "dni": "11111111",
+  "name": "adamin",
+  "lastName": "comun",
+  "email": "loaslza@gmail.com",
+  "password": "123456S*",
+  "birthdate": "2005-01-01",
+  "notification": false
+}

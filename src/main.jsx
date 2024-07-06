@@ -21,9 +21,17 @@ import { ListarSucursales } from './components/Layout/Listar-Sucursales/ListarSu
 import { SuggestedExchangesList } from './components/MySuggestionsList/SuggestedExchangesList.jsx'
 import { SuggestDetail } from './components/MySuggestionsList/SuggestDetatil.jsx'
 import { ActiveExchanges } from './components/ActiveExchanges/ActiveExchanges.jsx'
-import { RegisterDetails } from './components/MySuggestionsList/RegisterDetails.jsx'
+import { RegisterDetailsModal } from './components/MyExchangesList/RegisterDetailsModal.jsx'
 import { MisPublicaciones } from './components/publicaciones/MisPublicaciones.jsx'
 import { DashBoards } from './components/DashBoards/DashBoards.jsx'
+import { EstablishExchange } from './components/EstablishExchange/EstablishExchange'
+import { ExchangesList } from './components/MyExchangesList/ExchangesList.jsx'
+import { ExchangeDetails } from './components/MyExchangesList/ExchangeDetails.jsx'
+import { ListarTruequesDeMiSucursal } from './components/Trueques/ListarTruequesDeMiSucursal.jsx'
+import { ExchangeDetail } from './components/Trueques/ExchangeDetail.jsx' //este y el de exchange details creo que hacen exactamente lo mismo solo que uno lo hizo fabri y uno yo xp
+import { PublicacionesFiltradas } from './components/Busqueda/PublicacionesFiltradas.jsx'
+import { PaymentBrick } from './components/payment/PaymentBrick.jsx'
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
@@ -47,13 +55,23 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             element={<ModificarPublicacion />}
           />
           <Route path="/listado_sucursales" element={<ListarSucursales />} />
+          <Route
+            path="/listado_de_trueques_de_mi_sucursal"
+            element={<ListarTruequesDeMiSucursal />}
+          />
           <Route path="/ver_mis_sugerencias" element={<SuggestedExchangesList />} />
           <Route path="/unauthorized" element={<UnauthorizedAccessPage />} />
           <Route path="/ver_sugerencia/:id" element={<SuggestDetail />} />
           <Route path="/mis_trueques_activos" element={<ActiveExchanges />} />
-          <Route path="/registrar-detalles" element={<RegisterDetails />} />
+          <Route path="/registrar_detalles/:id" element={<RegisterDetailsModal />} />
           <Route path="/ver_mis_publicaciones" element={<MisPublicaciones />} />
           <Route path="/dashboards" element={<DashBoards />} />
+          <Route path="/determinar_trueque" element={<EstablishExchange />} />
+          <Route path="/intercambios" element={<ExchangesList />} />
+          <Route path="/ver_intercambio/:id" element={<ExchangeDetails />} />
+          <Route path="/ver_trueque/:id" element={<ExchangeDetail />} /> //este y el de arriba
+          <Route path="/buscar/:query" element={<PublicacionesFiltradas />} />
+          <Route path="/payment/:id/publicacion/:pubId" element={<PaymentBrick />} />
         </Route>
       </Routes>
     </BrowserRouter>
