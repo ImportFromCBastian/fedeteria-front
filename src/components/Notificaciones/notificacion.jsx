@@ -66,6 +66,24 @@ const icono = {
       <path d="M18 6 6 18" />
       <path d="m6 6 12 12" />
     </svg>
+  ),
+  consulta: (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="h-6 w-6 text-gray-500"
+    >
+      <circle cx="12" cy="12" r="10" />
+      <path d="M9.1 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3" />
+      <path d="M12 17h.01" />
+    </svg>
   )
 }
 export const Notificacion = ({ tipo, idNotificacion, contenido, onDelete }) => {

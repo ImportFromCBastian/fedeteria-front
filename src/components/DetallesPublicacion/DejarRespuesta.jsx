@@ -1,13 +1,11 @@
 import React, { useState } from 'react'
-import { useHandlerConsulta } from './hooks/useHandlerConsulta'
+import { useHandlerRespuesta } from './hooks/useHandlerRespuesta'
 
-export const ConsultaForm = ({
-  consulta,
-  setConsulta,
+export const RespuestaForm = ({
+  idConsulta,
   maxLength,
-  idPublicacion,
-  dni,
-  dniPublicacion,
+  dniDueno,
+  dniConsultador,
   nombrePublicacion
 }) => {
   function autoResize() {
@@ -16,23 +14,26 @@ export const ConsultaForm = ({
     textarea.style.height = textarea.scrollHeight + 'px' // Asignar la nueva altura
   }
 
+  const [respuesta, setRespuesta] = useState('')
+
   const handleInputChange = (event) => {
     const text = event.target.value
-    setConsulta(text)
+    setRespuesta(text)
   }
 
-  const { handleSubmit } = useHandlerConsulta(
-    consulta,
-    idPublicacion,
-    dni,
-    dniPublicacion,
+  const { handleSubmit } = useHandlerRespuesta(
+    respuesta,
+    idConsulta,
+    dniDueno,
+    dniConsultador,
     nombrePublicacion
   )
 
   const handleSubmitWithValidation = (event) => {
     event.preventDefault()
-    if (consulta.trim() !== '') {
+    if (respuesta.trim() !== '') {
       handleSubmit(event)
+      // Limpiar el estado de respuesta después del envío
     }
   }
 
@@ -40,29 +41,29 @@ export const ConsultaForm = ({
     <div className="grid gap-2">
       <label
         className="text-base font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-        htmlFor="consulta"
+        htmlFor="respuesta"
       >
-        Deja tu consulta
+        Respuesta
       </label>
       <textarea
         className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex min-h-[80px] w-full rounded-md border bg-fede-fondo-texto px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         id="consulta"
         placeholder="Escribe tu comentario aquí"
-        value={consulta}
+        value={respuesta}
         maxLength={maxLength}
         onChange={handleInputChange}
         onInput={autoResize}
         style={{ resize: 'none' }}
       ></textarea>
       <div className="text-sm text-gray-500">
-        {consulta.length}/{maxLength}
+        {respuesta.length}/{maxLength}
       </div>
       <button
         className="active:bg-primary/80 focus:ring-primary inline-flex items-center justify-center rounded-lg bg-fede-main px-4 py-2 text-sm font-medium text-white shadow-lg hover:scale-100 hover:bg-fede-hover-button focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         onClick={handleSubmitWithValidation}
-        disabled={consulta.trim() === ''}
+        disabled={respuesta.trim() === ''}
       >
-        Enviar consulta
+        Enviar respuesta
       </button>
     </div>
   )
