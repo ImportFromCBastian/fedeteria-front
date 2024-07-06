@@ -1,6 +1,6 @@
 export async function fetchExchangeMainProductByID(id) {
   try {
-    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/exchange/product/${id}`)
+    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/exchange/product/search/${id}`)
     if (!response.ok) {
       throw new Error('Error fetching product')
     }

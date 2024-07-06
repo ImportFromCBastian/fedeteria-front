@@ -7,6 +7,7 @@ import { fetchAvailableTimes } from '../MySuggestionsList/hooks/fetchAvailableTi
 import { useRegisterDetails } from '../MySuggestionsList/hooks/useRegisterDetails.jsx'
 import { toast, Toaster } from 'sonner'
 import { decodeToken } from '../../utils/tokenUtils.js'
+import dateSchema from '../MySuggestionsList/hooks/validator/dateSchema.jsx'
 
 export const RegisterDetailsModal = ({
   exchangeID,
@@ -113,13 +114,21 @@ export const RegisterDetailsModal = ({
   }
 
   const handleAccept = (exchangeID) => {
+    try {
+      dateSchema.validateSync(selectedDay, { abortEarly: false }) //valido que la fecha sea mayor a el dia actual.
+    } catch (error) {
+      const { errors } = error
+      for (let i = 0; i < errors.length; i++) {
+        toast.error(errors[i])
+      }
+      return
+    }
     const data = {
       selectedSucursal,
       selectedDay,
       selectedTime
     }
     useRegisterDetails(data, exchangeID)
-    // Cerrar modal después de aceptar
     closeModal()
   }
   const closeModal = () => {
