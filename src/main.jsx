@@ -29,6 +29,7 @@ import { ExchangeDetails } from './components/MyExchangesList/ExchangeDetails.js
 import { ListarTruequesDeMiSucursal } from './components/Trueques/ListarTruequesDeMiSucursal.jsx'
 import { ExchangeDetail } from './components/Trueques/ExchangeDetail.jsx' //este y el de exchange details creo que hacen exactamente lo mismo solo que uno lo hizo fabri y uno yo xp
 import { PublicacionesFiltradas } from './components/Busqueda/PublicacionesFiltradas.jsx'
+import { PaymentBrick } from './components/payment/PaymentBrick.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -68,6 +69,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/ver_intercambio/:id" element={<ExchangeDetails />} />
           <Route path="/ver_trueque/:id" element={<ExchangeDetail />} /> //este y el de arriba
           <Route path="/buscar/:query" element={<PublicacionesFiltradas />} />
+          <Route path="/payment/:id/publicacion/:pubId" element={<PaymentBrick />} />
         </Route>
       </Routes>
     </BrowserRouter>
