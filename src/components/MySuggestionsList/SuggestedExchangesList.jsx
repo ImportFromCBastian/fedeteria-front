@@ -42,10 +42,10 @@ export const SuggestedExchangesList = () => {
           </button>
         </div>
       </div>
-      <p className="pl-6 pt-2 text-gray-500 md:text-xl/relaxed">
+      <p className="pt-2 text-gray-500 md:text-xl/relaxed">
         Acá podés ver tus propuestas de trueque
       </p>
-      <div className="space-y-4 py-1 pl-6">
+      <div className="space-y-4 py-1 ">
         {showReceived ? (
           <>
             <h3 className="text-2xl font-bold">Sugerencias recibidas</h3>
