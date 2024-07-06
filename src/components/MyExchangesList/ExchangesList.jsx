@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchExchanges } from './hooks/fetchExchanges'
 import { Exchange } from './Exchange'
@@ -12,8 +12,7 @@ export const ExchangesList = () => {
   const [nombrePublicacion, setNombrePublicacion] = useState('')
   const [publicationCount, setPublicationCount] = useState(0)
   const [nombreOfrecida, setNombreOfrecida] = useState('')
-  const [filter, setFilter] = useState('all')
-  const [showGuiaColores, setShowGuiaColores] = useState(false)
+  const [filter, setFilter] = useState(null)
 
   useEffect(() => {
     fetchExchanges(setExchanges, navigate)
@@ -27,22 +26,14 @@ export const ExchangesList = () => {
     setNombreOfrecida(nombreOfrecida)
   }
 
-  const handleFilterChange = (e) => {
-    setFilter(e.target.value)
+  const handleFilterChange = (estado) => {
+    setFilter(estado === filter ? null : estado)
   }
 
   const filteredExchanges = exchanges.filter((exchange) => {
-    if (filter === 'all') return true
+    if (filter === null) return true
     return exchange.realizado === parseInt(filter)
   })
-
-  const handleMouseEnter = () => {
-    setShowGuiaColores(true)
-  }
-
-  const handleMouseLeave = () => {
-    setShowGuiaColores(false)
-  }
 
   return (
     <section className="mx-auto w-full max-w-4xl px-4 pb-6 pt-8 md:px-6">
@@ -50,44 +41,58 @@ export const ExchangesList = () => {
         <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
           Listado de tus intercambios
         </h2>
-        <select
-          value={filter}
-          onChange={handleFilterChange}
-          className="ml-4 mt-4 rounded-lg border border-fede-main p-2 hover:bg-gray-200"
-        >
-          <option value="all">Todos</option>
-          <option value="0">No realizado</option>
-          <option value="1">Realizado</option>
-          <option value="2">Pendiente de horario</option>
-          <option value="3">Por realizarse</option>
-        </select>
-        <div className="relative">
-          <span
-            className=" material-symbols-outlined float-right mt-4 cursor-pointer rounded-full outline-dotted"
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-          >
-            question_mark
-          </span>
-          {showGuiaColores && (
-            <div className="absolute -right-52 z-50 mt-4 w-48 rounded-xl bg-fede-main/40 p-4 backdrop-blur-md">
-              <h3 className="text-base font-medium text-fede-texto-input">Guía de colores</h3>
-              <ul className="mt-2 text-sm text-fede-texto-input/50">
-                <li>- Verde - realizado</li>
-                <li>- Rojo - no realizado</li>
-                <li>- Azul - pendiente de selección de horario</li>
-                <li>- Amarillo - por realizarse</li>
-              </ul>
-            </div>
-          )}
-        </div>
+        <div className="relative"></div>
       </div>
       <p className="pl-6 pt-2 text-gray-500 md:text-xl">
         Estos son todos los trueques en los que formaste parte
       </p>
+      <div className="pl-6 pt-4">
+        <p>Filtrar por estado:</p>
+        <button
+          className={`mb-2 mr-2 rounded-md px-3 py-1 ${
+            filter === null ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-700'
+          }`}
+          onClick={() => handleFilterChange(null)}
+        >
+          Todas
+        </button>
+
+        <button
+          className={`mb-2 mr-2 rounded-md px-3 py-1 ${
+            filter === 2 ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'
+          }`}
+          onClick={() => handleFilterChange(2)}
+        >
+          Pendiente de horario
+        </button>
+        <button
+          className={`mb-2 mr-2 rounded-md px-3 py-1 ${
+            filter === 3 ? 'bg-fede-amarillo text-white' : 'bg-gray-200 text-gray-700'
+          }`}
+          onClick={() => handleFilterChange(3)}
+        >
+          Por realizarse
+        </button>
+        <button
+          className={`mb-2 mr-2 rounded-md px-3 py-1 ${
+            filter === 1 ? 'bg-fede-verde text-white' : 'bg-gray-200 text-gray-700'
+          }`}
+          onClick={() => handleFilterChange(1)}
+        >
+          Realizado
+        </button>
+        <button
+          className={`mb-2 mr-2 rounded-md px-3 py-1 ${
+            filter === 0 ? 'bg-fede-rojo text-white' : 'bg-gray-200 text-gray-700'
+          }`}
+          onClick={() => handleFilterChange(0)}
+        >
+          No realizado
+        </button>
+      </div>
       <div className="space-y-4 py-1 pl-6">
         {filteredExchanges.length === 0 ? (
-          <p>Aún no tenés trueques, ¿Qué esperás para empezar a intercambiar?</p>
+          <p>No hay nada que mostrar</p>
         ) : (
           filteredExchanges.map((exchange, index) => (
             <Exchange
