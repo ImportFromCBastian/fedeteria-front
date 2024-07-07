@@ -33,10 +33,26 @@ export const Publication = ({ publication, onError }) => {
   }
 
   return (
-    <div className="group relative overflow-hidden rounded-lg bg-gray-950 shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-2 hover:shadow-xl">
+    <div
+      className={`-1 group relative overflow-hidden rounded-lg bg-gray-950 shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-2 hover:shadow-xl`}
+    >
       <span onClick={handleClick} className="absolute inset-0 z-10" href="#">
         <span className="sr-only">View</span>
       </span>
+
+      {publication.destacada === 'si' && (
+        <div className="flex items-center gap-1">
+          <svg viewBox="0 0 24 24" fill="#E7AB12" className="absolute ml-1 mt-10 h-4 w-4">
+            <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path>
+          </svg>
+          <svg viewBox="0 0 24 24" fill="#E7AB12" className="absolute ml-7 mt-10 h-4 w-4">
+            <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path>
+          </svg>
+          <svg viewBox="0 0 24 24" fill="#E7AB12" className="absolute ml-4 mt-5 h-4 w-4">
+            <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path>
+          </svg>
+        </div>
+      )}
       {fotoUrl ? ( // Si hay una URL de foto, muestra la imagen
         <img
           src={fotoUrl}
@@ -51,7 +67,8 @@ export const Publication = ({ publication, onError }) => {
           Cargando...
         </div>
       )}
-      <div className=" bg-gray-950 p-4">
+
+      <div className={`p-4 `}>
         <div className="flex items-center justify-between">
           <h3 className="text-xl font-bold text-white">{publication.nombre}</h3>
           <span className="text-base font-medium text-gray-500">
