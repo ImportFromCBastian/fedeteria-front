@@ -14,6 +14,8 @@ const Exchange = ({ mainPublicationID, publicationCount, exchangeID, state }) =>
   const [publication, setPublication] = useState({})
   const [offeredPublication, setOfferedPublication] = useState({})
   const [offeredFotoUrl, setOfferedFotoUrl] = useState('')
+  const [color, setColor] = useState('')
+
   const [trueque, setTrueque] = useState({
     idTrueque: 0,
     hora: 0,
@@ -83,27 +85,30 @@ const Exchange = ({ mainPublicationID, publicationCount, exchangeID, state }) =>
     navigate(`/ver_intercambio/${exchangeID}`)
   }
 
-  const getColorClass = (realizado) => {
-    switch (realizado) {
+  useEffect(() => {
+    switch (state) {
       case 0:
-        return 'bg-fede-rojo'
+        setColor('bg-fede-rojo')
+        break
       case 1:
-        return 'bg-fede-verde'
+        setColor('bg-fede-verde')
+        break
       case 2:
-        return 'bg-fede-azul'
+        setColor('bg-fede-azul')
+        break
       case 3:
-        return 'bg-fede-amarillo'
+        setColor('bg-fede-amarillo')
+        break
       default:
-        return 'bg-white'
+        setColor('bg-white')
+        break
     }
-  }
-
-  const colorClass = getColorClass(trueque.realizado)
+  }, [state])
 
   return (
     <div
       onClick={handleClick}
-      className={`relative rounded-lg border p-4 shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-xl ${colorClass}`}
+      className={`relative rounded-lg border p-4 shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-xl ${color}`}
       style={{ minWidth: '320px' }} // Ajusta el ancho mínimo según tus necesidades
     >
       <div className="flex items-center">

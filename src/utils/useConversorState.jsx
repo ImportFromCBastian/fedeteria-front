@@ -11,6 +11,6 @@ export const getState = (state) => {
     case state == 5:
       return 'trueque cancelado'
     default:
-      return 'no se que hiciste papi'
+      return ''
   }
 }

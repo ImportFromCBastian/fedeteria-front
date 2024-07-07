@@ -150,6 +150,14 @@ export const ListarTruequesDeMiSucursal = () => {
         <p>Filtrar por estado:</p>
         <button
           className={`mb-2 mr-2 rounded-md px-3 py-1 ${
+            filtroEstado === null ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-700'
+          }`}
+          onClick={() => handleFiltrarPorEstado(null)}
+        >
+          Todas
+        </button>
+        <button
+          className={`mb-2 mr-2 rounded-md px-3 py-1 ${
             filtroEstado === 0 ? 'bg-fede-rojo text-white' : 'bg-gray-200 text-gray-700'
           }`}
           onClick={() => handleFiltrarPorEstado(0)}
