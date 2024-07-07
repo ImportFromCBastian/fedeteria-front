@@ -22,11 +22,18 @@ export const Header = () => {
 
   const handleSearchKeyPress = (event) => {
     if (event.key === 'Enter') {
-      // Redirect to a new route with search query as a parameter
-      if (searchQuery) navigate(`/buscar/${searchQuery}`)
-      else if (location.pathname.startsWith('/buscar/')) {
-        navigate('/')
-      }
+      executeSearch()
+    }
+  }
+
+  const handleSearchIconClick = () => {
+    executeSearch()
+  }
+
+  const executeSearch = () => {
+    if (searchQuery) navigate(`/buscar/${searchQuery}`)
+    else if (location.pathname.startsWith('/buscar/')) {
+      navigate('/')
     }
   }
 
@@ -51,7 +58,7 @@ export const Header = () => {
   return (
     <div>
       <div className="relative w-full bg-fede-main">
-        <div className="absolute left-1/2 top-0 mt-4 flex w-full max-w-2xl -translate-x-1/2 items-center gap-2 rounded-full bg-gray-100 px-3 py-1">
+        <div className="absolute left-1/2 top-0 mt-4 flex w-full max-w-xl -translate-x-1/2 items-center gap-2 rounded-full bg-gray-100 px-3 py-1">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -62,7 +69,8 @@ export const Header = () => {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="h-5 w-5 text-gray-500 dark:text-gray-400"
+            className="h-5 w-5 cursor-pointer text-gray-500 dark:text-gray-400"
+            onClick={handleSearchIconClick} // Add onClick event
           >
             <circle cx="11" cy="11" r="8"></circle>
             <path d="m21 21-4.3-4.3"></path>
@@ -156,6 +164,16 @@ export const Header = () => {
               Mis trueques
             </Link>
 
+            {user.rol === 'empleado' && (
+              <>
+                <Link
+                  className="font-medium underline-offset-4 hover:underline"
+                  to="/determinar_trueque"
+                >
+                  Determinar trueque
+                </Link>
+              </>
+            )}
             {(user.rol === 'empleado' || user.rol === 'administrador') && (
               <>
                 <Link
@@ -166,19 +184,11 @@ export const Header = () => {
                 </Link>
                 <Link
                   className="font-medium underline-offset-4 hover:underline"
-                  to="/determinar_trueque"
+                  to="/listado_de_trueques_de_mi_sucursal"
                 >
-                  Determinar trueque
+                  Listar trueques de mi sucursal
                 </Link>
               </>
-            )}
-            {(user.rol === 'empleado' || user.rol === 'administrador') && (
-              <Link
-                className="font-medium underline-offset-4 hover:underline"
-                to="/listado_de_trueques_de_mi_sucursal"
-              >
-                Listar trueques de mi sucursal
-              </Link>
             )}
             {user.rol === 'administrador' && (
               <>
