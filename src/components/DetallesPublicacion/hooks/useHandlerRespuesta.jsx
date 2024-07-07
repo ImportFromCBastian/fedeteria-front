@@ -9,14 +9,19 @@ export const useHandlerRespuesta = (
   dniConsultador,
   nombrePublicacion
 ) => {
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    createRespuesta(respuesta, idConsulta, dniDueno)
-    enviarNotificacion(
-      'consulta',
-      `El dueño de la publicacion: ${nombrePublicacion}, respondio tu consulta!`,
-      dniConsultador
-    )
+    try {
+      await createRespuesta(respuesta, idConsulta, dniDueno)
+      await enviarNotificacion(
+        'consulta',
+        `El dueño de la publicacion: ${nombrePublicacion}, respondio tu consulta!`,
+        dniConsultador
+      )
+    } catch (error) {
+      console.error('Error al enviar respuesta:', error)
+      toast.error('Error al enviar respuesta')
+    }
   }
 
   return {

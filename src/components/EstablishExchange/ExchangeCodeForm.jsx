@@ -9,13 +9,13 @@ export const ExchangeCodeForm = ({ childSubmit, childChange }) => {
           Código del trueque
         </label>
         <input
-          className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm  "
+          className="w-full rounded-md border border-gray-300 bg-fede-fondo-texto px-3 py-2 text-fede-texto-input placeholder-fede-texto-claro shadow-sm outline-fede-main focus:border-fede-main focus:outline-none focus:ring-2 focus:ring-fede-main [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
           name="code"
           placeholder="Ingresar el código"
           onChange={childChange}
         />
       </div>
-      <button className="inline-flex h-10 w-full items-center justify-center whitespace-nowrap rounded-md bg-fede-main/75 px-4 py-2 text-sm font-medium transition-colors hover:bg-fede-main  ">
+      <button className="w-full rounded-md bg-fede-main px-4 py-2 font-medium text-white hover:scale-105  hover:bg-fede-hover-button focus:outline-none focus:ring-2 focus:ring-fede-main focus:ring-offset-2">
         Confirmar
       </button>
     </form>

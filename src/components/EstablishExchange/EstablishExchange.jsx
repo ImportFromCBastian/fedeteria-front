@@ -15,8 +15,8 @@ export const EstablishExchange = () => {
     useHandler(setCode, setState, code, setExchangeData, exchangeData)
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-[url('/background-pattern.svg')] bg-cover">
-      <div className="w-full max-w-2xl rounded-lg bg-white p-8 shadow-lg">
+    <div className="flex min-h-screen flex-col items-center  border bg-cover">
+      <div className="m-10 w-full max-w-5xl rounded-lg border-2 bg-white p-8 shadow-lg">
         <Toaster richColors={true} />
         {state != 'rs' ? (
           <>

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchExchangeUtils } from './hooks/fetchExchangeUtils'
-import { ProductList } from './ProductList'
 import { PaymentModal } from './PaymentModal'
 import { AddProductModal } from './AddProductModal'
 import { modalHandler } from './hooks/modalHandler'
@@ -12,6 +11,7 @@ export const ExchangeSales = ({ exchangeData }) => {
   const [clients, setClients] = useState([])
   const [total, setTotal] = useState(0)
   const [modal, setModal] = useState('')
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const { fetchProducts } = fetchExchangeUtils(setProductList)
   const { openPaymentModal, openAddProductModal, closeModal } = modalHandler(setModal)
   const navigate = useNavigate()
@@ -49,36 +49,51 @@ export const ExchangeSales = ({ exchangeData }) => {
     <>
       {modal === 'payment' && <PaymentModal price={total} close={closeModal} clients={clients} />}
       {modal === 'addProduct' && <AddProductModal update={updateList} close={closeModal} />}
-      <button
-        onClick={() => navigate('/')}
-        className="inline-flex h-11 w-full items-center justify-center whitespace-nowrap rounded-md px-8 text-sm font-medium transition-colors"
-      >
-        Salir
-      </button>
-      <div className="mx-auto grid max-w-6xl items-start gap-6 px-4 py-6 md:grid-cols-2 lg:gap-12">
+      <div className="mx-auto grid max-w-full items-start gap-6 px-4 py-6 md:grid-cols-2 lg:gap-12">
         <div className="grid gap-4 md:gap-10">
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-            <div className="grid gap-2">
-              <div className="grid gap-1">
-                {productList.map((product, index) => (
-                  <ProductList
-                    key={index}
-                    index={index}
-                    nombre={product.nombre}
-                    precio={product.precio}
-                    state={'toAdd'}
-                    changeProductList={changeProductList}
-                  />
-                ))}
+          <div className="relative">
+            <button
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="inline-flex h-11 w-full items-center justify-center whitespace-nowrap rounded-md border px-8 text-sm font-medium transition-colors hover:bg-fede-main hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+            >
+              Seleccionar producto
+            </button>
+            {isDropdownOpen && (
+              <div className="max-h-82 absolute left-0 top-full z-10 mt-2 flex w-full flex-col overflow-hidden rounded-md border bg-white shadow-lg">
+                <div className="max-h-72 flex-grow overflow-y-auto">
+                  <ul>
+                    {productList.map((product, index) => (
+                      <li
+                        key={index}
+                        className="flex cursor-pointer items-center justify-between border-b p-2 hover:bg-gray-100"
+                      >
+                        <div className="flex items-center space-x-2">
+                          <h3 className="font-semibold">{product.nombre} -</h3>
+                          <p className="text-sm leading-none">${product.precio}</p>
+                        </div>
+                        <button
+                          className="ring-offset-background focus-visible:ring-ring border-input bg-background b inline-flex h-7 w-7 items-center justify-center rounded-full border bg-green-500 px-2 text-sm font-medium text-white transition-colors hover:bg-green-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+                          onClick={() => {
+                            changeProductList(index, 'add')
+                          }}
+                        >
+                          +
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="border-t">
+                  <button
+                    onClick={openAddProductModal}
+                    className="block w-full bg-gray-100 px-4 py-2 text-center text-sm font-medium hover:bg-gray-200"
+                  >
+                    Cargar nuevo producto
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
           </div>
-          <button
-            onClick={openAddProductModal}
-            className="inline-flex h-11 w-full items-center justify-center whitespace-nowrap rounded-md px-8 text-sm font-medium transition-colors"
-          >
-            Agregar producto
-          </button>
         </div>
         <div className="grid gap-4 md:gap-10">
           <div
@@ -89,46 +104,59 @@ export const ExchangeSales = ({ exchangeData }) => {
               <h3 className="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">
                 Lista de productos
               </h3>
-            </div>
-            {products.length > 0 && (
-              <button
-                className="inline-flex h-11 w-full items-center justify-center whitespace-nowrap rounded-md bg-slate-400 px-8 text-sm font-medium transition-colors"
-                onClick={() => {
-                  setProducts([])
-                  setTotal(0)
-                }}
-              >
-                Borrar todo
-              </button>
-            )}
-            <div className="p-6">
+
+              {products.length > 0 && (
+                <button
+                  className="ml-auto inline-flex h-6 items-center justify-center whitespace-nowrap rounded-md bg-slate-400 px-2 text-xs font-medium transition-colors hover:bg-red-500"
+                  onClick={() => {
+                    setProducts([])
+                    setTotal(0)
+                  }}
+                >
+                  Borrar todos
+                </button>
+              )}
+
               {products.length > 0 ? (
                 products.map((product, index) => (
-                  <ProductList
-                    key={index}
-                    index={index}
-                    nombre={product.nombre}
-                    precio={product.precio}
-                    state={'toShow'}
-                    changeProductList={changeProductList}
-                  />
+                  <div key={index} className=" mb-2 flex items-center justify-between border-b ">
+                    <div className="flex items-center space-x-2 ">
+                      <h3 className="font-semibold">{product.nombre} -</h3>
+                      <p className="text-sm leading-none">${product.precio}</p>
+                    </div>
+                    <button
+                      className="ring-offset-background focus-visible:ring-ring border-input bg-background b mb-2 inline-flex h-7 w-7 items-center justify-center rounded-full border bg-red-500 px-2 text-sm font-medium text-white transition-colors hover:bg-red-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+                      onClick={() => changeProductList(index, 'remove')}
+                    >
+                      x
+                    </button>
+                  </div>
                 ))
               ) : (
                 <p>No hay productos agregados</p>
               )}
-              {total > 0 && (
-                <>
-                  <p>Precio Final: ${total}</p>
+
+              {products.length > 0 && (
+                <div className="mb-4  ">
+                  <div>
+                    <h1>Precio Final: ${total}</h1>
+                  </div>
                   <button
-                    className="inline-flex h-11 w-full items-center justify-center whitespace-nowrap rounded-md bg-slate-400 px-8 text-sm font-medium transition-colors"
+                    className="ring-offset-background focus-visible:ring-ring border-input bg-background b inline-flex h-9 w-full items-center justify-center whitespace-nowrap rounded-md border px-3 text-sm font-medium transition-colors hover:scale-105 hover:bg-fede-main hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
                     onClick={openPaymentModal}
                   >
                     Pagar
                   </button>
-                </>
+                </div>
               )}
             </div>
           </div>
+          <button
+            onClick={() => navigate('/')}
+            className="ring-offset-background focus-visible:ring-ring border-input bg-background b inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border px-3 text-sm font-medium transition-colors hover:scale-105 hover:bg-fede-main hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+          >
+            Finalizar
+          </button>
         </div>
       </div>
     </>

@@ -9,7 +9,7 @@ export const useHandler = (setCode, setState, code, setExchangeData, exchangeDat
 
   const handleChildSubmit = async (e) => {
     e.preventDefault()
-    if (code.length !== 10) return toast.error('El código debe tener 10 caracteres')
+    if (code.length !== 6) return toast.error('El código debe tener 6 caracteres')
     const result = await fetch(`${import.meta.env.VITE_BASE_URL}/exchange/code/${code}`)
       .then((res) => res.json())
       .then((data) => {

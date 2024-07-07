@@ -91,7 +91,8 @@ export const SuggestExchange = () => {
         alert('No tienes publicaciones para intercambiar')
         navigate(`/ver_publicacion/${id}`)
       } else {
-        setSuggestPublications(data)
+        const filteredPublications = data.filter((publication) => publication.precio > 0)
+        setSuggestPublications(filteredPublications)
       }
     } catch (error) {
       console.error('Error fetching client publications:', error)
