@@ -27,6 +27,7 @@ export const Consultas = ({
       )
       if (response.status === 200) {
         toast.success('Consulta eliminada correctamente')
+        window.location.reload()
       }
     } catch (error) {
       console.error('Error al borrar la consulta:', error)

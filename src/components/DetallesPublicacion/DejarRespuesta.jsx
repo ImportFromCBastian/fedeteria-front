@@ -29,7 +29,7 @@ export const RespuestaForm = ({
     nombrePublicacion
   )
 
-  const handleSubmitWithValidation = (event) => {
+  const handleSubmitWithValidation = async (event) => {
     event.preventDefault()
     if (respuesta.trim() !== '') {
       handleSubmit(event)

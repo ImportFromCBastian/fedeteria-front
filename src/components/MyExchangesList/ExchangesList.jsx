@@ -16,6 +16,7 @@ export const ExchangesList = () => {
 
   useEffect(() => {
     fetchExchanges(setExchanges, navigate)
+    console.log(exchanges)
   }, [navigate])
 
   const openModal = (exchangeID, nombrePublicacion, publicationCount, nombreOfrecida) => {
