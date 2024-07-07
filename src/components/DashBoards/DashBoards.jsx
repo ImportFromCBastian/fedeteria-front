@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react'
 import { decodeToken } from '../../utils/tokenUtils'
 import { useNavigate } from 'react-router-dom'
 import { Toaster, toast } from 'sonner'
-
+import { getCantidadDeTruequesPorSucursal } from './hooks/getCantidadDeTruequesPorSucursal'
 export const DashBoards = () => {
   const navigate = useNavigate()
   const [data, setData] = useState([])
@@ -22,6 +22,7 @@ export const DashBoards = () => {
   const [ganancias, setGanancias] = useState([])
   const [dataSave, setDataSave] = useState([])
   const [gananciasSave, setGananciasSave] = useState([])
+  const [cantidadDeTrueques, setCantidadDeTrueques] = useState([])
 
   const dataFormatter = (number) => Intl.NumberFormat('us').format(number).toString()
   const { fetchSucursalesConTrueques } = getSucursalesConTrueques(
@@ -33,7 +34,8 @@ export const DashBoards = () => {
   const { fetchUsers } = getUsuarios(setUsers)
   const { fetchClients } = getClientesPorSucursal(setClients)
   const { fetchGanancias } = getGanancias(setGanancias, setGananciasSave)
-
+  const { fetchCantidadDeTruequesPorSucursal } =
+    getCantidadDeTruequesPorSucursal(setCantidadDeTrueques)
   useEffect(() => {
     const token = localStorage.getItem('token')
     if (token === null) {
@@ -50,6 +52,7 @@ export const DashBoards = () => {
       fetchUsers()
       fetchClients()
       fetchGanancias()
+      fetchCantidadDeTruequesPorSucursal()
     }
     fetchData()
   }, [])
@@ -59,10 +62,10 @@ export const DashBoards = () => {
       {/* Fila de Trueques */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Card className="p-4 md:col-span-2" decoration="top" decorationColor="indigo">
-          <Text className="mb-4 text-center font-bold">Cantidad de Trueques por Sucursal</Text>
+          <Text className="mb-4 text-center font-bold">Cantidad de Trueques por Dia</Text>
           <BarChart
             data={data}
-            index="nombre"
+            index="fechaAux"
             categories={['CantidadDeTrueques']}
             colors={['yellow']}
             valueFormatter={dataFormatter}
@@ -72,11 +75,11 @@ export const DashBoards = () => {
           />
         </Card>
         <Card className="p-4 md:h-64 md:w-64" decoration="top" decorationColor="indigo">
-          <Text className="mb-4 text-center font-bold">Cantidad de Trueques por Sucursal</Text>
+          <Text className="mb-4 text-center font-bold">Cantidad de Trueques por Dia</Text>
           <DonutChart
             data={data}
             category="CantidadDeTrueques"
-            index="nombre"
+            index="fechaAux"
             variant="donut"
             valueFormatter={dataFormatter}
             colors={[
@@ -215,6 +218,21 @@ export const DashBoards = () => {
               'fuchsia'
             ]}
             showAnimation={true}
+          />
+        </Card>
+      </div>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <Card className="p-4 md:col-span-2" decoration="top" decorationColor="indigo">
+          <Text className="mb-4 text-center font-bold">Cantidad de Trueques por Sucursal</Text>
+          <BarChart
+            data={cantidadDeTrueques}
+            index="nombre"
+            categories={['CantidadDeTrueques']}
+            colors={['yellow']}
+            valueFormatter={dataFormatter}
+            yAxisWidth={48}
+            showAnimation={true}
+            onValueChange={(v) => console.log()}
           />
         </Card>
       </div>

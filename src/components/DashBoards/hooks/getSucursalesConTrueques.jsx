@@ -12,7 +12,8 @@ export const getSucursalesConTrueques = (setData, setDisplay, setDisplay2, setDa
           return {
             ...item,
             ['fechaDate']: fecha, // Asignar el objeto Date a 'fecha'
-            ['fecha']: item.fecha // esta la utilizo para luego splitearla y hacer el filtro.
+            ['fecha']: item.fecha, // esta la utilizo para luego splitearla y hacer el filtro.
+            ['fechaAux']: item.fecha.split('T')[0] //esta la utilizo para mostarla en la tabla(se ve: YYYY-MM-DD)
           }
         })
         setDataSave(aux)
