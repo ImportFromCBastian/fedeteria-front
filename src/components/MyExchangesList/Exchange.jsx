@@ -1,8 +1,9 @@
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { fetchFotosUrls } from '../../utils/fotoUtils'
 import { publicationInfo } from '../MySuggestionsList/hooks/publicationInfo'
-import { useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
 import { fetchExchangeProduct } from './hooks/fetchExchangeProduct'
+
 export const Exchange = ({
   mainPublicationID,
   publicationCount,
@@ -21,6 +22,7 @@ export const Exchange = ({
   const [offeredPublication, setOfferedPublication] = useState(null)
   const [offeredFotoUrl, setOfferedFotoUrl] = useState('')
   const [color, setColor] = useState('')
+
   useEffect(() => {
     if (fecha) {
       const fechaObj = new Date(fecha)
@@ -29,7 +31,8 @@ export const Exchange = ({
       setFormattedHora(truncatedHora)
       setFormattedFecha(fechaObj.toLocaleDateString('es-ES', optionsFecha))
     }
-  }, [fecha])
+  }, [fecha, hora])
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -81,10 +84,33 @@ export const Exchange = ({
     navigate(`/ver_intercambio/${exchangeID}`)
   }
 
-  const handleElegirHorario = (e) => {
+  const handleElegirHorario = async (e) => {
     e.stopPropagation()
-    if (publication && (publicationCount !== 1 || (publicationCount === 1 && offeredPublication))) {
-      openModal(exchangeID, publication.nombre, publicationCount, offeredPublication?.nombre)
+    try {
+      let DNIOwner = null
+      let DNISuggestor = null
+
+      if (publication) {
+        const responseOwner = await fetch(
+          `${import.meta.env.VITE_BASE_URL}/user/${publication.DNI}`
+        )
+        const responseSuggestor = await fetch(
+          `${import.meta.env.VITE_BASE_URL}/user/${offeredPublication.DNI}`
+        )
+        DNIOwner = await responseOwner.json()
+        DNISuggestor = await responseSuggestor.json()
+      }
+
+      openModal(
+        exchangeID,
+        publication?.nombre,
+        publicationCount,
+        offeredPublication?.nombre,
+        DNIOwner,
+        DNISuggestor
+      )
+    } catch (error) {
+      console.error('Error fetching user data:', error)
     }
   }
 

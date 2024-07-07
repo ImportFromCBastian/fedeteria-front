@@ -1,19 +1,20 @@
-import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { fetchSuggestionsAccepteds } from '../MySuggestionsList/hooks/fetchSuggestionsAccepteds'
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { fetchData } from '../user/hooks/fetchData.jsx'
-import { SuggestAccept } from '../MySuggestionsList/SuggestAccept'
 import { fetchAvailableTimes } from '../MySuggestionsList/hooks/fetchAvailableTimes.jsx'
-import { useRegisterDetails } from '../MySuggestionsList/hooks/useRegisterDetails.jsx'
 import { toast, Toaster } from 'sonner'
 import { decodeToken } from '../../utils/tokenUtils.js'
+import { fetchSucursalById } from './hooks/fetchSucursal.jsx'
 import dateSchema from '../MySuggestionsList/hooks/validator/dateSchema.jsx'
+import { useRegisterDetails } from '../MySuggestionsList/hooks/useRegisterDetails.jsx'
 
 export const RegisterDetailsModal = ({
   exchangeID,
   nombrePublicacion,
   publicationCount,
-  nombreOfrecida
+  nombreOfrecida,
+  DNIOwner,
+  DNISuggestor
 }) => {
   const navigate = useNavigate()
 
@@ -23,6 +24,11 @@ export const RegisterDetailsModal = ({
   const [selectedDay, setSelectedDay] = useState('')
   const [availableTimes, setAvailableTimes] = useState([])
   const [selectedTime, setSelectedTime] = useState('')
+  const [ownerEmail, setOwnerEmail] = useState('')
+  const [suggestorEmail, setSuggestorEmail] = useState('')
+  const [ownerName, setOwnerName] = useState('')
+  const [suggestorName, setSuggestorName] = useState('')
+  const [sucursal, setSucursal] = useState('')
 
   const { fetchSucursal } = fetchData()
 
@@ -54,25 +60,83 @@ export const RegisterDetailsModal = ({
     return times
   }
 
+  const sendMail = async (dia, mes, hora, sucursal, codigo) => {
+    try {
+      const mailResponse = await fetch(`${import.meta.env.VITE_BASE_URL}/mailing/codigo`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          owner: ownerEmail,
+          suggestor: suggestorEmail,
+          ownerName: ownerName,
+          suggestorName: suggestorName,
+          dia,
+          mes,
+          hora,
+          sucursal,
+          codigo
+        })
+      })
+      if (!mailResponse.ok) {
+        toast.error('Error al enviar el correo de bloqueo')
+      }
+    } catch (error) {
+      console.error('Error al enviar el correo de bloqueo', error)
+      toast.error('Error al enviar el correo de bloqueo')
+    }
+  }
+
+  function generateRandomString(length) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    let result = ''
+    const charactersLength = characters.length
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength))
+    }
+    return result
+  }
+
   useEffect(() => {
     const fetchData = async () => {
-      const token = localStorage.getItem('token')
-      if (token === null) {
-        navigate('/')
-        return
-      }
+      try {
+        const token = localStorage.getItem('token')
+        if (token === null) {
+          navigate('/')
+          return
+        }
 
-      const decodedToken = await decodeToken(token)
-      if (!decodedToken.rol) {
-        navigate('/')
-        return
-      }
+        const decodedToken = await decodeToken(token)
+        if (!decodedToken.rol) {
+          navigate('/')
+          return
+        }
 
-      setSelectedSuggestion(exchangeID)
-      wrapper()
+        setSelectedSuggestion(exchangeID)
+        wrapper()
+
+        // Obtener datos del owner
+        const ownerResponse = await fetch(
+          `${import.meta.env.VITE_BASE_URL}/user/${DNIOwner[0].DNI}`
+        )
+        const ownerData = await ownerResponse.json()
+        setOwnerEmail(ownerData[0].mail)
+        setOwnerName(ownerData[0].nombre)
+
+        // Obtener datos del suggestor
+        const suggestorResponse = await fetch(
+          `${import.meta.env.VITE_BASE_URL}/user/${DNISuggestor[0].DNI}`
+        )
+        const suggestorData = await suggestorResponse.json()
+        setSuggestorEmail(suggestorData[0].mail)
+        setSuggestorName(suggestorData[0].nombre)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
     }
     fetchData()
-  }, [navigate])
+  }, [navigate, exchangeID, DNIOwner, DNISuggestor])
 
   const handleSucursalSelect = (event) => {
     setSelectedSucursal(event.target.value)
@@ -113,9 +177,9 @@ export const RegisterDetailsModal = ({
     return `${year}-${month}-${day}`
   }
 
-  const handleAccept = (exchangeID) => {
+  const handleAccept = async (exchangeID) => {
     try {
-      dateSchema.validateSync(selectedDay, { abortEarly: false }) //valido que la fecha sea mayor a el dia actual.
+      dateSchema.validateSync(selectedDay, { abortEarly: false }) // Validar que la fecha sea mayor al día actual.
     } catch (error) {
       const { errors } = error
       for (let i = 0; i < errors.length; i++) {
@@ -123,13 +187,45 @@ export const RegisterDetailsModal = ({
       }
       return
     }
-    const data = {
-      selectedSucursal,
-      selectedDay,
-      selectedTime
+    const randomString = generateRandomString(6).toUpperCase() // Generar una cadena aleatoria de 10 caracteres
+    try {
+      const fetchedSucursal = await fetchSucursalById(selectedSucursal)
+      setSucursal(fetchedSucursal.nombre)
+      await sendMail(
+        selectedDay.split('-')[2], // Extraer día
+        getMonthName(parseInt(selectedDay.split('-')[1])), // Extraer mes
+        selectedTime,
+        fetchedSucursal.nombre, // Usar nombre de la sucursal obtenido
+        randomString
+      )
+      const data = {
+        selectedSucursal,
+        selectedDay,
+        selectedTime
+      }
+      useRegisterDetails(randomString, data, exchangeID)
+      closeModal()
+    } catch (error) {
+      console.error('Error al obtener datos de la sucursal:', error)
+      toast.error('Error al registrar el trueque. Inténtalo de nuevo.')
     }
-    useRegisterDetails(data, exchangeID)
-    closeModal()
+  }
+  const getMonthName = (monthNumber) => {
+    const months = [
+      'Enero',
+      'Febrero',
+      'Marzo',
+      'Abril',
+      'Mayo',
+      'Junio',
+      'Julio',
+      'Agosto',
+      'Septiembre',
+      'Octubre',
+      'Noviembre',
+      'Diciembre'
+    ]
+    return months[monthNumber - 1] // Resta 1 porque los meses en el array empiezan en 0
   }
   const closeModal = () => {
     window.location.reload()
