@@ -30,7 +30,7 @@ export const Consultas = ({
         toast.success('Consulta eliminada correctamente')
         setTimeout(() => {
           window.location.reload()
-        }, 1000) // 1 segundo1 de espera
+        }, 1000) // 1 segundo de espera
       }
     } catch (error) {
       console.error('Error al borrar la consulta:', error)
