@@ -32,8 +32,14 @@ export const RespuestaForm = ({
   const handleSubmitWithValidation = async (event) => {
     event.preventDefault()
     if (respuesta.trim() !== '') {
-      handleSubmit(event)
-      // Limpiar el estado de respuesta después del envío
+      try {
+        await handleSubmit(event)
+        setTimeout(() => {
+          window.location.reload()
+        }, 1000) // 1 segundo de espera
+      } catch (error) {
+        console.error('Error al crear respuesta:', error)
+      }
     }
   }
 
