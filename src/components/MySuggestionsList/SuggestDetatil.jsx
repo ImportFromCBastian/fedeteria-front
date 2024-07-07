@@ -242,20 +242,26 @@ export const SuggestDetail = () => {
                   </div>
                 ))}
               </div>
-              <div className="mt-4 flex flex-col gap-4">
-                <button
-                  onClick={handleAcceptExchange}
-                  className="ring-offset-background focus-visible:ring-ring border-input bg-background inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border px-3 text-sm font-medium transition-colors hover:scale-105 hover:bg-green-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-                >
-                  Aceptar Trueque
-                </button>
-                <button
-                  onClick={handleCancelExchange}
-                  className="ring-offset-background focus-visible:ring-ring border-input bg-background inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border px-3 text-sm font-medium transition-colors hover:scale-105 hover:bg-red-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-                >
-                  Cancelar Trueque
-                </button>
-              </div>
+              {mainProduct.DNI.toString() === tokenDNI ? (
+                <>
+                  <div>
+                    <button
+                      onClick={handleAcceptExchange}
+                      className="ring-offset-background focus-visible:ring-ring border-input bg-background mb-4 inline-flex h-9 w-full items-center justify-center whitespace-nowrap rounded-md border px-3 text-sm font-medium transition-colors hover:scale-105 hover:bg-green-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+                    >
+                      Aceptar Trueque
+                    </button>
+                    <button
+                      onClick={handleCancelExchange}
+                      className="ring-offset-background focus-visible:ring-ring border-input bg-background inline-flex h-9 w-full items-center justify-center whitespace-nowrap rounded-md border px-3 text-sm font-medium transition-colors hover:scale-105 hover:bg-red-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+                    >
+                      Cancelar Trueque
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <div className="h-30"></div>
+              )}
             </div>
           </div>
         </div>

@@ -12,18 +12,29 @@ export const ExchangesList = () => {
   const [nombrePublicacion, setNombrePublicacion] = useState('')
   const [publicationCount, setPublicationCount] = useState(0)
   const [nombreOfrecida, setNombreOfrecida] = useState('')
+  const [DNIOwner, setDNIOwner] = useState('')
+  const [DNISuggestor, setDNISuggestor] = useState('')
   const [filter, setFilter] = useState(null)
 
   useEffect(() => {
     fetchExchanges(setExchanges, navigate)
   }, [navigate])
 
-  const openModal = (exchangeID, nombrePublicacion, publicationCount, nombreOfrecida) => {
+  const openModal = (
+    exchangeID,
+    nombrePublicacion,
+    publicationCount,
+    nombreOfrecida,
+    DNIOwner,
+    DNISuggestor
+  ) => {
     setSelectedExchangeID(exchangeID)
     setIsModalOpen(true)
     setNombrePublicacion(nombrePublicacion)
     setPublicationCount(publicationCount)
     setNombreOfrecida(nombreOfrecida)
+    setDNIOwner(DNIOwner)
+    setDNISuggestor(DNISuggestor)
   }
 
   const handleFilterChange = (estado) => {
@@ -115,6 +126,8 @@ export const ExchangesList = () => {
           nombrePublicacion={nombrePublicacion}
           publicationCount={publicationCount}
           nombreOfrecida={nombreOfrecida}
+          DNIOwner={DNIOwner}
+          DNISuggestor={DNISuggestor}
         />
       )}
     </section>

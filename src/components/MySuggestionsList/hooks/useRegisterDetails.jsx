@@ -1,13 +1,13 @@
 import { toast } from 'sonner'
 
-export const useRegisterDetails = async (data, idTrueque) => {
+export const useRegisterDetails = async (codigo, data, idTrueque) => {
   try {
     const result = await fetch(`${import.meta.env.VITE_BASE_URL}/exchange/details/${idTrueque}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ data })
+      body: JSON.stringify({ codigo, data })
     })
     if (!result.ok) {
       throw new Error('Error al registrar los datos de trueque')
