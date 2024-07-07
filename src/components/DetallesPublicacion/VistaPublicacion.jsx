@@ -18,6 +18,7 @@ export const DetallesPublicacion = () => {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0)
   const [suggestPublications, setSuggestPublications] = useState([])
   const [isSuggested, setIsSuggested] = useState(false)
+  const [isInExchange, setIsInExchange] = useState(false)
   const [decodedToken, setDecodedToken] = useState({})
   const [consulta, setConsulta] = useState('')
   const [consultas, setConsultas] = useState([])
@@ -31,7 +32,8 @@ export const DetallesPublicacion = () => {
     descripcion: '',
     productoACambio: '',
     estado: '',
-    DNI: 0
+    DNI: 0,
+    borrado: null
   })
   const [usuario, setUsuario] = useState({})
   const [fotosUrls, setFotosUrls] = useState([])
@@ -98,6 +100,7 @@ export const DetallesPublicacion = () => {
         const userResponse = await fetch(`${import.meta.env.VITE_BASE_URL}/user/${data[0].DNI}`)
         const userData = await userResponse.json()
         setUsuario(userData[0])
+        isAvailableToDelete()
       } catch (error) {
         console.error('Error al obtener la publicación:', error)
       }
@@ -118,8 +121,8 @@ export const DetallesPublicacion = () => {
   }, [idPublicacion, navigate])
 
   const eliminarPublicacion = async (idPublicacion) => {
-    await fetch(`${import.meta.env.VITE_BASE_URL}/ver_detalles/${idPublicacion}`, {
-      method: 'DELETE'
+    await fetch(`${import.meta.env.VITE_BASE_URL}/ver_detalles/logicDelete/${idPublicacion}`, {
+      method: 'PATCH'
     })
       .then(() => {
         toast.success('Publicación eliminada con éxito!')
@@ -190,6 +193,21 @@ export const DetallesPublicacion = () => {
       navigate(`/payment/${preference.id}/publicacion/${publicacion.idPublicacion}`)
     } else {
       toast.error('Error al crear la preferencia de pago')
+    }
+  }
+  const handleClickEliminate = async () => {
+    eliminarPublicacion(publicacion.idPublicacion)
+  }
+
+  const isAvailableToDelete = async () => {
+    const pending = await fetch(
+      `${import.meta.env.VITE_BASE_URL}/exchange/toDelete/${idPublicacion}`
+    )
+      .then((res) => res.json())
+      .then((data) => data.rows)
+      .catch((err) => new Error(err))
+    if (pending.length > 0) {
+      setIsInExchange(true)
     }
   }
 
@@ -272,7 +290,7 @@ export const DetallesPublicacion = () => {
                     <span className="text-sm font-medium">{publicacion.estado}</span>
                   </div>
                 </div>
-                {publicacion.precio !== 0 ? (
+                {publicacion.precio !== 0 || publicacion.borrado === 1 ? (
                   <h2 className="pb-2 text-2xl font-bold">{`Categoria: ${getCategory(publicacion.precio)}`}</h2>
                 ) : null}
 
@@ -289,7 +307,9 @@ export const DetallesPublicacion = () => {
               </div>
 
               <div className="mt-4 grid gap-2">
-                {parseInt(decodedToken.DNI) !== publicacion.DNI && !isSuggested ? (
+                {parseInt(decodedToken.DNI) !== publicacion.DNI &&
+                publicacion.borrado === 0 &&
+                !isSuggested ? (
                   <button
                     onClick={handleSugerirTrueque}
                     className="mt-2 w-full rounded-md bg-fede-main px-4 py-2 font-medium text-white hover:scale-105 hover:bg-fede-hover-button focus:outline-none focus:ring-2 focus:ring-fede-main focus:ring-offset-2"
@@ -323,7 +343,7 @@ export const DetallesPublicacion = () => {
               {decodedToken.rol === 'empleado' || decodedToken.rol === 'administrador' ? (
                 <>
                   <div className="ml-4 flex items-center space-x-2">
-                    {publicacion.precio == 0 && (
+                    {publicacion.precio == 0 && publicacion.borrado === 0 && (
                       <AceptarDenegar
                         onAccept={(numero) => aceptarPublicacion(publicacion.idPublicacion, numero)}
                         onDelete={() => eliminarPublicacion(publicacion.idPublicacion)}
@@ -359,8 +379,24 @@ export const DetallesPublicacion = () => {
                   </div>
                 </>
               ) : null}
+              <div className="ml-4 flex items-center space-x-2">
+                {publicacion.precio !== 0 &&
+                  publicacion.borrado === 0 &&
+                  isInExchange &&
+                  parseInt(decodedToken.DNI) === publicacion.DNI &&
+                  decodedToken.rol === 'cliente' && (
+                    <button
+                      className="flex items-center justify-center rounded-md border border-red-500 px-4 py-2 text-red-500 hover:border-white hover:bg-red-500 hover:text-white"
+                      onClick={handleClickEliminate}
+                    >
+                      <span className="mr-1" role="img" aria-label="trash icon">
+                        🗑️
+                      </span>
+                      Eliminar
+                    </button>
+                  )}
+              </div>
             </div>
-
             <div className="hidden items-start md:flex">
               <div className="grid gap-4"></div>
             </div>

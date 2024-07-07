@@ -83,7 +83,9 @@ export const SuggestExchange = () => {
 
   const fetchClientPublications = async (dni) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_BASE_URL}/publication/user/${dni}`)
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/publication/user/notDeleted/${dni}`
+      )
       const data = await response.json()
       if (data.length === 0) {
         alert('No tienes publicaciones para intercambiar')

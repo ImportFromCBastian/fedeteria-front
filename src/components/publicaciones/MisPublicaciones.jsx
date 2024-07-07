@@ -66,9 +66,9 @@ export const MisPublicaciones = () => {
 
   const filteredPublicaciones = publicaciones.filter((publication) => {
     if (filter === null) return true
-    if (filter === 'rechazada') return publication.rechazado === 1
-    if (filter === 'pendiente') return publication.precio === 0
-    if (filter === 'activa') return publication.rechazado !== 1 && publication.precio !== 0
+    if (filter === 'rechazada') return publication.borrado === 1
+    if (filter === 'pendiente') return publication.borrado === 0 && publication.precio === 0
+    if (filter === 'activa') return publication.borrado === 0 && publication.precio !== 0
     return false
   })
 

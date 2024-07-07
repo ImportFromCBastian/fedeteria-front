@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react'
 import { decodeToken } from '../../utils/tokenUtils'
 import { useNavigate } from 'react-router-dom'
 import { Toaster, toast } from 'sonner'
-
+import { getCantidadDeTruequesPorSucursal } from './hooks/getCantidadDeTruequesPorSucursal'
 export const DashBoards = () => {
   const navigate = useNavigate()
   const [data, setData] = useState([])
@@ -22,6 +22,7 @@ export const DashBoards = () => {
   const [ganancias, setGanancias] = useState([])
   const [dataSave, setDataSave] = useState([])
   const [gananciasSave, setGananciasSave] = useState([])
+  const [cantidadDeTrueques, setCantidadDeTrueques] = useState([])
 
   const dataFormatter = (number) => Intl.NumberFormat('us').format(number).toString()
   const { fetchSucursalesConTrueques } = getSucursalesConTrueques(
@@ -33,7 +34,8 @@ export const DashBoards = () => {
   const { fetchUsers } = getUsuarios(setUsers)
   const { fetchClients } = getClientesPorSucursal(setClients)
   const { fetchGanancias } = getGanancias(setGanancias, setGananciasSave)
-
+  const { fetchCantidadDeTruequesPorSucursal } =
+    getCantidadDeTruequesPorSucursal(setCantidadDeTrueques)
   useEffect(() => {
     const token = localStorage.getItem('token')
     if (token === null) {
@@ -50,11 +52,12 @@ export const DashBoards = () => {
       fetchUsers()
       fetchClients()
       fetchGanancias()
+      fetchCantidadDeTruequesPorSucursal()
     }
     fetchData()
   }, [])
   return (
-    <div className=" flex items-center justify-center">
+ <div className=" flex items-center justify-center">
       <div className=" my-5 w-full max-w-[86rem] rounded-lg border-2 border-fede-main bg-fede-secundary p-8 shadow-md">
         <h2 className="mb-6 text-center text-3xl font-bold text-fede-texto-base">
           Analíticas de tus ferreterías
@@ -232,5 +235,20 @@ export const DashBoards = () => {
         </div>
       </div>
     </div>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <Card className="p-4 md:col-span-2" decoration="top" decorationColor="indigo">
+          <Text className="mb-4 text-center font-bold">Cantidad de Trueques por Sucursal</Text>
+          <BarChart
+            data={cantidadDeTrueques}
+            index="nombre"
+            categories={['CantidadDeTrueques']}
+            colors={['yellow']}
+            valueFormatter={dataFormatter}
+            yAxisWidth={48}
+            showAnimation={true}
+            onValueChange={(v) => console.log()}
+          />
+        </Card>
+      </div>
   )
 }
