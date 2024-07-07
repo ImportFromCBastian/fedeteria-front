@@ -54,6 +54,39 @@ export const RegisterDetailsModal = ({
     return times
   }
 
+  const sendMail = async (codigo, data, DNIOwner, DNISuggestor) => {
+    const owner = await fetch(`${import.meta.env.VITE_BASE_URL}/user/${DNIOwner}`)
+      .then((res) => res.json())
+      .then((data) => data[0].mail)
+
+    const suggestor = await fetch(`${import.meta.env.VITE_BASE_URL}/user/${DNISuggestor}`)
+      .then((res) => res.json())
+      .then((data) => data[0].mail)
+    try {
+      const mailResponse = await fetch(`${import.meta.env.VITE_BASE_URL}/mailing/codigo`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, codigo })
+      })
+      if (!mailResponse.ok) {
+        toast.error('Error al enviar el correo de bloqueo')
+      }
+    } catch (error) {
+      console.error('Error al enviar el correo de bloqueo')
+    }
+  }
+  function generateRandomString(length) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    let result = ''
+    const charactersLength = characters.length
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength))
+    }
+    return result
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem('token')
@@ -128,7 +161,9 @@ export const RegisterDetailsModal = ({
       selectedDay,
       selectedTime
     }
+    const randomString = generateRandomString(10).toUpperCase() // Generates a 10 character long random string
     useRegisterDetails(data, exchangeID)
+    sendMail(randomString, data, DNIOwner, DNISuggestor)
     closeModal()
   }
   const closeModal = () => {
