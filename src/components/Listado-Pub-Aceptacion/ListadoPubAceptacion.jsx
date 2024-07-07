@@ -19,8 +19,25 @@ export const ListadoPublicaciones = () => {
       .catch((e) => new Error(e))
   }
 
+  const fetchEliminarPublicacion = async (idPublicacion) => {
+    await fetch(`${import.meta.env.VITE_BASE_URL}/ver_detalles/logicDelete/${idPublicacion}`, {
+      method: 'PATCH'
+    })
+  }
+
+  const notificarEliminacionExitosa = (nombre, dni) => {
+    toast.success('Publicación eliminada con éxito!')
+    enviarNotificacion('rechazada', `Tu publicación ${nombre} ha sido rechazada`, dni)
+  }
+
+  const actualizarListaPublicaciones = () => {
+    setTimeout(() => {
+      window.location.reload()
+    }, 500) // 0.5 segundos de espera antes de recargar la página
+  }
+
   const fetchPublicationData = async () => {
-    await fetch(`${import.meta.env.VITE_BASE_URL}/publicaciones`)
+    await fetch(`${import.meta.env.VITE_BASE_URL}/publicaciones/notDeleted`)
       .then((response) => response.json())
       .then((data) => {
         setPublicaciones(data.data)
@@ -47,18 +64,13 @@ export const ListadoPublicaciones = () => {
   }, [])
 
   const eliminarPublicacion = async (idPublicacion, dni, nombre) => {
-    await fetch(`${import.meta.env.VITE_BASE_URL}/publicaciones/${idPublicacion}`, {
-      method: 'DELETE'
-    })
-      .then(() => {
-        toast.success('Publicación eliminada con éxito!')
-        enviarNotificacion('rechazada', `Tu publicación ${nombre} ha sido rechazada`, dni)
-        // Actualizar la lista de publicaciones después de eliminar
-        setTimeout(() => {
-          window.location.reload()
-        }, 500) // 1 segundo de espera
-      })
-      .catch((error) => console.error('Error al eliminar la publicación:', error))
+    try {
+      await fetchEliminarPublicacion(idPublicacion)
+      notificarEliminacionExitosa(nombre, dni)
+      actualizarListaPublicaciones()
+    } catch (error) {
+      console.error('Error al eliminar la publicación:', error)
+    }
   }
 
   const aceptarPublicacion = async (idPublicacion, numero, dni, nombre) => {

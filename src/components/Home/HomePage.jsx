@@ -4,7 +4,7 @@ import { PublicationList } from '../publicaciones/PublicationList'
 export const HomePage = () => {
   const [publication, setPublication] = useState([])
   const fetchPublication = async () => {
-    await fetch(`${import.meta.env.VITE_BASE_URL}/publication`)
+    await fetch(`${import.meta.env.VITE_BASE_URL}/publication/notDeleted`)
       .then((res) => res.json())
       .then((data) => setPublication(data))
       .catch((err) => new Error(err))

@@ -34,7 +34,7 @@ export const MyPublication = ({ publication, onError }) => {
     } else navigate('/ver_publicacion/' + publication.idPublicacion)
   }
   useEffect(() => {
-    if (publication.rechazado === 1) {
+    if (publication.borrado === 1) {
       setColor('bg-fede-rojo')
       setEstado('Rechazada')
     } else if (publication.precio === 0) {
