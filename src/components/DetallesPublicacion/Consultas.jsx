@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { RespuestaForm } from './DejarRespuesta'
 import { toast, Toaster } from 'sonner'
+import { RiCornerDownRightLine } from '@remixicon/react'
 
 export const Consultas = ({
   consulta,
@@ -27,6 +28,9 @@ export const Consultas = ({
       )
       if (response.status === 200) {
         toast.success('Consulta eliminada correctamente')
+        setTimeout(() => {
+          window.location.reload()
+        }, 1000) // 1 segundo1 de espera
       }
     } catch (error) {
       console.error('Error al borrar la consulta:', error)
@@ -67,7 +71,7 @@ export const Consultas = ({
   }, [consulta.dniUsuario])
 
   return (
-    <div className="relative grid gap-4">
+    <div className="relative grid gap-2  border-b-2 ">
       {consulta.idRespuesta === null &&
         (decodedDNI === consulta.dniUsuario || decodedRol === 'administrador') && (
           <div className="absolute right-0 top-0">
@@ -79,38 +83,32 @@ export const Consultas = ({
             </button>
           </div>
         )}
-      <div className="grid gap-6">
-        <div className="flex gap-4">
-          <div className="grid gap-2">
-            <div className="flex items-center gap-4">
+      <div className="grid gap-4">
+        <div className="flex gap-2">
+          <div className="grid gap-1">
+            <div className="flex items-center gap-2">
               <h3 className="text-base font-semibold">
-                {user.nombre} {user.apellido}
+                {user.nombre} {user.apellido}:
               </h3>
               <div className="flex items-center gap-0.5"></div>
             </div>
             <p
-              className="text-sm text-gray-500 dark:text-gray-400"
+              className="text-sm text-gray-800 dark:text-gray-800"
               style={{ wordWrap: 'break-word', overflow: 'hidden', textOverflow: 'ellipsis' }}
             >
               {consulta.textoConsulta}
             </p>
             <div>
-              {parseInt(decodedDNI) === publicacionDNI ? (
-                consulta.idRespuesta === null ? (
-                  <button
-                    className="rounded-md bg-blue-500 px-2 py-1 text-xs font-semibold text-white shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                    onClick={toggleMostrarFormulario}
-                  >
-                    Responder
-                  </button>
-                ) : (
-                  <p className="text-sm text-gray-500 dark:text-gray-600">
-                    <span style={{ fontWeight: 'bold' }}>Respuesta:</span> {respuesta}
-                  </p>
-                )
+              {parseInt(decodedDNI) === publicacionDNI && consulta.idRespuesta === null ? (
+                <button
+                  className="rounded-md bg-fede-main px-2 py-1 text-xs font-semibold text-white shadow-md hover:bg-fede-hover-button focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  onClick={toggleMostrarFormulario}
+                >
+                  Responder
+                </button>
               ) : consulta.idRespuesta !== null ? (
-                <p className="text-sm text-gray-500 dark:text-gray-600">
-                  <span style={{ fontWeight: 'bold' }}>Respuesta:</span> {respuesta}
+                <p className="text-sm text-gray-400 dark:text-gray-500">
+                  <RiCornerDownRightLine className="inline-block text-lg" /> {respuesta}
                 </p>
               ) : null}
             </div>
