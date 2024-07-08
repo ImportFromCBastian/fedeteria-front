@@ -220,6 +220,36 @@ export const DetallesPublicacion = () => {
       // Aquí puedes manejar el error según tus necesidades
     }
   }
+  const PromocionarIcon = () => (
+    <svg
+      height="30px" // Ajustar el tamaño aquí
+      width="30px" // Ajustar el tamaño aquí
+      style={{
+        fillRule: 'evenodd',
+        clipRule: 'evenodd',
+        strokeLinejoin: 'round',
+        strokeMiterlimit: 2,
+        fill: 'white'
+      }}
+      viewBox="0 0 42 42"
+      version="1.1"
+      xmlSpace="preserve"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsSerif="http://www.serif.com/"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+    >
+      <path d="M4,5l0,32c0,0.552 0.448,1 1,1l32,-0c0.552,-0 1,-0.448 1,-1c-0,-0.552 -0.448,-1 -1,-1l-31,-0c0,0 0,-31 0,-31c-0,-0.552 -0.448,-1 -1,-1c-0.552,0 -1,0.448 -1,1Z" />
+      <path d="M10,33.008l0,-1c-0,-0.551 -0.448,-1 -1,-1c-0.552,0 -1,0.449 -1,1l0,1c-0,0.552 0.448,1 1,1c0.552,0 1,-0.448 1,-1Z" />
+      <path d="M12,32.008l0,1c0,0.552 0.448,1 1,1c0.552,0 1,-0.448 1,-1l0,-1c0,-0.551 -0.448,-1 -1,-1c-0.552,0 -1,0.449 -1,1Z" />
+      <path d="M16,31.008l0,2c-0,0.552 0.448,1 1,1c0.552,0 1,-0.448 1,-1l0,-2c-0,-0.551 -0.448,-1 -1,-1c-0.552,0 -1,0.449 -1,1Z" />
+      <path d="M20,30.008l-0,3c0,0.552 0.448,1 1,1c0.552,0 1,-0.448 1,-1l-0,-3c0,-0.551 -0.448,-1 -1,-1c-0.552,0 -1,0.449 -1,1Z" />
+      <path d="M24,28.008l0,5c-0,0.552 0.448,1 1,1c0.552,0 1,-0.448 1,-1l0,-5c-0,-0.551 -0.448,-1 -1,-1c-0.552,0 -1,0.449 -1,1Z" />
+      <path d="M28,24.008l0,9c-0,0.552 0.448,1 1,1c0.552,0 1,-0.448 1,-1l0,-9c-0,-0.551 -0.448,-1 -1,-1c-0.552,0 -1,0.449 -1,1Z" />
+      <path d="M32,20.008l0,13c0,0.552 0.448,1 1,1c0.552,0 1,-0.448 1,-1l0,-13c0,-0.551 -0.448,-1 -1,-1c-0.552,0 -1,0.449 -1,1Z" />
+      <path d="M36,18.008l0,15c-0,0.552 0.448,1 1,1c0.552,0 1,-0.448 1,-1l0,-15c-0,-0.551 -0.448,-1 -1,-1c-0.552,0 -1,0.449 -1,1Z" />
+      <path d="M32.544,12.65l-1.19,-1.741l6.646,-0.909l-3.26,5.863l-1.061,-1.552c-2.876,2.498 -5.005,5.181 -7.279,7.538c-3.998,4.145 -8.407,7.35 -17.543,7.151c-0.552,-0.012 -0.99,-0.47 -0.978,-1.022c0.012,-0.552 0.47,-0.99 1.022,-0.978c8.362,0.183 12.4,-2.745 16.059,-6.539c2.359,-2.446 4.574,-5.227 7.584,-7.811Z" />
+    </svg>
+  )
 
   return (
     <div>
@@ -316,26 +346,31 @@ export const DetallesPublicacion = () => {
                 </div>
               </div>
 
-              <div className="mt-4 grid gap-2">
-                {parseInt(decodedToken.DNI) !== publicacion.DNI &&
-                publicacion.borrado === 0 &&
-                !isSuggested ? (
+              {parseInt(decodedToken.DNI) !== publicacion.DNI &&
+              publicacion.borrado === 0 &&
+              !isSuggested ? (
+                <div className="mt-4 grid gap-2">
                   <button
                     onClick={handleSugerirTrueque}
                     className="mt-2 w-full rounded-md bg-fede-main px-4 py-2 font-medium text-white hover:scale-105 hover:bg-fede-hover-button focus:outline-none focus:ring-2 focus:ring-fede-main focus:ring-offset-2"
                   >
                     Sugerir Trueque
                   </button>
-                ) : parseInt(decodedToken.DNI) === publicacion.DNI && isReady.ok ? (
+                </div>
+              ) : parseInt(decodedToken.DNI) === publicacion.DNI && isReady.ok ? (
+                <div className="mt-4 grid justify-end gap-2">
                   <button
                     onClick={handleClickPayment}
-                    className=" mt-2 w-full rounded-md bg-fede-main px-4 py-2 font-medium text-white hover:scale-105 hover:bg-fede-hover-button focus:outline-none focus:ring-2 focus:ring-fede-main focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+                    className=" mt-2 max-w-fit rounded-md bg-fede-main px-4 py-1 font-medium text-white hover:scale-105 hover:bg-fede-hover-button focus:outline-none focus:ring-2 focus:ring-fede-main focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
                     disabled={isReady.publications[0].destacada === 'si' ? true : false}
                   >
-                    Promocionar Publicación
+                    <div className="flex items-center justify-center space-x-2">
+                      <span>Promocionar</span>
+                      <PromocionarIcon />
+                    </div>
                   </button>
-                ) : null}
-              </div>
+                </div>
+              ) : null}
             </div>
           </div>
           {publicacion.productoACambio && (
