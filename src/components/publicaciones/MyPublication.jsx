@@ -36,7 +36,7 @@ export const MyPublication = ({ publication, onError }) => {
   useEffect(() => {
     if (publication.borrado === 1) {
       setColor('bg-fede-rojo')
-      setEstado('Rechazada')
+      setEstado('Rechazada/Eliminada')
     } else if (publication.precio === 0) {
       setColor('bg-fede-amarillo')
       setEstado('Pendiente de revisión')

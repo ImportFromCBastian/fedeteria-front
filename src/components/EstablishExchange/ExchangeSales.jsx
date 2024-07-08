@@ -47,7 +47,14 @@ export const ExchangeSales = ({ exchangeData }) => {
 
   return (
     <>
-      {modal === 'payment' && <PaymentModal price={total} close={closeModal} clients={clients} />}
+      {modal === 'payment' && (
+        <PaymentModal
+          price={total}
+          close={closeModal}
+          clients={clients}
+          setProductos={setProductList}
+        />
+      )}
       {modal === 'addProduct' && <AddProductModal update={updateList} close={closeModal} />}
       <div className="mx-auto grid max-w-full items-start gap-6 px-4 py-6 md:grid-cols-2 lg:gap-12">
         <div className="grid gap-4 md:gap-10">
@@ -58,10 +65,12 @@ export const ExchangeSales = ({ exchangeData }) => {
             >
               Seleccionar producto
             </button>
+
             {isDropdownOpen && (
               <div className="max-h-82 absolute left-0 top-full z-10 mt-2 flex w-full flex-col overflow-hidden rounded-md border bg-white shadow-lg">
                 <div className="max-h-72 flex-grow overflow-y-auto">
                   <ul>
+                    {productList.length === 0 && <p className="ml-4">No hay items cargados</p>}
                     {productList.map((product, index) => (
                       <li
                         key={index}

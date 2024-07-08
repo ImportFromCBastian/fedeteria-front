@@ -111,7 +111,7 @@ export const MisPublicaciones = () => {
             }`}
             onClick={() => handleFilterChange('rechazada')}
           >
-            Rechazadas
+            Rechazadas/Eliminadas
           </button>
         </div>
         <section className="space-y-4 py-1 ">

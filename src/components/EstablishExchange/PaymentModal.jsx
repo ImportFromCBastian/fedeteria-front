@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { decodeToken } from '../../utils/tokenUtils'
 import { toast } from 'sonner'
 
-export const PaymentModal = ({ price, close, clients }) => {
+export const PaymentModal = ({ price, close, clients, setProductos }) => {
   const [mainClient] = clients[0]
   const [offeredClient] = clients[1]
   const [paymentData, setPaymentData] = useState({
@@ -39,6 +39,7 @@ export const PaymentModal = ({ price, close, clients }) => {
 
     if (result.ok === false) return toast.warning(`${result.error}`)
     toast.success('Pago confirmado')
+    setProductos([])
     close()
   }
 
