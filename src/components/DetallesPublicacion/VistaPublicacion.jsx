@@ -392,9 +392,8 @@ export const DetallesPublicacion = () => {
               <div className="ml-4 flex items-center space-x-2">
                 {publicacion.precio !== 0 &&
                   publicacion.borrado === 0 &&
-                  isInExchange &&
-                  parseInt(decodedToken.DNI) === publicacion.DNI &&
-                  decodedToken.rol === 'cliente' && (
+                  !isInExchange &&
+                  parseInt(decodedToken.DNI) === publicacion.DNI && (
                     <button
                       className="flex items-center justify-center rounded-md border border-red-500 px-4 py-2 text-red-500 hover:border-white hover:bg-red-500 hover:text-white"
                       onClick={handleClickEliminate}
