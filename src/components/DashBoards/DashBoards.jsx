@@ -180,14 +180,14 @@ export const DashBoards = () => {
                     'fuchsia'
                   ]}
                   showAnimation={true}
-                  label={`${display}`}
-                  onValueChange={(v) => {
-                    if (v == null) {
-                      setDisplay(display2)
-                      return
-                    }
-                    setDisplay(v.CantidadDeTrueques)
-                  }}
+                  // label={`${display}`}
+                  // onValueChange={(v) => {
+                  //   if (v == null) {
+                  //     setDisplay(display2)
+                  //     return
+                  //   }
+                  //   setDisplay(v.CantidadDeTrueques)
+                  // }}
                 />
               </Card>
             </div>
