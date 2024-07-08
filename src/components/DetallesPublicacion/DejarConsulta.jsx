@@ -45,7 +45,7 @@ export const ConsultaForm = ({
         Deja tu consulta
       </label>
       <textarea
-        className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex min-h-[80px] w-full rounded-md border bg-fede-fondo-texto px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+        className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex min-h-[80px] w-full rounded-md border-2 bg-fede-fondo-texto px-3 py-2 text-sm focus:border-fede-main focus-visible:outline-none  disabled:cursor-not-allowed disabled:opacity-50"
         id="consulta"
         placeholder="Escribe tu comentario aquí"
         value={consulta}
@@ -58,7 +58,7 @@ export const ConsultaForm = ({
         {consulta.length}/{maxLength}
       </div>
       <button
-        className="active:bg-primary/80 focus:ring-primary inline-flex items-center justify-center rounded-lg bg-fede-main px-4 py-2 text-sm font-medium text-white shadow-lg hover:scale-100 hover:bg-fede-hover-button focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+        className="active:bg-primary/80 focus:ring-primary inline-flex items-center justify-center rounded-lg bg-fede-main px-4 py-2 text-sm font-medium text-white shadow-lg hover:scale-100 hover:bg-fede-hover-button focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
         onClick={handleSubmitWithValidation}
         disabled={consulta.trim() === ''}
       >

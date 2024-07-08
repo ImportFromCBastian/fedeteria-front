@@ -101,7 +101,7 @@ export const Consultas = ({
             <div>
               {parseInt(decodedDNI) === publicacionDNI && consulta.idRespuesta === null ? (
                 <button
-                  className="rounded-md bg-fede-main px-2 py-1 text-xs font-semibold text-white shadow-md hover:bg-fede-hover-button focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  className="te  rounded-md  py-1 text-sm font-semibold text-fede-main underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                   onClick={toggleMostrarFormulario}
                 >
                   Responder

@@ -38,7 +38,19 @@ export const PaymentBrick = () => {
         body: JSON.stringify(formData)
       })
         .then((response) => response.json())
-        .then((response) => {
+        .then(async (response) => {
+          if (response.error) {
+            const result = await fetch(`${import.meta.env.VITE_BASE_URL}/publication/${pubId}`)
+              .then((response) => response.json())
+              .catch((error) => console.error('Error:', error))
+            enviarNotificacion(
+              'rechazada',
+              `Error promocionando publicacion ${result.nombre}`,
+              result.DNI
+            )
+            navigate(`/ver_publicacion/${pubId}`)
+            return
+          }
           const featured = async () => {
             return await fetch(`${import.meta.env.VITE_BASE_URL}/publication/featured/${pubId}`, {
               method: 'PATCH',
@@ -49,8 +61,8 @@ export const PaymentBrick = () => {
               .then((response) => response.json())
               .catch((error) => console.error('Error:', error))
           }
+
           featured()
-          enviarNotificacion('default', 'Tu publicacion ha sido destacada')
           navigate(`/ver_publicacion/${pubId}`)
           resolve()
         })
