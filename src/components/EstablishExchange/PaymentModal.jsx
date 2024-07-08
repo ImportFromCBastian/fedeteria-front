@@ -49,7 +49,7 @@ export const PaymentModal = ({ price, close, clients, setProductos }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="relative w-96 rounded-lg bg-white p-6">
+      <div className="relative w-96 rounded-lg border-2 border-fede-main bg-white p-6">
         <button
           onClick={close}
           className="ring-offset-background focus-visible:ring-ring border-input b absolute right-1 top-1  mt-1 inline-flex h-7 w-7 items-center justify-center rounded-full border bg-red-500 px-2 text-sm font-medium text-white transition-colors hover:bg-red-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"

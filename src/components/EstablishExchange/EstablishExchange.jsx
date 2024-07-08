@@ -16,7 +16,7 @@ export const EstablishExchange = () => {
 
   return (
     <div className="flex min-h-screen flex-col items-center  border bg-cover">
-      <div className="m-10 w-full max-w-5xl rounded-lg border-2 bg-white p-8 shadow-lg">
+      <div className="m-10 w-full max-w-5xl rounded-lg border-2  border-fede-main bg-white p-8 shadow-lg">
         <Toaster richColors={true} />
         {state != 'rs' ? (
           <>

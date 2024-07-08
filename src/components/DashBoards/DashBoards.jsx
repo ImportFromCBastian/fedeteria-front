@@ -62,6 +62,9 @@ export const DashBoards = () => {
         <h2 className="mb-6 text-center text-3xl font-bold text-fede-texto-base">
           Analíticas de tus ferreterías
         </h2>
+        <h2 className="mb-2 ml-20 text-start text-2xl  text-fede-texto-base">
+          Datos por ferretería
+        </h2>
         <div className="mx-auto grid max-w-6xl gap-4">
           <Toaster expand="true" richColors="true" />
           <div className=" mb-6 gap-4 md:grid-cols-3">
@@ -79,6 +82,68 @@ export const DashBoards = () => {
               />
             </Card>
           </div>
+          <div className="mb-6 grid grid-cols-1 gap-4 ">
+            <Card className=" p-4 md:col-span-3" decoration="top" decorationColor="fede-main">
+              <Badge icon={RiAccountCircleLine} size="md" color={'yellow'}>
+                Usuarios Totales {users}
+              </Badge>
+              <Text className="mb-4 text-center font-bold">Cantidad de Clientes por Sucursal</Text>
+              <BarChart
+                data={clients}
+                index="nombre"
+                categories={['Clientes']}
+                colors={['yellow']}
+                valueFormatter={dataFormatter}
+                yAxisWidth={42}
+                showAnimation={true}
+                onValueChange={(v) => console.log()}
+              />
+            </Card>
+          </div>
+          <hr className="my-4 w-full border-t border-gray-500" />
+          <h2 className="mb-2  text-start text-2xl  text-fede-texto-base">Datos por fecha</h2>
+          <div className="mx-auto mb-6 max-w-md space-y-3">
+            <p className="pt-6 text-center font-mono text-sm text-slate-500">
+              Seleccione rango de fechas
+            </p>
+            <div className="flex items-center justify-between">
+              <DateRangePicker
+                className="max-w-md"
+                selectPlaceholder="Seleccionar"
+                placeholder="Seleccionar rango de fechas"
+                onValueChange={(value) => {
+                  const { from, to } = value
+                  if (from === undefined || to === undefined) return
+                  const filterData = dataSave.filter((item) => {
+                    const fecha = item.fechaDate
+                    return from <= fecha && fecha <= to
+                  })
+                  if (filterData.length === 0) {
+                    toast.error('No hay datos de trueques en el rango de fechas')
+                  }
+                  setData(filterData)
+                  const filterGanancias = gananciasSave.filter((item) => {
+                    const fecha = item.fechaDate
+                    return from <= fecha && fecha <= to
+                  })
+                  if (filterGanancias.length === 0) {
+                    toast.error('No hay datos de ganancias en el rango de fechas')
+                  }
+                  setGanancias(filterGanancias)
+                }}
+              />
+              <button
+                className="ml-10 rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                onClick={() => {
+                  setData(dataSave)
+                  setGanancias(gananciasSave)
+                }}
+              >
+                Eliminar filtros
+              </button>
+            </div>
+          </div>
+
           <div className="mb-6 grid grid-cols-1 items-center gap-4 md:grid-cols-4">
             <Card className="p-4 md:col-span-3" decoration="top" decorationColor="fede-main">
               <Text className="mb-4 text-center font-bold">Cantidad de Trueques por Día</Text>
@@ -127,67 +192,6 @@ export const DashBoards = () => {
               </Card>
             </div>
           </div>
-          {/* Fila de Clientes y Usuarios */}
-          <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-4">
-            <Card className=" p-4 md:col-span-3" decoration="top" decorationColor="fede-main">
-              <Badge icon={RiAccountCircleLine} size="md" color={'yellow'}>
-                Usuarios Totales {users}
-              </Badge>
-              <Text className="mb-4 text-center font-bold">Cantidad de Clientes por Sucursal</Text>
-              <BarChart
-                data={clients}
-                index="nombre"
-                categories={['Clientes']}
-                colors={['yellow']}
-                valueFormatter={dataFormatter}
-                yAxisWidth={42}
-                showAnimation={true}
-                onValueChange={(v) => console.log()}
-              />
-            </Card>
-            <div className=" mx-auto mb-6 max-w-xs space-y-3">
-              <p className="pt-6 text-center font-mono text-sm text-slate-500">
-                Seleccione rango de fechas
-              </p>
-              <DateRangePicker
-                className="mx-auto max-w-md"
-                selectPlaceholder="Seleccionar"
-                placeholder="Seleccionar rango de fechas"
-                onValueChange={(value) => {
-                  const { from, to } = value
-                  if (from === undefined || to === undefined) return
-                  const filterData = dataSave.filter((item) => {
-                    const fecha = item.fechaDate
-                    return from <= fecha && fecha <= to
-                  })
-                  if (filterData.length === 0) {
-                    toast.error('No hay datos de trueques en el rango de fechas')
-                  }
-                  setData(filterData)
-                  const filterGanancias = gananciasSave.filter((item) => {
-                    const fecha = item.fechaDate
-                    return from <= fecha && fecha <= to
-                  })
-                  if (filterGanancias.length === 0) {
-                    toast.error('No hay datos de ganancias en el rango de fechas')
-                  }
-                  setGanancias(filterGanancias)
-                }}
-              />
-              <div className="flex justify-end">
-                <button
-                  className="mt-4 rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-                  onClick={() => {
-                    setData(dataSave)
-                    setGanancias(gananciasSave)
-                  }}
-                >
-                  Eliminar filtros
-                </button>
-              </div>
-            </div>
-          </div>
-          {/* Fila de Ganancias Totales por Sucursales */}
 
           <div className=" grid grid-cols-1 items-center gap-4 md:grid-cols-4">
             <Card className="p-4 md:col-span-3" decoration="top" decorationColor="fede-main">
