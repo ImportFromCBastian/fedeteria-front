@@ -45,15 +45,15 @@ export const ExchangeSales = ({ exchangeData }) => {
     fetchProducts()
   }
 
+  const deleteAll = () => {
+    setProducts([])
+    setTotal(0)
+  }
+
   return (
     <>
       {modal === 'payment' && (
-        <PaymentModal
-          price={total}
-          close={closeModal}
-          clients={clients}
-          setProductos={setProductList}
-        />
+        <PaymentModal price={total} close={closeModal} clients={clients} deleteAll={deleteAll} />
       )}
       {modal === 'addProduct' && <AddProductModal update={updateList} close={closeModal} />}
       <div className="mx-auto grid max-w-full items-start gap-6 px-4 py-6 md:grid-cols-2 lg:gap-12">
@@ -117,10 +117,7 @@ export const ExchangeSales = ({ exchangeData }) => {
               {products.length > 0 && (
                 <button
                   className="ml-auto inline-flex h-6 items-center justify-center whitespace-nowrap rounded-md bg-slate-400 px-2 text-xs font-medium transition-colors hover:bg-red-500"
-                  onClick={() => {
-                    setProducts([])
-                    setTotal(0)
-                  }}
+                  onClick={deleteAll}
                 >
                   Borrar todos
                 </button>
