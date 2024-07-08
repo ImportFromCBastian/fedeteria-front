@@ -175,8 +175,10 @@ export const ListarTruequesDeMiSucursal = () => {
       </div>
 
       <div className="space-y-4 py-1 pl-6">
-        {truequesINFO.length === 0 ? (
-          <p>No hay trueques en esta sucursal!</p>
+        {truequesINFO.filter(
+          (trueque) => filtroEstado === null || trueque.realizado === filtroEstado
+        ).length === 0 ? (
+          <p>No hay nada que mostrar!</p>
         ) : (
           truequesINFO
             .filter((trueque) => filtroEstado === null || trueque.realizado === filtroEstado)

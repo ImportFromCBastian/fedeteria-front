@@ -196,7 +196,7 @@ export const Header = () => {
                   className="font-medium underline-offset-4 hover:underline"
                   to="/listado_de_trueques_de_mi_sucursal"
                 >
-                  Listar trueques de mi sucursal
+                  Trueques de mi sucursal
                 </Link>
               </>
             )}

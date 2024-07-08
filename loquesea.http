@@ -4,7 +4,7 @@ content-type: application/json
 
 {
   "dni": "11111111",
-  "name": "adamin",
+  "name": "admin",
   "lastName": "comun",
   "email": "loaslza@gmail.com",
   "password": "123456S*",

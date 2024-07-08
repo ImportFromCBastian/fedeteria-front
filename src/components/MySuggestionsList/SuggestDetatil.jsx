@@ -110,6 +110,11 @@ export const SuggestDetail = () => {
     console.log(result)
     if (!result.ok) return toast.error('Error al cancelar el trueque')
     toast.success('Cancelado con exito')
+    enviarNotificacion(
+      'rechazada',
+      `Tu sugerencia de trueque en el producto ${mainProduct.nombre} ha sido rechazada.`,
+      offeredProducts[0].DNI
+    )
     await delay(2500)
     navigate('/')
   }
