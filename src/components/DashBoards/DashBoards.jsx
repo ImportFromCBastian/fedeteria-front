@@ -12,6 +12,7 @@ import { decodeToken } from '../../utils/tokenUtils'
 import { useNavigate } from 'react-router-dom'
 import { Toaster, toast } from 'sonner'
 import { getCantidadDeTruequesPorSucursal } from './hooks/getCantidadDeTruequesPorSucursal'
+import { getPayment } from './hooks/getPayment'
 export const DashBoards = () => {
   const navigate = useNavigate()
   const [data, setData] = useState([])
@@ -23,6 +24,8 @@ export const DashBoards = () => {
   const [dataSave, setDataSave] = useState([])
   const [gananciasSave, setGananciasSave] = useState([])
   const [cantidadDeTrueques, setCantidadDeTrueques] = useState([])
+  const [total, setTotal] = useState(0)
+  const { getAll } = getPayment(setTotal)
 
   const dataFormatter = (number) => Intl.NumberFormat('us').format(number).toString()
   const { fetchSucursalesConTrueques } = getSucursalesConTrueques(
@@ -53,6 +56,7 @@ export const DashBoards = () => {
       fetchClients()
       fetchGanancias()
       fetchCantidadDeTruequesPorSucursal()
+      getAll()
     }
     fetchData()
   }, [])
@@ -246,6 +250,11 @@ export const DashBoards = () => {
                   showAnimation={true}
                 />
               </Card>
+            </div>
+            <div className="flex items-center justify-end">
+              <Badge size="md" color={'yellow'}>
+                Total recaudado por promociones {total === null ? 0 : total}
+              </Badge>
             </div>
           </div>
         </div>
