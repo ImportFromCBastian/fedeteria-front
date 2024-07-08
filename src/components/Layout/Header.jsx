@@ -98,7 +98,7 @@ export const Header = () => {
             />
           </Link>
           {user ? (
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
               <Notificaciones />
               <Link
                 to="/mi_perfil"
@@ -122,7 +122,17 @@ export const Header = () => {
                 <span className="sr-only">Perfil</span>
                 <div className="ml-2">
                   <h1 className="font-semibold">{nombre.nombre}</h1>
-                  {user.rol !== 'cliente' && <h2 className="text-xs">{user.rol}</h2>}
+                  {user.rol === 'empleado' && <h2 className="text-xs">Empleado</h2>}
+                  {user.rol === 'administrador' && (
+                    <div className="flex items-center gap-1">
+                      <h2 className="text-xs">Admin</h2>
+                      <img
+                        src="/public/estudiante.png"
+                        className="inline-flex h-6 w-6"
+                        alt="Estudiante"
+                      />
+                    </div>
+                  )}
                 </div>
               </Link>
             </div>
@@ -190,6 +200,12 @@ export const Header = () => {
                 </Link>
               </>
             )}
+            <Link
+              className="font-medium underline-offset-4 hover:underline"
+              to="/ver_mis_publicaciones"
+            >
+              Mis publicaciones
+            </Link>
             {user.rol === 'administrador' && (
               <>
                 <Link className="font-medium underline-offset-4 hover:underline" to="/sucursal">
@@ -212,12 +228,6 @@ export const Header = () => {
                 </Link>
               </>
             )}
-            <Link
-              className="font-medium underline-offset-4 hover:underline"
-              to="/ver_mis_publicaciones"
-            >
-              Mis publicaciones
-            </Link>
           </div>
         )}
       </header>

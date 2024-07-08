@@ -40,7 +40,8 @@ export const ListadoPublicaciones = () => {
     await fetch(`${import.meta.env.VITE_BASE_URL}/publicaciones/notDeleted`)
       .then((response) => response.json())
       .then((data) => {
-        setPublicaciones(data.data)
+        const reversedPublicaciones = data.data.reverse()
+        setPublicaciones(reversedPublicaciones)
       })
       .catch((error) => console.error('Error al obtener el listado de publicaciones:', error))
   }

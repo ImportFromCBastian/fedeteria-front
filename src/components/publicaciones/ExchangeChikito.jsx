@@ -37,13 +37,13 @@ export const ExchangeChikito = ({ mainPublicationID, publicationCount, exchangeI
   }, [mainPublicationID, exchangeID, publicationCount])
 
   return (
-    <div className="ml-2 flex rounded-md border-2 border-fede-main transition-transform duration-300 hover:shadow-xl">
+    <div className="ml-2 flex rounded-md border-2 border-fede-main bg-white transition-transform duration-300 hover:shadow-xl">
       <div className="relative flex-grow rounded-lg p-4">
         <div className="flex items-center">
           <img
             src={fotoUrl || '/placeholder-image.jpg'}
             alt={publication?.nombre || 'Cargando...'}
-            className="h-12 w-12 rounded-xl bg-white object-fill"
+            className="h-10 w-10 rounded-xl bg-white object-fill"
           />
         </div>
         <div className="absolute inset-0 flex items-center justify-center">
