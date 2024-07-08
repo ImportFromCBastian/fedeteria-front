@@ -200,14 +200,24 @@ export const DetallesPublicacion = () => {
   }
 
   const isAvailableToDelete = async () => {
-    const pending = await fetch(
-      `${import.meta.env.VITE_BASE_URL}/exchange/toDelete/${idPublicacion}`
-    )
-      .then((res) => res.json())
-      .then((data) => data.rows)
-      .catch((err) => new Error(err))
-    if (pending.length > 0) {
-      setIsInExchange(true)
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/exchange/toDelete/${idPublicacion}`
+      )
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch data')
+      }
+
+      const data = await response.json()
+      const pending = data || [] // Asigna un array vacío si data.rows es undefined
+
+      if (pending.length > 0) {
+        setIsInExchange(true)
+      }
+    } catch (err) {
+      console.error('Error fetching data:', err)
+      // Aquí puedes manejar el error según tus necesidades
     }
   }
 
