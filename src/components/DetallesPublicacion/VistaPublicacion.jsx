@@ -57,7 +57,10 @@ export const DetallesPublicacion = () => {
         .then((data) => data.rows)
         .catch((err) => new Error(err))
       for (let i = 0; i < pending.length; i++) {
-        if (parseInt(pending[i].productoDeseado) === parseInt(idPublicacion)) {
+        if (
+          parseInt(pending[i].productoDeseado) === parseInt(idPublicacion) ||
+          parseInt(pending[i].idPublicacion) === parseInt(idPublicacion)
+        ) {
           setIsSuggested(true)
           break
         }
@@ -350,6 +353,7 @@ export const DetallesPublicacion = () => {
               publicacion.borrado === 0 &&
               !isSuggested ? (
                 <div className="mt-4 grid gap-2">
+                  {console.log('hola')}
                   <button
                     onClick={handleSugerirTrueque}
                     className="mt-2 w-full rounded-md bg-fede-main px-4 py-2 font-medium text-white hover:scale-105 hover:bg-fede-hover-button focus:outline-none focus:ring-2 focus:ring-fede-main focus:ring-offset-2"

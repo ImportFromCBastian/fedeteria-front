@@ -5,7 +5,6 @@ export const getCantidadDeTruequesPorSucursal = (setCantidadDeTrueques) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
         setCantidadDeTrueques(data)
       })
       .catch((error) => console.error(error))
